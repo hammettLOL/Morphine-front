@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 
 export interface Customer {
   id: number;
-  dni: string;
+  document: string;
+  typeDocument: number
   name: string;
   lastName: string;
   email: string;
@@ -31,6 +32,13 @@ export class CustomersService {
     return this.http.get<Customer[]>(this.apiUrl, { params });
   }
 
+  getCustomer(customerId: number): Observable<Customer> {
+    return this.http.get<Customer>(`${this.apiUrl}/${customerId}`);
+  }
+
+  updateCustomer(customer: Customer): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${customer.id}`, customer);
+  }
 
   deleteCustomer(customerId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${customerId}`);

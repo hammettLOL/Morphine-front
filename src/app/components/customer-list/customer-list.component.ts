@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomersService, Customer } from '../../services/customers.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-customers-list',
@@ -14,7 +15,14 @@ export class CustomersListComponent implements OnInit {
   pageNumber = 1;
   pageSize = 10;
 
-  constructor(private readonly customersService: CustomersService) {}
+  // Mapeo de valores numéricos a cadenas de texto
+  documentTypeMap: { [key: number]: string } = {
+    0: 'DNI',
+    1: 'CE',
+    2: 'Pasaporte'
+  };
+
+  constructor(private readonly customersService: CustomersService, private readonly router: Router) {}
 
   ngOnInit(): void {
     this.loadCustomers();
@@ -44,9 +52,8 @@ export class CustomersListComponent implements OnInit {
   }
 
   editCustomer(customer: Customer) {
-    // Aquí puedes navegar a una página de edición o abrir un modal
-    console.log('Editar cliente', customer);
-    // Ejemplo: this.router.navigate(['/edit-customer', customer.id]);
+    // Navegar a la pantalla de edición pasando el ID del cliente
+    this.router.navigate(['/edit-customer', customer.id]);
   }
 
   deleteCustomer(customer: Customer) {

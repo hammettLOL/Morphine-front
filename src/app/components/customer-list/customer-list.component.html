@@ -15,7 +15,10 @@
             <span class="font-bold">Email:</span> {{ customer.email }}
           </div>
           <div class="mb-1">
-            <span class="font-bold">DNI:</span> {{ customer.dni }}
+            <span class="font-bold">Tipo de Documento:</span> {{ documentTypeMap[customer.typeDocument] }}
+          </div>
+          <div class="mb-1">
+            <span class="font-bold">Documento:</span> {{ customer.document }}
           </div>
           <div class="mb-1">
             <span class="font-bold">Cumpleaños:</span> {{ customer.birthday | date:'shortDate' }}
@@ -46,7 +49,8 @@
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido</th>
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DNI</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de Documento</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documento</th>
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cumpleaños</th>
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instagram</th>
             <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
@@ -57,7 +61,8 @@
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.name }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.lastName }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.email }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ customer.dni }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ documentTypeMap[customer.typeDocument] }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ customer.document }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.birthday | date:'shortDate' }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.instagram }}</td>
             <td class="px-4 py-2 whitespace-nowrap text-center space-x-2">
