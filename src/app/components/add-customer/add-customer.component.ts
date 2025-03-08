@@ -60,7 +60,6 @@ export class AddCustomerComponent implements OnInit {
         this.router.navigate(['/customers']);
       },
       error: (err) => {
-        console.error('Error al agregar el cliente', err);
         this.toastService.showToast('Error al agregar el cliente.', 'danger');
       }
     });

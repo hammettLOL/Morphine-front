@@ -16,7 +16,7 @@ export class ToastService {
   private readonly toastSubject = new BehaviorSubject<ToastMessage | null>(null);
   toast$: Observable<ToastMessage | null> = this.toastSubject.asObservable();
 
-  showToast(message: string, type: ToastType, duration = 3000): void {
+  showToast(message: string, type: ToastType, duration = 5000): void {
     const toast: ToastMessage = { type, message };
     this.toastSubject.next(toast);
     setTimeout(() => {

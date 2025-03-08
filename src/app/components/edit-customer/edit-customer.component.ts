@@ -6,6 +6,7 @@ import { CustomersService } from '../../services/customers.service';
 import { Customer } from '../../services/customers.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-edit-customer',
@@ -22,7 +23,8 @@ export class EditCustomerComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly fb: FormBuilder,
-    private readonly customersService: CustomersService
+    private readonly customersService: CustomersService,
+    private readonly toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -58,7 +60,7 @@ export class EditCustomerComponent implements OnInit {
         });
       },
       error: (err) => {
-        console.error('Error al cargar el cliente', err);
+        this.toastService.showToast('Error al cargar el cliente','danger');
       }
     });
   }
@@ -88,11 +90,11 @@ export class EditCustomerComponent implements OnInit {
 
     this.customersService.updateCustomer(updatedCustomer).subscribe({
       next: () => {
-        alert('Cliente actualizado correctamente');
+        this.toastService.showToast('Cliente actualizado correctamente','success');
         this.router.navigate(['/customers']);
       },
       error: (err) => {
-        console.error('Error al actualizar el cliente', err);
+        this.toastService.showToast('Error al actualizar el cliente','danger');
       }
     });
   }

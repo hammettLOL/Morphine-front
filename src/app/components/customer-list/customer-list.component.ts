@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CustomersService, Customer } from '../../services/customers.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-customers-list',
@@ -22,7 +23,10 @@ export class CustomersListComponent implements OnInit {
     2: 'Pasaporte'
   };
 
-  constructor(private readonly customersService: CustomersService, private readonly router: Router) {}
+  constructor(private readonly customersService: CustomersService, 
+    private readonly router: Router,
+    private readonly toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.loadCustomers();
@@ -64,12 +68,12 @@ export class CustomersListComponent implements OnInit {
     if (confirm(`¿Estás seguro de eliminar a ${customer.name}?`)) {
       this.customersService.deleteCustomer(customer.id).subscribe({
         next: () => {
-          console.log('Cliente eliminado');
+          this.toastService.showToast('Cliente eliminado','success');
           // Recarga la lista después de eliminar
           this.loadCustomers();
         },
         error: (err) => {
-          console.error('Error al eliminar cliente', err);
+          this.toastService.showToast('Error al eliminar cliente','danger');
         }
       });
     }
