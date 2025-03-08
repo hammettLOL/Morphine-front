@@ -5,6 +5,7 @@ import { CustomersService, Customer } from '../../services/customers.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-add-customer',
@@ -19,6 +20,7 @@ export class AddCustomerComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly customersService: CustomersService,
+    private readonly toastService :ToastService,
     private readonly router: Router
   ) {}
 
@@ -54,12 +56,12 @@ export class AddCustomerComponent implements OnInit {
 
     this.customersService.addCustomer(newCustomer).subscribe({
       next: (response) => {
-        alert('Cliente agregado correctamente.');
+        this.toastService.showToast('Cliente agregado correctamente.', 'success');
         this.router.navigate(['/customers']);
       },
       error: (err) => {
         console.error('Error al agregar el cliente', err);
-        alert('Error al agregar el cliente.');
+        this.toastService.showToast('Error al agregar el cliente.', 'danger');
       }
     });
   }
