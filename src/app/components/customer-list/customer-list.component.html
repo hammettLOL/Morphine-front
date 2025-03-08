@@ -1,6 +1,11 @@
 <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Lista de Clientes</h1>
-  
+    <div class="flex justify-end mb-4">
+      <button (click)="addCustomer()"
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        Agregar Cliente
+      </button>
+    </div>
     <!-- Vista en Tarjetas para dispositivos pequeños -->
     <div class="block sm:hidden">
       <div class="space-y-4">
@@ -19,6 +24,9 @@
           </div>
           <div class="mb-1">
             <span class="font-bold">Documento:</span> {{ customer.document }}
+          </div>
+          <div class="mb-1">
+            <span class="font-bold">Celular:</span> {{ customer.cellphone }}
           </div>
           <div class="mb-1">
             <span class="font-bold">Cumpleaños:</span> {{ customer.birthday | date:'shortDate' }}
@@ -51,6 +59,7 @@
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de Documento</th>
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documento</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Celular</th>
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cumpleaños</th>
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instagram</th>
             <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
@@ -63,6 +72,7 @@
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.email }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ documentTypeMap[customer.typeDocument] }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.document }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ customer.cellphone }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.birthday | date:'shortDate' }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.instagram }}</td>
             <td class="px-4 py-2 whitespace-nowrap text-center space-x-2">

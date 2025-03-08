@@ -34,8 +34,9 @@ export class EditCustomerComponent implements OnInit {
       name: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      document: ['', Validators.required],
+      document: ['', [Validators.required, Validators.maxLength(14)]],
       typeDocument: [0, Validators.required],
+      cellphone: ['',[Validators.required, Validators.minLength(9),Validators.maxLength(12)]],
       birthday: ['', Validators.required],
       instagram: ['']
     });
@@ -52,6 +53,7 @@ export class EditCustomerComponent implements OnInit {
           document: customer.document,
           typeDocument: customer.typeDocument,
           birthday: this.formatDateForInput(customer.birthday), // Si es necesario formatear la fecha
+          cellphone: customer.cellphone,
           instagram: customer.instagram
         });
       },
@@ -79,6 +81,7 @@ export class EditCustomerComponent implements OnInit {
     }
     const updatedCustomer: Customer = {
       ...this.customerForm.value,
+      cellphone : String(this.customerForm.value.cellphone),
       typeDocument: Number(this.customerForm.value.typeDocument), 
       id: this.customerId
     };

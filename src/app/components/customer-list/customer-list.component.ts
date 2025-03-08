@@ -55,6 +55,9 @@ export class CustomersListComponent implements OnInit {
     // Navegar a la pantalla de edición pasando el ID del cliente
     this.router.navigate(['/edit-customer', customer.id]);
   }
+  addCustomer() {
+    this.router.navigate(['/add-customer']);
+  }
 
   deleteCustomer(customer: Customer) {
     // Aquí llamas al servicio para eliminar el cliente, por ejemplo:

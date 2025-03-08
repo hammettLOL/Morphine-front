@@ -21,7 +21,8 @@ export interface Customer {
   providedIn: 'root'
 })
 export class CustomersService {
-  private readonly apiUrl = 'http://localhost:5102/api/customers';
+  private readonly apiUrl = 'http://localhost:5102/';
+  private readonly endpoint ='api/customers'; 
 
   constructor(private readonly http: HttpClient) {}
 
@@ -29,18 +30,21 @@ export class CustomersService {
     const params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
-    return this.http.get<Customer[]>(this.apiUrl, { params });
+    return this.http.get<Customer[]>(`${this.apiUrl}${this.endpoint}`, { params });
   }
 
   getCustomer(customerId: number): Observable<Customer> {
-    return this.http.get<Customer>(`${this.apiUrl}/${customerId}`);
+    return this.http.get<Customer>(`${this.apiUrl}${this.endpoint}/${customerId}`);
+  }
+  addCustomer(customer: Customer): Observable<any> {
+    return this.http.post(`${this.apiUrl}${this.endpoint}/${customer.id}`, customer);
   }
 
   updateCustomer(customer: Customer): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${customer.id}`, customer);
+    return this.http.put(`${this.apiUrl}${this.endpoint}/${customer.id}`, customer);
   }
 
   deleteCustomer(customerId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${customerId}`);
+    return this.http.delete(`${this.apiUrl}${this.endpoint}/${customerId}`);
   }
 }
