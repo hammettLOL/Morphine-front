@@ -1,2 +1,18 @@
-
-<router-outlet />
+<div class="flex h-screen">
+    <!-- Sidebar siempre toggleable -->
+    <app-side-bar [isOpen]="isSidebarOpen" (closeSidebar)="closeSidebar()"></app-side-bar>
+  
+    <!-- Backdrop: se muestra siempre cuando el sidebar está abierto -->
+    <div *ngIf="isSidebarOpen" class="fixed inset-0 bg-black opacity-50 z-30" (click)="toggleSidebar()"></div>
+  
+    <!-- Contenido principal -->
+    <div class="flex-1 flex flex-col">
+      <!-- Navbar con botón hamburguesa siempre visible -->
+      <app-nav-bar (toggleSidebar)="toggleSidebar()"></app-nav-bar>
+      <!-- Área de contenido -->
+      <main class="flex-1 p-4 overflow-auto mt-16">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+  
