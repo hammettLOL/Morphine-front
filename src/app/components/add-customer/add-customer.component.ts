@@ -26,11 +26,11 @@ export class AddCustomerComponent implements OnInit {
     this.customerForm = this.fb.group({
       name: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      documento: ['', [Validators.required, Validators.maxLength(14)]],
-      tipoDocumento: ['', Validators.required],
-      cellphone: ['',[Validators.required,Validators.minLength(9)]],
-      birthday: ['', Validators.required],
+      email: ['', [Validators.email]],
+      document: ['', [Validators.maxLength(14)]],
+      typeDocument: [0],
+      cellphone: ['',[Validators.minLength(9)]],
+      birthday: [''],
       instagram: ['']
     });
   }
@@ -47,7 +47,7 @@ export class AddCustomerComponent implements OnInit {
       email: formValues.email,
       document: formValues.document,
       typeDocument: formValues.typeDocument,
-      birthday: formValues.birthday,
+      birthday: formValues.birthday || null,
       cellphone: formValues.cellphone,
       instagram: formValues.instagram
     };

@@ -37,7 +37,7 @@ export class CustomersService {
     return this.http.get<Customer>(`${this.apiUrl}${this.endpoint}/${customerId}`);
   }
   addCustomer(customer: Customer): Observable<any> {
-    return this.http.post(`${this.apiUrl}${this.endpoint}/${customer.id}`, customer);
+    return this.http.post(`${this.apiUrl}${this.endpoint}`, customer);
   }
 
   updateCustomer(customer: Customer): Observable<any> {

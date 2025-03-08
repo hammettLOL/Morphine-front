@@ -5,12 +5,22 @@
       <div class="mb-4">
         <label for="name" class="block font-bold mb-1">Nombre</label>
         <input id="name" formControlName="name" type="text" placeholder="Ingrese el nombre"
-               class="w-full p-2 border border-gray-300 rounded" />
+               class="w-full p-2 border border-gray-300 rounded"
+               [ngClass]="{'border-red-500': customerForm.get('name')?.invalid && customerForm.get('name')?.touched}"
+        />
+        <div *ngIf="customerForm.get('name')?.invalid && customerForm.get('name')?.touched" class="text-red-500 text-sm mt-1">
+          El nombre es requerido.
+        </div>
       </div>
       <div class="mb-4">
         <label for="lastName" class="block font-bold mb-1">Apellido</label>
         <input id="lastName" formControlName="lastName" type="text" placeholder="Ingrese el apellido"
-               class="w-full p-2 border border-gray-300 rounded" />
+               class="w-full p-2 border border-gray-300 rounded"
+               [ngClass]="{'border-red-500': customerForm.get('name')?.invalid && customerForm.get('name')?.touched}"
+        />
+        <div *ngIf="customerForm.get('lastName')?.invalid && customerForm.get('lastName')?.touched" class="text-red-500 text-sm mt-1">
+          El nombre es requerido.
+        </div>
       </div>
       <div class="mb-4">
         <label for="email" class="block font-bold mb-1">Email</label>
@@ -19,14 +29,14 @@
       </div>
       <!-- Campo para Documento -->
       <div class="mb-4">
-        <label for="documento" class="block font-bold mb-1">Documento</label>
-        <input id="documento" formControlName="documento" type="text" placeholder="Ingrese el número de documento"
+        <label for="document" class="block font-bold mb-1">Documento</label>
+        <input id="document" formControlName="document" type="text" placeholder="Ingrese el número de documento"
                class="w-full p-2 border border-gray-300 rounded" />
       </div>
       <!-- Campo para Tipo de Documento -->
       <div class="mb-4">
-        <label for="tipoDocumento" class="block font-bold mb-1">Tipo de Documento</label>
-        <select id="tipoDocumento" formControlName="tipoDocumento" class="w-full p-2 border border-gray-300 rounded">
+        <label for="typeDocument" class="block font-bold mb-1">Tipo de Documento</label>
+        <select id="typeDocument" formControlName="typeDocument" class="w-full p-2 border border-gray-300 rounded">
           <!-- Si la API espera un número, podrías enviar "0", "1", "2" -->
           <option value="0">DNI</option>
           <option value="1">CE</option>

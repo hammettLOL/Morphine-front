@@ -33,11 +33,11 @@ export class EditCustomerComponent implements OnInit {
     this.customerForm = this.fb.group({
       name: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      document: ['', [Validators.required, Validators.maxLength(14)]],
-      typeDocument: [0, Validators.required],
-      cellphone: ['',[Validators.required, Validators.minLength(9),Validators.maxLength(12)]],
-      birthday: ['', Validators.required],
+      email: ['', [Validators.email]],
+      document: ['', [Validators.maxLength(14)]],
+      typeDocument: [0],
+      cellphone: ['',[Validators.minLength(9),Validators.maxLength(12)]],
+      birthday: [''],
       instagram: ['']
     });
 
@@ -52,7 +52,7 @@ export class EditCustomerComponent implements OnInit {
           email: customer.email,
           document: customer.document,
           typeDocument: customer.typeDocument,
-          birthday: this.formatDateForInput(customer.birthday), // Si es necesario formatear la fecha
+          birthday: this.formatDateForInput(customer.birthday) || null, // Si es necesario formatear la fecha
           cellphone: customer.cellphone,
           instagram: customer.instagram
         });
