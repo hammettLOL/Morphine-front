@@ -13,10 +13,11 @@ export type ToastType = 'success' | 'danger' | 'warning';
 export class ToastComponent {
   @Input() type: ToastType = 'success';
   @Input() message: string = '';
-  @Output() closed = new EventEmitter<void>();
+  @Input() id: number = 0;
+  @Output() closed = new EventEmitter<number>();
 
   close(): void {
-    this.closed.emit();
+    this.closed.emit(this.id!);
   }
 
   get iconClasses(): string {

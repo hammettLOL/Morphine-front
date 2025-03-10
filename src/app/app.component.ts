@@ -5,22 +5,23 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { CommonModule } from '@angular/common';
 import { ToastComponent } from './components/toast/toast.component';
 import { ToastMessage, ToastService } from './services/toast.service';
+import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,SideBarComponent,CommonModule,NavBarComponent,ToastComponent],
+  imports: [RouterOutlet,SideBarComponent,CommonModule,NavBarComponent, ToastComponent, ConfirmModalComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'morphine-front';
+  toasts$: Observable<ToastMessage[]>;
 
   toastMessage: ToastMessage | null = null;
 
   constructor(private readonly toastService: ToastService) {
-    this.toastService.toast$.subscribe(msg => {
-      this.toastMessage = msg;
-    });
+    this.toasts$ = this.toastService.toasts$;
   }
   isSidebarOpen = false;
 
@@ -30,6 +31,10 @@ export class AppComponent {
 
   closeSidebar(): void {
     this.isSidebarOpen = false;
+  }
+
+  removeToast(id: number): void {
+    this.toastService.removeToast(id);
   }
  
 }

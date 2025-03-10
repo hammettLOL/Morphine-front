@@ -17,6 +17,12 @@
   </div>
 
   <div class="fixed bottom-4 right-4 z-50">
-    <app-toast *ngIf="toastMessage" [type]="toastMessage.type || 'success'" [message]="toastMessage.message || ''"></app-toast>
-  </div>
+    <app-toast *ngFor="let toast of toasts$ | async"
+    [id]="toast.id"
+    [type]="toast.type"
+    [message]="toast.message"
+    (closed)="removeToast($event)">
+</app-toast>
+    </div>
+  <app-confirm-modal></app-confirm-modal>
   

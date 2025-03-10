@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export type ToastType = 'success' | 'danger' | 'warning';
 
 export interface ToastMessage {
+  id: number;
   type: ToastType;
   message: string;
 }
@@ -13,14 +14,21 @@ export interface ToastMessage {
   providedIn: 'root'
 })
 export class ToastService {
-  private readonly toastSubject = new BehaviorSubject<ToastMessage | null>(null);
-  toast$: Observable<ToastMessage | null> = this.toastSubject.asObservable();
+  private readonly toastsSubject = new BehaviorSubject<ToastMessage[]>([]);
+  toasts$: Observable<ToastMessage[]> = this.toastsSubject.asObservable();
+  private toastIdCounter = 0;
 
   showToast(message: string, type: ToastType, duration = 5000): void {
-    const toast: ToastMessage = { type, message };
-    this.toastSubject.next(toast);
+    const toast: ToastMessage = { id: ++this.toastIdCounter, type, message };
+    const currentToasts = this.toastsSubject.getValue();
+    this.toastsSubject.next([...currentToasts, toast]);
     setTimeout(() => {
-      this.toastSubject.next(null);
+      this.removeToast(toast.id);
     }, duration);
+  }
+
+  removeToast(id: number): void {
+    const currentToasts = this.toastsSubject.getValue();
+    this.toastsSubject.next(currentToasts.filter(t => t.id !== id));
   }
 }
