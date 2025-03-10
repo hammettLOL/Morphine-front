@@ -3,6 +3,7 @@ import { CustomersService, Customer } from '../../services/customers.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToastService } from '../../services/toast.service';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-customers-list',
@@ -25,7 +26,8 @@ export class CustomersListComponent implements OnInit {
 
   constructor(private readonly customersService: CustomersService, 
     private readonly router: Router,
-    private readonly toastService: ToastService
+    private readonly toastService: ToastService,
+    private readonly modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -64,18 +66,19 @@ export class CustomersListComponent implements OnInit {
   }
 
   deleteCustomer(customer: Customer) {
-    // Aquí llamas al servicio para eliminar el cliente, por ejemplo:
-    if (confirm(`¿Estás seguro de eliminar a ${customer.name}?`)) {
-      this.customersService.deleteCustomer(customer.id).subscribe({
-        next: () => {
-          this.toastService.showToast('Cliente eliminado','success');
+    this.modalService.confirm({message: `Estas seguro de borrar a ${customer.name}`, title: 'Confirmar Eliminación'}).subscribe((result)=>{
+      if (result) {
+        this.customersService.deleteCustomer(customer.id).subscribe({
+          next: () => {
+            this.toastService.showToast('Cliente eliminado','success');
           // Recarga la lista después de eliminar
-          this.loadCustomers();
-        },
-        error: (err) => {
-          this.toastService.showToast('Error al eliminar cliente','danger');
-        }
-      });
-    }
+            this.loadCustomers();
+          },
+          error: (err) => {
+            this.toastService.showToast('Error al eliminar cliente','danger');
+          }
+        });
+      }
+    });
   }
 }
