@@ -60,8 +60,5 @@ export class LoginComponent implements OnInit{
     return this.loginForm.get('password');
   }
 
-  onLogout(){
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
-  }
+  
 }

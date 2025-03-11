@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-side-bar',
@@ -10,11 +10,17 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./side-bar.component.scss']
 })
 export class SideBarComponent {
+  private readonly router = inject(Router);
   @Input() isOpen: boolean = false;
   @Output() closeSidebar = new EventEmitter<void>();
 
   // Para que el sidebar se comporte igual en todos los tamaños, no se aplica lógica condicional de mobile
   onClose(): void {
     this.closeSidebar.emit();
+  }
+
+  onLogout(){
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 }
