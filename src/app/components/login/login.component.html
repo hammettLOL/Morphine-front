@@ -1,14 +1,39 @@
-<!-- src/app/components/login/login.component.html -->
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-    <form (ngSubmit)="onLogin()" class="bg-white p-8 rounded shadow-md w-full max-w-sm">
-      <h2 class="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h2>
-      <input type="text" [(ngModel)]="username" name="username" placeholder="Correo" required
-             class="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <input type="password" [(ngModel)]="password" name="password" placeholder="Contraseña" required
-             class="w-full p-2 mb-6 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
-        Ingresar
-      </button>
-    </form>
-  </div>
-  
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 overflow-hidden">
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="bg-white p-8 rounded shadow-md w-full max-w-sm">
+    <h2 class="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h2>
+    
+    <!-- Campo de correo -->
+    <div class="mb-4">
+      <input type="text" formControlName="username" placeholder="Correo" 
+             class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+             [ngClass]="{'border-red-500': username?.invalid && username?.touched}">
+      <div *ngIf="username?.invalid && username?.touched" class="text-red-500 text-sm mt-1">
+        <div *ngIf="username?.errors?.['required']">El correo es requerido.</div>
+        <div *ngIf="username?.errors?.['email']">Ingrese un correo válido.</div>
+      </div>
+    </div>
+    
+    <!-- Campo de contraseña -->
+    <div class="mb-6">
+      <input type="password" formControlName="password" placeholder="Contraseña" 
+             class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+             [ngClass]="{'border-red-500': password?.invalid && password?.touched}">
+      <div *ngIf="password?.invalid && password?.touched" class="text-red-500 text-sm mt-1">
+        <div *ngIf="password?.errors?.['required']">La contraseña es requerida.</div>
+        <div *ngIf="password?.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres.</div>
+      </div>
+    </div>
+    
+    <!-- Botón de Ingresar con animación de carga -->
+    <button type="submit" [disabled]="isLoading" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 flex items-center justify-center">
+      <ng-container *ngIf="!isLoading">Ingresar</ng-container>
+      <ng-container *ngIf="isLoading">
+        <svg class="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+        Cargando...
+      </ng-container>
+    </button>
+  </form>
+</div>

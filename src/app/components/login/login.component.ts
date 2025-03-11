@@ -1,33 +1,63 @@
 // src/app/components/login/login.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-  username = '';
-  password = '';
+export class LoginComponent implements OnInit{
+  loginForm!: FormGroup;
+  isLoading: boolean = false;
 
-  constructor(private readonly authService: AuthService, private readonly router: Router) {}
+
+  constructor(private readonly fb: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly toastService: ToastService
+  ) {}
+
+    ngOnInit(): void {
+      this.loginForm = this.fb.group({
+        username: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]]
+      });
+    }
 
   onLogin() {
-    this.authService.login(this.username, this.password).subscribe({
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }this.isLoading = true;
+    const { username, password } = this.loginForm.value;
+    this.authService.login(username, password).subscribe({
       next: (res) => {
         localStorage.setItem('token', res.token);
         this.router.navigate(['/customers']);
       },
       error: (err) => {
-        console.error('Error en autenticación', err);
+        this.isLoading = false;
+        this.toastService.showToast('Error en autenticación','warning');
+      },complete: () => {
+        this.isLoading = false;
       }
     });
+  }
+
+  // Getters para facilitar el acceso a los controles del formulario
+  get username() {
+    return this.loginForm.get('username');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
   }
 
   onLogout(){
