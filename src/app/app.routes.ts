@@ -4,10 +4,11 @@ import { CustomersListComponent } from './components/customer-list/customer-list
 import { AuthGuard } from '../guards/auth.guard';
 import { EditCustomerComponent } from './components/edit-customer/edit-customer.component';
 import { AddCustomerComponent } from './components/add-customer/add-customer.component';
+import { NoAuthGuard } from '../guards/no-auth.guard';
 
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
   { path: 'customers', component: CustomersListComponent, canActivate: [AuthGuard] },
   { path: 'edit-customer/:id', component: EditCustomerComponent, canActivate: [AuthGuard]},
   { path: 'add-customer', component: AddCustomerComponent, canActivate: [AuthGuard]},
