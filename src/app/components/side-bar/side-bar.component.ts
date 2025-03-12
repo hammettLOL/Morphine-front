@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -11,6 +12,7 @@ import { RouterLink, Router } from '@angular/router';
 })
 export class SideBarComponent {
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
   @Input() isOpen: boolean = false;
   @Output() closeSidebar = new EventEmitter<void>();
 
@@ -20,7 +22,6 @@ export class SideBarComponent {
   }
 
   onLogout(){
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 }
