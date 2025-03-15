@@ -1,11 +1,9 @@
 // src/app/components/edit-customer/edit-customer.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CustomersService } from '../../services/customers.service';
-import { Customer } from '../../services/customers.service';
+import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
+import { CustomersService,Customer, } from '../../services/customers.service';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from '../../services/toast.service';
 
 @Component({

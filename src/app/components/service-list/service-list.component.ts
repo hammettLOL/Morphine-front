@@ -7,6 +7,7 @@ import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-service-list',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './service-list.component.html',
   styleUrl: './service-list.component.css'

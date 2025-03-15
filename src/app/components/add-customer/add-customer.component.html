@@ -19,7 +19,7 @@
                [ngClass]="{'border-red-500': customerForm.get('name')?.invalid && customerForm.get('name')?.touched}"
         />
         <div *ngIf="customerForm.get('lastName')?.invalid && customerForm.get('lastName')?.touched" class="text-red-500 text-sm mt-1">
-          El nombre es requerido.
+          El apellido es requerido.
         </div>
       </div>
       <div class="mb-4">
