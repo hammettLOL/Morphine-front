@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalService, ModalRequest } from '../../services/modal.service';
+import { ModalService, ModalRequest } from '../../core/services/modal.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

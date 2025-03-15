@@ -1,10 +1,10 @@
 // src/app/components/login/login.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ToastService } from '../../services/toast.service';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-login',

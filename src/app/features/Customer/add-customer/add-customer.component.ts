@@ -1,11 +1,10 @@
 // src/app/components/add-customer/add-customer.component.ts
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CustomersService, Customer } from '../../services/customers.service';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CustomersService, Customer } from '../../../core/services/customers.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ToastService } from '../../services/toast.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-add-customer',

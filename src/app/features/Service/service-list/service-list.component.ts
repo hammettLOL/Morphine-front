@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Service, ServicesService } from '../../services/service.service';
+import { Service, ServicesService } from '../../../core/services/service.service';
 import { Router } from '@angular/router';
-import { ToastService } from '../../services/toast.service';
-import { ModalService } from '../../services/modal.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-service-list',

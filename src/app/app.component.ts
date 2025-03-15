@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SideBarComponent } from './components/side-bar/side-bar.component';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { SideBarComponent } from './shared/side-bar/side-bar.component';
+import { NavBarComponent } from './shared/nav-bar/nav-bar.component';
 import { CommonModule } from '@angular/common';
-import { AuthService } from './services/auth.service';
-import { ToastComponent } from './components/toast/toast.component';
-import { ToastMessage, ToastService } from './services/toast.service';
-import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
+import { AuthService } from './core/services/auth.service';
+import { ToastComponent } from './shared/toast/toast.component';
+import { ToastMessage, ToastService } from './core/services/toast.service';
+import { ConfirmModalComponent } from './shared/confirm-modal/confirm-modal.component';
 import { Observable } from 'rxjs';
 
 @Component({

@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ServicesService, Service } from '../../services/service.service';
-import { ToastService } from '../../services/toast.service';
+import { ServicesService, Service } from '../../../core/services/service.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-edit-service',

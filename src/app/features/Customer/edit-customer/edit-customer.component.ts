@@ -2,9 +2,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
-import { CustomersService,Customer, } from '../../services/customers.service';
+import { CustomersService,Customer, } from '../../../core/services/customers.service';
 import { CommonModule } from '@angular/common';
-import { ToastService } from '../../services/toast.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-edit-customer',
