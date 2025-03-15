@@ -67,10 +67,10 @@ export class AuthService {
     localStorage.removeItem(this.userNameKey);
     localStorage.removeItem(this.userLastNameKey);
     localStorage.removeItem(this.userEmailKey);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return this.isTokenValid();
   }
 }

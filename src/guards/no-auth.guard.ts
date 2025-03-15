@@ -11,7 +11,7 @@ export class NoAuthGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/customers']);
       return false;
     }
     return true;
