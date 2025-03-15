@@ -9,11 +9,13 @@ import { NoAuthGuard } from '../guards/no-auth.guard';
 import { ServicesListComponent } from './features/Service/service-list/service-list.component';
 import { AddServiceComponent } from './features/Service/add-service/add-service.component';
 import { EditServiceComponent } from './features/Service/edit-service/edit-service.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 export const routes: Routes = [
   { path: '', component: HomeComponent},
   { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'customers', component: CustomersListComponent, canActivate: [AuthGuard] },
   { path: 'services', component: ServicesListComponent, canActivate: [AuthGuard] },
   { path: 'add-service', component: AddServiceComponent, canActivate: [AuthGuard]},
