@@ -1,0 +1,76 @@
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Lista de Servicios</h1>
+    <div class="flex justify-end mb-4">
+      <button (click)="addService()"
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        Agregar Servicio
+      </button>
+    </div>
+    <!-- Vista en Tarjetas para dispositivos pequeños -->
+    <div class="block sm:hidden">
+      <div class="space-y-4">
+        <div *ngFor="let service of services; trackBy: trackByServiceId" class="bg-white p-4 rounded shadow">
+          <div class="mb-1">
+            <span class="font-bold">Tipo:</span> {{ service.type }}
+          </div>
+          <div class="mb-1">
+            <span class="font-bold">Descripción:</span> {{ service.description }}
+          </div>
+          <!-- Acciones -->
+          <div class="mt-2 flex space-x-2">
+            <button (click)="editService(service)"
+                    class="flex-1 bg-green-500 text-white py-1 rounded hover:bg-green-600">
+              Editar
+            </button>
+            <button (click)="deleteService(service)"
+                    class="flex-1 bg-red-500 text-white py-1 rounded hover:bg-red-600">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Vista en Tabla para pantallas medianas y superiores -->
+    <div class="hidden sm:block overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let service of services; trackBy: trackByServiceId">
+            <td class="px-4 py-2 whitespace-nowrap">{{ service.type }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ service.description }}</td>
+            <td class="px-4 py-2 whitespace-nowrap text-center space-x-2">
+              <button (click)="editService(service)" 
+                      class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
+                Editar
+              </button>
+              <button (click)="deleteService(service)" 
+                      class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Paginación (visible en todas las vistas) -->
+    <div class="flex justify-center mt-4">
+      <button (click)="prevPage()"
+              [disabled]="pageNumber === 1"
+              class="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50 mr-2">
+        Anterior
+      </button>
+      <span class="self-center">Página {{ pageNumber }}</span>
+      <button (click)="nextPage()"
+              class="px-4 py-2 bg-blue-500 text-white rounded ml-2">
+        Siguiente
+      </button>
+    </div>
+  </div>
+  

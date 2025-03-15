@@ -36,7 +36,6 @@ export class CustomersListComponent implements OnInit {
 
   loadCustomers() {
     this.customersService.getCustomers(this.pageNumber, this.pageSize).subscribe(data => {
-      console.log("llamando carga de clientes");
       this.customers = data;
     });
   }
