@@ -48,4 +48,7 @@ export class AddServiceComponent implements OnInit {
       }
     });
   }
+  cancel() {
+    this.router.navigate(['/services']);
+  }
 }

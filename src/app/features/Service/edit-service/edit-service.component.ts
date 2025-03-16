@@ -63,4 +63,7 @@ export class EditServiceComponent implements OnInit {
       }
     });
   }
+  cancel() {
+    this.router.navigate(['/services']);
+  }
 }

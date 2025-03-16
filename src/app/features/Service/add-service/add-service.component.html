@@ -22,9 +22,15 @@
           La descripción es requerida.
         </div>
       </div>
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
-        Agregar Servicio
-      </button>
+      <div class="flex flex-col sm:flex-row justify-between gap-2 mt-4">
+        <button type="submit" class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+          Agregar Servicio
+        </button>
+        <button type="button" class="flex-1 bg-gray-500 text-white py-2 rounded hover:bg-gray-600"
+          (click)="cancel()">
+          Cancelar
+        </button>
+      </div>
     </form>
   </div>
   

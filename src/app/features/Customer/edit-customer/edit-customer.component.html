@@ -55,9 +55,15 @@
         <label for="instagram" class="block font-bold mb-1">Instagram</label>
         <input id="instagram" formControlName="instagram" type="text" class="w-full p-2 border border-gray-300 rounded" />
       </div>
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
-        Guardar Cambios
-      </button>
+      <div class="flex flex-col sm:flex-row justify-between gap-2 mt-4">
+        <button type="submit" class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+          Guardar Cambios
+        </button>
+        <button type="button" class="flex-1 bg-gray-500 text-white py-2 rounded hover:bg-gray-600"
+          (click)="cancel()">
+          Cancelar
+        </button>
+      </div>
     </form>
   </div>
   

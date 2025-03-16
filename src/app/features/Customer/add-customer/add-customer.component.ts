@@ -63,4 +63,7 @@ export class AddCustomerComponent implements OnInit {
       }
     });
   }
+  cancel() {
+    this.router.navigate(['/customers']);
+  }
 }
