@@ -2,18 +2,19 @@
     <h1 class="text-2xl font-bold mb-4">Agregar Orden de Trabajo</h1>
     <form [formGroup]="workOrderForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded shadow-md max-w-lg mx-auto">
       
-      <!-- Service ID -->
-      <div class="mb-4">
-        <label for="serviceId" class="block font-bold mb-1">Servicio</label>
-        <select id="serviceId" formControlName="serviceId" class="w-full p-2 border border-gray-300 rounded">
-          <option value="">Seleccione un servicio</option>
-          <!-- Aquí podrías iterar sobre un listado de servicios -->
-          <option value="1">Tatuaje</option>
-        </select>
-        <div *ngIf="workOrderForm.get('serviceId')?.invalid && workOrderForm.get('serviceId')?.touched" class="text-red-500 text-sm mt-1">
-          Seleccione un servicio.
-        </div>
+      <!-- Seleccionar Servicio -->
+    <div class="mb-4">
+      <label for="serviceId" class="block font-bold mb-1">Servicio</label>
+      <select id="serviceId" formControlName="serviceId" class="w-full p-2 border border-gray-300 rounded">
+        <option value="">Seleccione un servicio</option>
+        <option *ngFor="let service of services" [value]="service.id">
+          {{ service.type }} <!-- O el nombre que corresponda -->
+        </option>
+      </select>
+      <div *ngIf="workOrderForm.get('serviceId')?.invalid && workOrderForm.get('serviceId')?.touched" class="text-red-500 text-sm mt-1">
+        Seleccione un servicio.
       </div>
+    </div>
       
       <!-- Description -->
       <div class="mb-4">
