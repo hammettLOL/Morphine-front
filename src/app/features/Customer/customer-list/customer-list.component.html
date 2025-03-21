@@ -1,15 +1,25 @@
 <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Lista de Clientes</h1>
     <div class="flex justify-end mb-4">
+        <!-- Botón global para agregar Work Order, visible si se ha seleccionado un cliente -->
+      <div class="mt-2 flex space-x-2">
+      <button *ngIf="selectedCustomer" (click)="addWorkOrder()"
+              class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+        Agregar Orden de Trabajo para {{ selectedCustomer.name }} {{ selectedCustomer.lastName }}
+      </button>
       <button (click)="addCustomer()"
               class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
         Agregar Cliente
       </button>
+      </div>
     </div>
     <!-- Vista en Tarjetas para dispositivos pequeños -->
     <div class="block sm:hidden">
       <div class="space-y-4">
-        <div *ngFor="let customer of customers; trackBy: trackByCustomerId" class="bg-white p-4 rounded shadow">
+        <div *ngFor="let customer of customers; trackBy: trackByCustomerId"
+          (click)="selectCustomer(customer)"
+           [ngClass]="{'bg-blue-100': selectedCustomer?.id === customer.id}"
+          class="bg-white p-4 rounded shadow">
           <div class="mb-1">
             <span class="font-bold">Nombre:</span> {{ customer.name }}
           </div>
@@ -66,7 +76,11 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr *ngFor="let customer of customers; trackBy: trackByCustomerId">
+          <tr *ngFor="let customer of customers; trackBy: trackByCustomerId"
+          (click)="selectCustomer(customer)"
+          [ngClass]="{'bg-blue-100': selectedCustomer?.id === customer.id}"
+          class="cursor-pointer"
+          >
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.name }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.lastName }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.email }}</td>
@@ -89,6 +103,7 @@
         </tbody>
       </table>
     </div>
+  
   
     <!-- Paginación (visible en todas las vistas) -->
     <div class="flex justify-center mt-4">

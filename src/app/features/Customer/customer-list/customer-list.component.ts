@@ -14,6 +14,7 @@ import { ModalService } from '../../../core/services/modal.service';
 })
 export class CustomersListComponent implements OnInit {
   customers: Customer[] = [];
+  selectedCustomer: Customer | null = null;
   pageNumber = 1;
   pageSize = 10;
 
@@ -37,7 +38,18 @@ export class CustomersListComponent implements OnInit {
   loadCustomers() {
     this.customersService.getCustomers(this.pageNumber, this.pageSize).subscribe(data => {
       this.customers = data;
+      this.selectedCustomer = null;
     });
+  }
+
+  selectCustomer(customer: Customer): void {
+    this.selectedCustomer = customer;
+  }
+  addWorkOrder(): void {
+    if (this.selectedCustomer) {
+      // Redirige a la ruta de agregar orden de trabajo con el ID del cliente seleccionado
+      this.router.navigate(['/add-work-orders/', this.selectedCustomer.id]);
+    }
   }
 
   nextPage() {

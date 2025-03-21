@@ -49,7 +49,7 @@ export class AddCustomerComponent implements OnInit {
       document: formValues.document,
       typeDocument: formValues.typeDocument,
       birthday: formValues.birthday || null,
-      cellphone: formValues.cellphone,
+      cellphone: String(formValues.cellphone),
       instagram: formValues.instagram
     };
 

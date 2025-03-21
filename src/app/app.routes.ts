@@ -19,7 +19,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'customers', component: CustomersListComponent, canActivate: [AuthGuard] },
   { path: 'services', component: ServicesListComponent, canActivate: [AuthGuard] },
-  { path: 'work-orders/:customerId', component: AddWorkOrderComponent, canActivate: [AuthGuard] },
+  { path: 'add-work-orders/:customerId', component: AddWorkOrderComponent, canActivate: [AuthGuard] },
   { path: 'add-service', component: AddServiceComponent, canActivate: [AuthGuard]},
   { path: 'edit-service/:id', component: EditServiceComponent, canActivate: [AuthGuard]},
   { path: 'edit-customer/:id', component: EditCustomerComponent, canActivate: [AuthGuard]},

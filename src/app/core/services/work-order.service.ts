@@ -4,16 +4,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export enum Status {
-  Pending = 'Pending',
-  InProgress = 'In Progress',
-  Completed = 'Completed',
-  Cancelled = 'Cancelled'
+  Pendiente = 0,
+  EnProgreso = 1,
+  Completado = 2,
+  Cancelado = 3
 }
 
 export enum PaymentMethod {
-  Cash = 'Cash',
-  Card = 'Card',
-  Transfer = 'Transfer'
+  Plin = 0,
+  Yape = 1,
+  Efectivo = 2,
+  Tarjeta = 3,
+  Transferencia = 4
 }
 
 export interface WorkOrder {
@@ -24,7 +26,7 @@ export interface WorkOrder {
   status: Status;
   advancePrice?: number;
   totalPrice?: number;
-  date?: Date;          // Se espera un valor Date en el backend (DateTime?)  
+  scheduleDate?: Date;          // Se espera un valor Date en el backend (DateTime?)  
   createdAt?: Date;
   updatedAt?: Date;
   paymentMethod?: PaymentMethod;
