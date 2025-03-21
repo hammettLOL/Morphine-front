@@ -1,0 +1,83 @@
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Agregar Orden de Trabajo</h1>
+    <form [formGroup]="workOrderForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded shadow-md max-w-lg mx-auto">
+      
+      <!-- Service ID -->
+      <div class="mb-4">
+        <label for="serviceId" class="block font-bold mb-1">Servicio</label>
+        <select id="serviceId" formControlName="serviceId" class="w-full p-2 border border-gray-300 rounded">
+          <option value="">Seleccione un servicio</option>
+          <!-- Aquí podrías iterar sobre un listado de servicios -->
+          <option value="1">Tatuaje</option>
+        </select>
+        <div *ngIf="workOrderForm.get('serviceId')?.invalid && workOrderForm.get('serviceId')?.touched" class="text-red-500 text-sm mt-1">
+          Seleccione un servicio.
+        </div>
+      </div>
+      
+      <!-- Description -->
+      <div class="mb-4">
+        <label for="description" class="block font-bold mb-1">Descripción</label>
+        <textarea id="description" formControlName="description" rows="3" class="w-full p-2 border border-gray-300 rounded"></textarea>
+      </div>
+      
+      <!-- Status -->
+      <div class="mb-4">
+        <label for="status" class="block font-bold mb-1">Estado</label>
+        <select id="status" formControlName="status" class="w-full p-2 border border-gray-300 rounded">
+          <option [ngValue]="Status.Pending">Pendiente</option>
+          <option [ngValue]="Status.InProgress">En Progreso</option>
+          <option [ngValue]="Status.Completed">Completada</option>
+          <option [ngValue]="Status.Cancelled">Cancelada</option>
+        </select>
+      </div>
+      
+      <!-- Scheduled Date -->
+      <div class="mb-4">
+        <label for="scheduledDate" class="block font-bold mb-1">Fecha Programada</label>
+        <input id="scheduledDate" formControlName="scheduledDate" type="date" class="w-full p-2 border border-gray-300 rounded" />
+        <div *ngIf="workOrderForm.get('scheduledDate')?.invalid && workOrderForm.get('scheduledDate')?.touched" class="text-red-500 text-sm mt-1">
+          La fecha es requerida.
+        </div>
+      </div>
+      
+      <!-- Total Price -->
+      <div class="mb-4">
+        <label for="totalPrice" class="block font-bold mb-1">Precio Total</label>
+        <input id="totalPrice" formControlName="totalPrice" type="number" step="0.01" class="w-full p-2 border border-gray-300 rounded" />
+        <div *ngIf="workOrderForm.get('totalPrice')?.invalid && workOrderForm.get('totalPrice')?.touched" class="text-red-500 text-sm mt-1">
+          Ingrese un precio válido.
+        </div>
+      </div>
+      
+      <!-- Advance Price -->
+      <div class="mb-4">
+        <label for="advancePrice" class="block font-bold mb-1">Precio Adelantado</label>
+        <input id="advancePrice" formControlName="advancePrice" type="number" step="0.01" class="w-full p-2 border border-gray-300 rounded" />
+      </div>
+      
+      <!-- Payment Method -->
+      <div class="mb-4">
+        <label for="paymentMethod" class="block font-bold mb-1">Medio de Pago</label>
+        <select id="paymentMethod" formControlName="paymentMethod" class="w-full p-2 border border-gray-300 rounded">
+          <option [ngValue]="PaymentMethod.Cash">Efectivo</option>
+          <option [ngValue]="PaymentMethod.Card">Tarjeta</option>
+          <option [ngValue]="PaymentMethod.Transfer">Transferencia</option>
+        </select>
+        <div *ngIf="workOrderForm.get('paymentMethod')?.invalid && workOrderForm.get('paymentMethod')?.touched" class="text-red-500 text-sm mt-1">
+          Seleccione un método de pago.
+        </div>
+      </div>
+      
+      <!-- Botones: Guardar y Cancelar (responsive) -->
+      <div class="flex flex-col sm:flex-row justify-between gap-2 mt-4">
+        <button type="submit" class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+          Guardar Orden
+        </button>
+        <button type="button" (click)="cancel()" class="flex-1 bg-gray-500 text-white py-2 rounded hover:bg-gray-600">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+  
