@@ -11,6 +11,7 @@ import { AddServiceComponent } from './features/Service/add-service/add-service.
 import { EditServiceComponent } from './features/Service/edit-service/edit-service.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AddWorkOrderComponent } from './features/WorkOrder/add-work-order/add-work-order.component';
+import { WorkOrderListComponent } from './features/WorkOrder/work-order-list/work-order-list.component';
 
 
 export const routes: Routes = [
@@ -19,6 +20,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'customers', component: CustomersListComponent, canActivate: [AuthGuard] },
   { path: 'services', component: ServicesListComponent, canActivate: [AuthGuard] },
+  { path: 'work-orders', component: WorkOrderListComponent, canActivate: [AuthGuard] },
   { path: 'add-work-orders/:customerId', component: AddWorkOrderComponent, canActivate: [AuthGuard] },
   { path: 'add-service', component: AddServiceComponent, canActivate: [AuthGuard]},
   { path: 'edit-service/:id', component: EditServiceComponent, canActivate: [AuthGuard]},

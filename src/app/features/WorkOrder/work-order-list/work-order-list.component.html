@@ -1,0 +1,108 @@
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Lista de Ordenes de Trabajo</h1>
+    <div class="flex justify-end mb-4">
+        <!-- Botón global para agregar Work Order, visible si se ha seleccionado un cliente -->
+      <div class="mt-2 flex space-x-2">
+     
+      <button (click)="addWorkOrder()"
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        Agregar Orden de Trabajo
+      </button>
+      </div>
+    </div>
+    <!-- Vista en Tarjetas para dispositivos pequeños -->
+    <div class="block sm:hidden">
+      <div class="space-y-4">
+        <div *ngFor="let workOrder of workOrders; trackBy: trackByWorkOrderId"
+          class="bg-white p-4 rounded shadow">
+          <div class="mb-1">
+            <span class="font-bold">Nombre:</span> {{ workOrder.customerName }}
+          </div>
+          <div class="mb-1">
+            <span class="font-bold">Servicio:</span> {{ workOrder.serviceType }}
+          </div>
+          <div class="mb-1">
+            <span class="font-bold">Estado:</span> {{ statusMap[workOrder.status] }}
+          </div>
+          <div class="mb-1">
+            <span class="font-bold">Método de Pago:</span> {{ paymentMethodMap[workOrder.paymentMethod] }}
+          </div>
+          <div class="mb-1">
+            <span class="font-bold">Día</span> {{ workOrder.scheduleDate | date:'shortDate' }}
+          </div>
+          <div class="mb-1">
+            <span class="font-bold">Adelanto:</span> {{ workOrder.advancePrice }}
+          </div>
+          <div class="mb-1">
+            <span class="font-bold">Precio Total:</span> {{ workOrder.totalPrice }}
+          </div>
+          <!-- Acciones -->
+          <div class="mt-2 flex space-x-2">
+            <button (click)="editWorkOrder(workOrder)"
+                    class="flex-1 bg-green-500 text-white py-1 rounded hover:bg-green-600">
+              Editar
+            </button>
+            <button (click)="deleteWorkOrder(workOrder)"
+                    class="flex-1 bg-red-500 text-white py-1 rounded hover:bg-red-600">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Vista en Tabla para pantallas medianas y superiores -->
+    <div class="hidden sm:block overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Servicio</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Método de Pago</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Día</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Adelanto</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Total</th>
+            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let workOrder of workOrders; trackBy: trackByWorkOrderId">
+            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.customerName }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.serviceType }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ statusMap[workOrder.status] }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ paymentMethodMap[workOrder.paymentMethod] }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.scheduleDate | date:'shortDate' }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.advancePrice }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.totalPrice }}</td>
+            <td class="px-4 py-2 whitespace-nowrap text-center space-x-2">
+              <button (click)="editWorkOrder(workOrder)" 
+                      class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
+                Editar
+              </button>
+              <button (click)="deleteWorkOrder(workOrder)" 
+                      class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+  
+    <!-- Paginación (visible en todas las vistas) -->
+    <div class="flex justify-center mt-4">
+      <button (click)="prevPage()"
+              [disabled]="pageNumber === 1"
+              class="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50 mr-2">
+        Anterior
+      </button>
+      <span class="self-center">Página {{ pageNumber }}</span>
+      <button (click)="nextPage()"
+              class="px-4 py-2 bg-blue-500 text-white rounded ml-2">
+        Siguiente
+      </button>
+    </div>
+  </div>
+  

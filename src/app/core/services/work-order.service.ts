@@ -1,6 +1,6 @@
 // src/app/services/work-order.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export enum Status {
@@ -17,7 +17,16 @@ export enum PaymentMethod {
   Tarjeta = 3,
   Transferencia = 4
 }
-
+export interface WorkOrderDto{
+  id: number,
+  customerName: string,
+  serviceType: string,
+  status: Status,
+  paymentMethod: PaymentMethod,
+  scheduleDate: Date,
+  advancePrice: number,
+  totalPrice: number
+}
 export interface WorkOrder {
   id: number;
   customerId: number;
@@ -49,13 +58,16 @@ export class WorkOrderService {
   constructor(private readonly http: HttpClient) {}
 
   // Obtener todas las órdenes de trabajo
-  getAll(): Observable<WorkOrder[]> {
-    return this.http.get<WorkOrder[]>(`{this.apiUrl}/${this.endpoint}`);
-  }
+  getWorkOrders(pageNumber: number, pageSize: number): Observable<WorkOrderDto[]> {
+      const params = new HttpParams()
+        .set('pageNumber', pageNumber.toString())
+        .set('pageSize', pageSize.toString());
+      return this.http.get<WorkOrderDto[]>(`${this.apiUrl}/${this.endpoint}`, { params });
+    }
 
   // Obtener una orden de trabajo por ID
-  getById(id: number): Observable<WorkOrder> {
-    return this.http.get<WorkOrder>(`${this.apiUrl}/{this.endpoint}/${id}`);
+  getById(id: number): Observable<WorkOrderDto> {
+    return this.http.get<WorkOrderDto>(`${this.apiUrl}/{this.endpoint}/${id}`);
   }
 
   // Crear una nueva orden de trabajo

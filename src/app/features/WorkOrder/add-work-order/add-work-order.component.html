@@ -43,9 +43,9 @@
       
       <!-- Scheduled Date -->
       <div class="mb-4">
-        <label for="scheduledDate" class="block font-bold mb-1">Fecha Programada</label>
-        <input id="scheduledDate" formControlName="scheduledDate" type="date" class="w-full p-2 border border-gray-300 rounded" />
-        <div *ngIf="workOrderForm.get('scheduledDate')?.invalid && workOrderForm.get('scheduledDate')?.touched" class="text-red-500 text-sm mt-1">
+        <label for="scheduleDate" class="block font-bold mb-1">Fecha Programada</label>
+        <input id="scheduleDate" formControlName="scheduleDate" type="date" class="w-full p-2 border border-gray-300 rounded" />
+        <div *ngIf="workOrderForm.get('scheduleDate')?.invalid && workOrderForm.get('scheduleDate')?.touched" class="text-red-500 text-sm mt-1">
           La fecha es requerida.
         </div>
       </div>

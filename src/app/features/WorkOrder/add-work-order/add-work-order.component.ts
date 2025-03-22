@@ -40,7 +40,7 @@ export class AddWorkOrderComponent implements OnInit {
        serviceId: ['', Validators.required],
        description: [''],
        status: [Status.Pendiente, Validators.required],
-       scheduledDate: ['', Validators.required],
+       scheduleDate: ['', Validators.required],
        totalPrice: [0, [Validators.required, Validators.min(0)]],
        advancePrice: [0],
        paymentMethod: [PaymentMethod.Efectivo, Validators.required]
