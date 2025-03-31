@@ -48,7 +48,7 @@ export class CustomersListComponent implements OnInit {
   addWorkOrder(): void {
     if (this.selectedCustomer) {
       // Redirige a la ruta de agregar orden de trabajo con el ID del cliente seleccionado
-      this.router.navigate(['/add-work-orders/', this.selectedCustomer.id]);
+      this.router.navigate(['/add-work-order/', this.selectedCustomer.id]);
     }
   }
 

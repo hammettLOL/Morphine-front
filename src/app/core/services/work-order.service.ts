@@ -19,11 +19,13 @@ export enum PaymentMethod {
 }
 export interface WorkOrderDto{
   id: number,
+  customerId: number,
   customerName: string,
+  serviceId: number,
   serviceType: string,
   status: Status,
   paymentMethod: PaymentMethod,
-  scheduleDate: Date,
+  scheduleDate: string,
   advancePrice: number,
   totalPrice: number
 }
@@ -67,7 +69,7 @@ export class WorkOrderService {
 
   // Obtener una orden de trabajo por ID
   getById(id: number): Observable<WorkOrderDto> {
-    return this.http.get<WorkOrderDto>(`${this.apiUrl}/{this.endpoint}/${id}`);
+    return this.http.get<WorkOrderDto>(`${this.apiUrl}/${this.endpoint}/${id}`);
   }
 
   // Crear una nueva orden de trabajo

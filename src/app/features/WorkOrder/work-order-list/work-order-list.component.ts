@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { PaymentMethod, Status, WorkOrder, WorkOrderDto, WorkOrderService } from '../../../core/services/work-order.service';
+import { WorkOrderDto, WorkOrderService } from '../../../core/services/work-order.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { ModalService } from '../../../core/services/modal.service';
