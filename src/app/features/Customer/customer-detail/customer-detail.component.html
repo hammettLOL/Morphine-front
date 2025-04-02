@@ -1,0 +1,35 @@
+<div class="container mx-auto p-4">
+    <div *ngIf="loading" class="text-center text-gray-500">
+      Cargando...
+    </div>
+    <div *ngIf="!loading && customer" class="bg-white shadow rounded-lg p-6">
+      <h1 class="text-2xl font-bold mb-4">Detalle del Cliente</h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <p><span class="font-bold">Nombre:</span> {{ customer.name }}</p>
+          <p><span class="font-bold">Apellido:</span> {{ customer.lastName }}</p>
+          <p><span class="font-bold">Email:</span> {{ customer.email }}</p>
+          <p><span class="font-bold">Tipo de Documento:</span> {{ customer.typeDocument }}</p>
+          <p><span class="font-bold">Documento:</span> {{ customer.document }}</p>
+        </div>
+        <div>
+          <p><span class="font-bold">Celular:</span> {{ customer.cellphone }}</p>
+          <p><span class="font-bold">Cumpleaños:</span> {{ customer.birthday | date:'shortDate' }}</p>
+          <p><span class="font-bold">Instagram:</span> {{ customer.instagram }}</p>
+        </div>
+      </div>
+      <!-- Botones de Acción -->
+      <div class="mt-6 flex flex-col sm:flex-row justify-between gap-2">
+        <button (click)="editCustomer()" class="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600">
+          Editar
+        </button>
+        <button (click)="addWorkOrder()" class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+          Agregar Work Order
+        </button>
+        <button (click)="deleteCustomer()" class="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+  

@@ -4,10 +4,6 @@
     <div class="flex justify-end mb-4">
         <!-- Botón global para agregar Work Order, visible si se ha seleccionado un cliente -->
       <div class="mt-2 flex space-x-2">
-      <button *ngIf="selectedCustomer" (click)="addWorkOrder()"
-              class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
-        Agregar Orden de Trabajo para {{ selectedCustomer.name }} {{ selectedCustomer.lastName }}
-      </button>
       <button (click)="addCustomer()"
               class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
         Agregar Cliente
@@ -39,23 +35,6 @@
           <div class="mb-1">
             <span class="font-bold">Celular:</span> {{ customer.cellphone }}
           </div>
-          <div class="mb-1">
-            <span class="font-bold">Cumpleaños:</span> {{ customer.birthday | date:'shortDate' }}
-          </div>
-          <div class="mb-1">
-            <span class="font-bold">Instagram:</span> {{ customer.instagram }}
-          </div>
-          <!-- Acciones -->
-          <div class="mt-2 flex space-x-2">
-            <button (click)="editCustomer(customer)"
-                    class="flex-1 bg-green-500 text-white py-1 rounded hover:bg-green-600">
-              Editar
-            </button>
-            <button (click)="deleteCustomer(customer)"
-                    class="flex-1 bg-red-500 text-white py-1 rounded hover:bg-red-600">
-              Eliminar
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -71,9 +50,6 @@
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de Documento</th>
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documento</th>
             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Celular</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cumpleaños</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instagram</th>
-            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -88,18 +64,6 @@
             <td class="px-4 py-2 whitespace-nowrap">{{ documentTypeMap[customer.typeDocument] }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.document }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.cellphone }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ customer.birthday | date:'shortDate' }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ customer.instagram }}</td>
-            <td class="px-4 py-2 whitespace-nowrap text-center space-x-2">
-              <button (click)="editCustomer(customer)" 
-                      class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
-                Editar
-              </button>
-              <button (click)="deleteCustomer(customer)" 
-                      class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
-                Eliminar
-              </button>
-            </td>
           </tr>
         </tbody>
       </table>

@@ -13,6 +13,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AddWorkOrderComponent } from './features/WorkOrder/add-work-order/add-work-order.component';
 import { WorkOrderListComponent } from './features/WorkOrder/work-order-list/work-order-list.component';
 import { EditWorkOrderComponent } from './features/WorkOrder/edit-work-order/edit-work-order.component';
+import { CustomerDetailComponent } from './features/Customer/customer-detail/customer-detail.component';
 
 
 export const routes: Routes = [
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'customers', component: CustomersListComponent, canActivate: [AuthGuard] },
+  { path: 'customer/detail/:id', component: CustomerDetailComponent, canActivate: [AuthGuard] },
   { path: 'services', component: ServicesListComponent, canActivate: [AuthGuard] },
   { path: 'work-orders', component: WorkOrderListComponent, canActivate: [AuthGuard] },
   { path: 'add-work-order/:customerId', component: AddWorkOrderComponent, canActivate: [AuthGuard] },

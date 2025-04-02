@@ -16,7 +16,7 @@ export class CustomersListComponent implements OnInit {
   customers: Customer[] = [];
   selectedCustomer: Customer | null = null;
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 15;
 
   // Mapeo de valores numéricos a cadenas de texto
   documentTypeMap: { [key: number]: string } = {
@@ -44,13 +44,9 @@ export class CustomersListComponent implements OnInit {
 
   selectCustomer(customer: Customer): void {
     this.selectedCustomer = customer;
+    this.router.navigate(['/customer/detail/', customer.id]);
   }
-  addWorkOrder(): void {
-    if (this.selectedCustomer) {
-      // Redirige a la ruta de agregar orden de trabajo con el ID del cliente seleccionado
-      this.router.navigate(['/add-work-order/', this.selectedCustomer.id]);
-    }
-  }
+
 
   nextPage() {
     this.pageNumber++;
@@ -68,28 +64,9 @@ export class CustomersListComponent implements OnInit {
     return customer.id;
   }
 
-  editCustomer(customer: Customer) {
-    // Navegar a la pantalla de edición pasando el ID del cliente
-    this.router.navigate(['/edit-customer', customer.id]);
-  }
+ 
   addCustomer() {
     this.router.navigate(['/add-customer']);
   }
 
-  deleteCustomer(customer: Customer) {
-    this.modalService.confirm({message: `Estas seguro de borrar a ${customer.name}`, title: 'Confirmar Eliminación'}).subscribe((result)=>{
-      if (result) {
-        this.customersService.deleteCustomer(customer.id).subscribe({
-          next: () => {
-            this.toastService.showToast('Cliente eliminado','success');
-          // Recarga la lista después de eliminar
-            this.loadCustomers();
-          },
-          error: (err) => {
-            this.toastService.showToast('Error al eliminar cliente','danger');
-          }
-        });
-      }
-    });
-  }
 }
