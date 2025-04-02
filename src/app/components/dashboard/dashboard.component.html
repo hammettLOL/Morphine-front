@@ -10,18 +10,30 @@
       </div>
       <!-- Card: Total Servicios -->
       <div class="bg-white shadow rounded-lg p-6">
-        <div class="text-gray-500 uppercase text-sm font-bold">Total Servicios</div>
-        <div class="mt-2 text-3xl font-semibold">{{ metrics.totalServices }}</div>
+        <div class="text-gray-500 uppercase text-sm font-bold">Total Tattoos</div>
+        <div class="mt-2 text-3xl font-semibold">{{ metrics.totalTattoos }}</div>
       </div>
       <!-- Card: Citas Hoy -->
       <div class="bg-white shadow rounded-lg p-6">
-        <div class="text-gray-500 uppercase text-sm font-bold">Citas Hoy</div>
-        <div class="mt-2 text-3xl font-semibold">{{ metrics.appointmentsToday }}</div>
+        <div class="text-gray-500 uppercase text-sm font-bold">Citas Mensual</div>
+        <div class="mt-2 text-3xl font-semibold">{{ metrics.appointmentsMonth }}</div>
       </div>
       <!-- Card: Ingresos Hoy -->
       <div class="bg-white shadow rounded-lg p-6">
-        <div class="text-gray-500 uppercase text-sm font-bold">Ingresos Hoy</div>
-        <div class="mt-2 text-3xl font-semibold">${{ metrics.revenueToday }}</div>
+        <div class="text-gray-500 uppercase text-sm font-bold">Ingresos Mensual</div>
+        <div class="mt-2 text-3xl font-semibold">${{ metrics.revenueMonth }}</div>
+      </div>
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="text-gray-500 uppercase text-sm font-bold">Total Ingresos</div>
+        <div class="mt-2 text-3xl font-semibold">S/. {{ metrics.totalRevenue }}</div>
+      </div>
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="text-gray-500 uppercase text-sm font-bold">Total Ingresos Lima Espacio</div>
+        <div class="mt-2 text-3xl font-semibold">S/. {{ metrics.totalLimaEspacioRevenue }}</div>
+      </div>
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="text-gray-500 uppercase text-sm font-bold">Total Ingresos Morphine</div>
+        <div class="mt-2 text-3xl font-semibold">S/. {{ metrics.totalMorphineRevenue }}</div>
       </div>
     </div>
     

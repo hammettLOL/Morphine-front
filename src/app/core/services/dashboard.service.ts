@@ -5,9 +5,12 @@ import { Observable } from 'rxjs';
 
 export interface DashboardMetrics {
   totalCustomers: number;
-  totalServices: number;
-  appointmentsToday: number;
-  revenueToday: number;
+  totalTattoos: number;
+  appointmentsMonth: number;
+  revenueMonth: number;
+  totalRevenue: number;
+  totalLimaEspacioRevenue: number;
+  totalMorphineRevenue: number;
 }
 
 @Injectable({
