@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PaymentMethod, Status, WorkOrderService } from '../../../core/services/work-order.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { ServicesService } from '../../../core/services/service.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-edit-work-order',
@@ -14,13 +14,14 @@ import { forkJoin } from 'rxjs';
   templateUrl: './edit-work-order.component.html',
   styleUrl: './edit-work-order.component.css'
 })
-export class EditWorkOrderComponent implements OnInit {
+export class EditWorkOrderComponent implements OnInit, OnDestroy {
   workOrderForm!: FormGroup;
   workOrderId!: number;
   customerId!: number;
   services: any[] = []; 
   Status = Status; // Exponer el enum para el template
   PaymentMethod = PaymentMethod; // Exponer el enum
+   private readonly destroy$ = new Subject<void>();
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -34,15 +35,31 @@ export class EditWorkOrderComponent implements OnInit {
     this.workOrderId = Number(this.route.snapshot.paramMap.get('id'));
     this.workOrderForm = this.fb.group({
       customerName: [{value: '', disabled: true}, Validators.required],
-      serviceId: ['', Validators.required],
+      serviceType: [{value: '', disabled: true}, Validators.required],
+      schedulerId: ['', Validators.required],
       description: [''],
       status: [Status.Pendiente, Validators.required],
       scheduleDate: ['', Validators.required],
       totalPrice: [0, [Validators.required, Validators.min(0)]],
-      advancePrice: [0],
+      advancePrice: [0, [Validators.min(0)]],
       paymentMethod: [PaymentMethod.Efectivo, Validators.required]
     });
 
+    // Suscribirse a los cambios en totalPrice
+    const totalPriceControl = this.workOrderForm.get('totalPrice');
+       if (totalPriceControl) {
+         totalPriceControl.valueChanges
+           .pipe(takeUntil(this.destroy$))
+           .subscribe(totalPrice => {
+             if (totalPrice) {
+               // Calcula el 40% del precio total y actualiza advancePrice
+               const advanceValue = parseFloat(totalPrice) * 0.4;
+               this.workOrderForm.get('advancePrice')?.setValue(advanceValue.toFixed(0), { emitEvent: false });
+             } else {
+               this.workOrderForm.get('advancePrice')?.setValue('', { emitEvent: false });
+             }
+           });
+       }
 
     forkJoin({
       services: this.servicesService.getServices(1,10),
@@ -53,8 +70,10 @@ export class EditWorkOrderComponent implements OnInit {
         this.customerId = workOrder.customerId;
         this.workOrderForm.patchValue({
           customerName: workOrder.customerName,
-          serviceId: workOrder.serviceId,
+          serviceType: workOrder.serviceType,
+          schedulerId: workOrder.schedulerId,
           status: workOrder.status,
+          description: workOrder.description,
           scheduleDate: this.formatDateForInput(workOrder.scheduleDate) || null, // Si es necesario formatear la fecha
           totalPrice: workOrder.totalPrice,
           advancePrice: workOrder.advancePrice,
@@ -67,6 +86,10 @@ export class EditWorkOrderComponent implements OnInit {
       }
     });
     
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private formatDateForInput(dateValue: string): string {
@@ -90,7 +113,6 @@ export class EditWorkOrderComponent implements OnInit {
       ...this.workOrderForm.value,
       paymentMethod : Number(this.workOrderForm.value.paymentMethod),
       status: Number(this.workOrderForm.value.status),
-      serviceId: Number(this.workOrderForm.value.serviceId),
       customerId: this.customerId,
       id: this.workOrderId
     };

@@ -7,15 +7,18 @@
     </div>
       <!-- Seleccionar Servicio -->
     <div class="mb-4">
-      <label for="serviceId" class="block font-bold mb-1">Servicio</label>
-      <select id="serviceId" formControlName="serviceId" class="w-full p-2 border border-gray-300 rounded">
-        <option value="">Seleccione un servicio</option>
-        <option *ngFor="let service of services" [value]="service.id">
-          {{ service.type }} <!-- O el nombre que corresponda -->
-        </option>
+      <label for="serviceType" class="block font-bold mb-1">Servicio</label>
+      <input id="serviceType" type="text" formControlName="serviceType" class="w-full p-2 border border-gray-300 rounded bg-gray-100" />
+    </div>
+    <!-- Seleccionar Scheduler -->
+    <div class="mb-4">
+      <label for="schedulerId" class="block font-bold mb-1">Agendado por</label>
+      <select id="schedulerId" formControlName="schedulerId" class="w-full p-2 border border-gray-300 rounded">
+        <option value="1">Morphine</option>
+        <option value="2">Lima Espacio</option>
       </select>
-      <div *ngIf="workOrderForm.get('serviceType')?.invalid && workOrderForm.get('serviceType')?.touched" class="text-red-500 text-sm mt-1">
-        Seleccione un servicio.
+      <div *ngIf="workOrderForm.get('schedulerId')?.invalid && workOrderForm.get('schedulerId')?.touched" class="text-red-500 text-sm mt-1">
+        Seleccione un agendador.
       </div>
     </div>
       

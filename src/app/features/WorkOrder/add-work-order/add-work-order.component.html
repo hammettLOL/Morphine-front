@@ -23,6 +23,18 @@
         Seleccione un servicio.
       </div>
     </div>
+
+      <!-- Seleccionar Scheduler -->
+      <div class="mb-4">
+        <label for="schedulerId" class="block font-bold mb-1">Agendado por</label>
+        <select id="schedulerId" formControlName="schedulerId" class="w-full p-2 border border-gray-300 rounded">
+          <option value="1">Morphine</option>
+          <option value="2">Lima Espacio</option>
+        </select>
+        <div *ngIf="workOrderForm.get('schedulerId')?.invalid && workOrderForm.get('schedulerId')?.touched" class="text-red-500 text-sm mt-1">
+          Seleccione un agendador.
+        </div>
+      </div>
       
       <!-- Description -->
       <div class="mb-4">

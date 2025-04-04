@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentMethod, Status, WorkOrderService, WorkOrder } from '../../../core/services/work-order.service';
 import { ServicesService } from '../../../core/services/service.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { CustomersService } from '../../../core/services/customers.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-work-order',
@@ -14,13 +15,14 @@ import { CustomersService } from '../../../core/services/customers.service';
   templateUrl: './add-work-order.component.html',
   styleUrl: './add-work-order.component.css'
 })
-export class AddWorkOrderComponent implements OnInit {
+export class AddWorkOrderComponent implements OnInit, OnDestroy {
   workOrderForm!: FormGroup;
   customerId!: number;
   customer: any;
   services: any[] = []; 
   Status = Status; // Exponer el enum para el template
   PaymentMethod = PaymentMethod; // Exponer el enum
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private readonly fb: FormBuilder,
@@ -38,6 +40,7 @@ export class AddWorkOrderComponent implements OnInit {
      this.workOrderForm = this.fb.group({
        customerId: [this.customerId, Validators.required],
        serviceId: ['', Validators.required],
+       schedulerId: [1, Validators.required],
        description: [''],
        status: [Status.Pendiente, Validators.required],
        scheduleDate: ['', Validators.required],
@@ -45,6 +48,22 @@ export class AddWorkOrderComponent implements OnInit {
        advancePrice: [0],
        paymentMethod: [PaymentMethod.Efectivo, Validators.required]
      });
+
+   
+    const totalPriceControl = this.workOrderForm.get('totalPrice');
+    if (totalPriceControl) {
+      totalPriceControl.valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(totalPrice => {
+          if (totalPrice) {
+            // Calcula el 40% del precio total y actualiza advancePrice
+            const advanceValue = parseFloat(totalPrice) * 0.4;
+            this.workOrderForm.get('advancePrice')?.setValue(advanceValue.toFixed(0), { emitEvent: false });
+          } else {
+            this.workOrderForm.get('advancePrice')?.setValue('', { emitEvent: false });
+          }
+        });
+    }
 
      // Cargar la lista de servicios para el select
     this.serviceService.getServices(1,10).subscribe({
@@ -67,6 +86,11 @@ export class AddWorkOrderComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   onSubmit(): void {
     if (this.workOrderForm.invalid) {
       this.workOrderForm.markAllAsTouched();
@@ -76,6 +100,7 @@ export class AddWorkOrderComponent implements OnInit {
          ...this.workOrderForm.value,
          paymentMethod : Number(this.workOrderForm.value.paymentMethod),
          status: Number(this.workOrderForm.value.status),
+         schedulerId: Number(this.workOrderForm.value.schedulerId),
          customerId: Number(this.workOrderForm.value.customerId),
          serviceId: Number(this.workOrderForm.value.serviceId)
        };

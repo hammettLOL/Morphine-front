@@ -17,10 +17,18 @@ export enum PaymentMethod {
   Tarjeta = 3,
   Transferencia = 4
 }
+
+export enum Scheduler {
+  Morphine = 1,
+  LimaEspacio = 2
+}
 export interface WorkOrderDto{
   id: number,
   customerId: number,
   customerName: string,
+  schedulerId: number,
+  schedulerName: string,
+  description: string,
   serviceId: number,
   serviceType: string,
   status: Status,
@@ -32,6 +40,7 @@ export interface WorkOrderDto{
 export interface WorkOrder {
   id: number;
   customerId: number;
+  schedulerId: number;
   serviceId: number;
   description?: string;
   status: Status;
