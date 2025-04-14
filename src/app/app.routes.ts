@@ -14,6 +14,7 @@ import { AddWorkOrderComponent } from './features/WorkOrder/add-work-order/add-w
 import { WorkOrderListComponent } from './features/WorkOrder/work-order-list/work-order-list.component';
 import { EditWorkOrderComponent } from './features/WorkOrder/edit-work-order/edit-work-order.component';
 import { CustomerDetailComponent } from './features/Customer/customer-detail/customer-detail.component';
+import { AddCustomerPublicComponent } from './features/Customer/add-customer-public/add-customer-public.component';
 
 
 export const routes: Routes = [
@@ -22,6 +23,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'customers', component: CustomersListComponent, canActivate: [AuthGuard] },
   { path: 'customer/detail/:id', component: CustomerDetailComponent, canActivate: [AuthGuard] },
+  { path: 'add-customer-public/:token', component: AddCustomerPublicComponent, data:{ hideSidebar: true } },
   { path: 'services', component: ServicesListComponent, canActivate: [AuthGuard] },
   { path: 'work-orders', component: WorkOrderListComponent, canActivate: [AuthGuard] },
   { path: 'add-work-order/:customerId', component: AddWorkOrderComponent, canActivate: [AuthGuard] },

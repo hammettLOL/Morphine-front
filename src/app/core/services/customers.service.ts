@@ -26,6 +26,14 @@ export class CustomersService {
 
   constructor(private readonly http: HttpClient) {}
 
+  validateToken(token: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.endpoint}/validate-customer-token/${token}`);
+  }
+
+  addCustomerByToken(token: string, customer: Customer): Observable<any> {
+    return this.http.post(`${this.apiUrl}${this.endpoint}/"add-customer-token/${token}`,customer);
+  }
+
   getCustomers(pageNumber: number, pageSize: number): Observable<Customer[]> {
     const params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
