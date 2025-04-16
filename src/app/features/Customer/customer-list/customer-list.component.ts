@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CustomersService, Customer } from '../../../core/services/customers.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { SpeedDialComponent } from '../../../shared/speed-dial/speed-dial.component';
 
 @Component({
   selector: 'app-customers-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SpeedDialComponent],
   templateUrl: './customer-list.component.html',
-  styleUrls: ['./customers-list.component.css']
+  styleUrl: './customer-list.component.css'
 })
 export class CustomersListComponent implements OnInit {
   customers: Customer[] = [];
@@ -58,11 +59,6 @@ export class CustomersListComponent implements OnInit {
 
   trackByCustomerId(index: number, customer: Customer): number {
     return customer.id;
-  }
-
- 
-  addCustomer() {
-    this.router.navigate(['/add-customer']);
   }
 
 }

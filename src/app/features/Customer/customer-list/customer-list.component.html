@@ -1,15 +1,6 @@
 <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Lista de Clientes</h1>
     <p>Selecciona un cliente para agregar una nueva orden de trabajo</p>
-    <div class="flex justify-end mb-4">
-        <!-- Botón global para agregar Work Order, visible si se ha seleccionado un cliente -->
-      <div class="mt-2 flex space-x-2">
-      <button (click)="addCustomer()"
-              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-        Agregar Cliente
-      </button>
-      </div>
-    </div>
     <!-- Vista en Tarjetas para dispositivos pequeños -->
     <div class="block sm:hidden">
       <div class="space-y-4">
@@ -84,4 +75,4 @@
       </button>
     </div>
   </div>
-  
+  <app-speed-dial></app-speed-dial>
