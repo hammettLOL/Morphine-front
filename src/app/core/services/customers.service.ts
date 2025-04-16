@@ -55,4 +55,8 @@ export class CustomersService {
   deleteCustomer(customerId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}${this.endpoint}/${customerId}`);
   }
+
+  generateRegistrationLink(): Observable<any> {
+    return this.http.get(`${this.apiUrl}${this.endpoint}/generate-registration-link`);
+  }
 }
