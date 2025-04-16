@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Customer, CustomersService } from '../../../core/services/customers.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { ToastService } from '../../../core/services/toast.service';
   templateUrl: './add-customer-public.component.html',
   styleUrl: './add-customer-public.component.css'
 })
-export class AddCustomerPublicComponent {
+export class AddCustomerPublicComponent implements OnInit {
   customerForm!: FormGroup;
   token!: string;
   message!: string;
@@ -30,7 +30,7 @@ export class AddCustomerPublicComponent {
     this.token = this.route.snapshot.paramMap.get('token') ?? '';
     this.customersService.validateToken(this.token).subscribe({
       next: (response) => {
-        if (response.status === 200) {
+        if (response.message === "Token válido") {
           this.isValid = true;
           this.buildForm();
         } else {
