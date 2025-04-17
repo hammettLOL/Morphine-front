@@ -49,17 +49,22 @@ export class AddCustomerPublicComponent implements OnInit {
     this.customerForm = this.fb.group({
       name: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', [Validators.email]],
-      document: ['', [Validators.maxLength(14)]],
-      typeDocument: [0],
-      cellphone: ['',[Validators.minLength(9)]],
-      birthday: [''],
+      email: ['', [Validators.required, Validators.email]],
+      document: ['', [Validators.required, Validators.maxLength(14)]],
+      typeDocument: [0,Validators.required],
+      cellphone: ['',[Validators.required,Validators.minLength(9)]],
+      birthday: ['',Validators.required],
       instagram: ['']
     });
   }
 
     onSubmit(): void {
-      if (this.customerForm.invalid) return;
+      if (this.customerForm.invalid) 
+        {
+          this.customerForm.markAllAsTouched();
+          return
+
+        };
   
       // Convertir el valor de tipoDocumento a número si la API lo requiere
       const formValues = this.customerForm.value;
@@ -77,8 +82,9 @@ export class AddCustomerPublicComponent implements OnInit {
   
       this.customersService.addCustomer(newCustomer).subscribe({
         next: (response) => {
+          this.isValid = false;
+          this.message = 'Gracias por registrarte. Estos datos me ayudaran a contactarte facilmente.';
           this.toastService.showToast('Cliente agregado correctamente.', 'success');
-          this.router.navigate(['/customers']);
         },
         error: (err) => {
           this.toastService.showToast('Error al agregar el cliente.', 'danger');
