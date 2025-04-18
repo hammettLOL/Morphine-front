@@ -31,7 +31,7 @@ export class CustomersService {
   }
 
   addCustomerByToken(token: string, customer: Customer): Observable<any> {
-    return this.http.post(`${this.apiUrl}${this.endpoint}/"add-customer-token/${token}`,customer);
+    return this.http.post(`${this.apiUrl}${this.endpoint}/add-customer-token/${token}`,customer);
   }
 
   getCustomers(pageNumber: number, pageSize: number): Observable<Customer[]> {

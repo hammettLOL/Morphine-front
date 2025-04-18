@@ -40,7 +40,7 @@ export class AddCustomerPublicComponent implements OnInit {
       },
       error: (err) => {
         this.isValid = false;
-        this.message = err.error || 'El enlace no es válido o ha expirado.';
+        this.message = 'El enlace no es válido o ha expirado.';
       }
     });
   }
@@ -80,7 +80,7 @@ export class AddCustomerPublicComponent implements OnInit {
         instagram: formValues.instagram
       };
   
-      this.customersService.addCustomer(newCustomer).subscribe({
+      this.customersService.addCustomerByToken(this.token, newCustomer).subscribe({
         next: (response) => {
           this.isValid = false;
           this.message = 'Gracias por registrarte. Estos datos me ayudaran a contactarte facilmente.';
