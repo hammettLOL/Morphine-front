@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './customer-list.component.css'
 })
 export class CustomersListComponent implements OnInit {
-  customers: Customer[] = [];
+  customers?: Customer[] = undefined;
   selectedCustomer: Customer | null = null;
   pageNumber = 1;
   totalPages = 1;

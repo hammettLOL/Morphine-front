@@ -5,8 +5,9 @@
       placeholder="Buscar cliente..."
       [(ngModel)]="searchTerm"
       (ngModelChange)="onSearchTermChange($event)"
-      class="w-full sm:w-64 p-2 mb-4 border rounded"
+      class="w-full p-2 mb-4 border rounded"
     />
+    <div *ngIf="customers; else loading">
     <p>Selecciona un cliente para agregar una nueva orden de trabajo</p>
     <!-- Vista en Tarjetas para dispositivos pequeños -->
     <div class="block sm:hidden">
@@ -53,8 +54,8 @@
         <tbody class="bg-white divide-y divide-gray-200">
           <tr *ngFor="let customer of customers; trackBy: trackByCustomerId"
           (click)="selectCustomer(customer)"
-          [ngClass]="{'bg-blue-100': selectedCustomer?.id === customer.id}"
-          class="cursor-pointer"
+          [ngClass]="{'bg-blue-200': selectedCustomer?.id === customer.id}"
+          class="cursor-pointer hover:bg-blue-100"
           >
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.name }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.lastName }}</td>
@@ -82,5 +83,9 @@
         Siguiente
       </button>
     </div>
+    </div>
+    <ng-template #loading>
+      <div class="text-center text-gray-500">Cargando clientes...</div>
+    </ng-template>
   </div>
   <app-speed-dial></app-speed-dial>
