@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PaymentMethod, Status, WorkOrderService } from '../../../core/services/work-order.service';
+import { WorkOrderService } from '../../../core/services/work-order.service';
+import { PaymentMethod } from '../../../core/enums/payment-method.enum';
+import { Status } from '../../../core/enums/status.enum';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { ServicesService } from '../../../core/services/service.service';

@@ -2,7 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
-import { CustomersService,Customer, } from '../../../core/services/customers.service';
+import { CustomersService} from '../../../core/services/customers.service';
+import { Customer } from '../../../core/models/customer.model';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../core/services/toast.service';
 

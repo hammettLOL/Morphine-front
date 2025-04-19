@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CustomersService, Customer } from '../../../core/services/customers.service';
+import { CustomersService} from '../../../core/services/customers.service';
+import { Customer } from '../../../core/models/customer.model';
 import { CommonModule, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { SpeedDialComponent } from '../../../shared/speed-dial/speed-dial.component';

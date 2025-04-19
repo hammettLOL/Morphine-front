@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { WorkOrderDto, WorkOrderService } from '../../../core/services/work-order.service';
+import { WorkOrderService } from '../../../core/services/work-order.service';
+import { WorkOrderDto } from '../../../core/models/work-order-dto.model';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { ModalService } from '../../../core/services/modal.service';
-
-
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-work-order-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './work-order-list.component.html',
   styleUrl: './work-order-list.component.css'
 })
@@ -18,6 +18,11 @@ export class WorkOrderListComponent implements OnInit {
   workOrders: WorkOrderDto[] = [];
   pageNumber = 1;
   pageSize = 10;
+  totalPages = 1;
+  hasPreviousPage = false;
+  hasNextPage = false;
+  searchTerm = '';
+
 
   statusMap: { [key: number]: string } = {
     0: 'Pendiente',
@@ -46,8 +51,11 @@ export class WorkOrderListComponent implements OnInit {
   }
 
   loadWorkOrders() {
-    this.workOrderService.getWorkOrders(this.pageNumber, this.pageSize).subscribe(data => {
-      this.workOrders = data;
+    this.workOrderService.getWorkOrders(this.pageNumber, this.pageSize, this.searchTerm).subscribe((data) => {
+      this.workOrders = data.items;
+      this.hasPreviousPage = this.pageNumber > 1;
+      this.hasNextPage = data.totalPages > this.pageNumber; 
+      this.totalPages = data.totalPages;
     });
   }
 
@@ -92,6 +100,12 @@ export class WorkOrderListComponent implements OnInit {
           });
         }
       });
+    }
+
+    onSearchTermChange(searchTerm: string) {
+      this.searchTerm = searchTerm;
+      this.pageNumber = 1;
+      this.loadWorkOrders();
     }
 
 }

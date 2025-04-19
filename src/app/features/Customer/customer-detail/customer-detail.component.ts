@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Customer, CustomersService } from '../../../core/services/customers.service';
+import { CustomersService } from '../../../core/services/customers.service';
+import { Customer } from '../../../core/models/customer.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { ModalService } from '../../../core/services/modal.service';
@@ -38,6 +39,13 @@ export class CustomerDetailComponent implements OnInit {
       }
     });
   }
+
+   // Mapeo de valores numéricos a cadenas de texto
+   documentTypeMap: { [key: number]: string } = {
+    0: 'DNI',
+    1: 'CE',
+    2: 'Pasaporte'
+  };
   addWorkOrder(): void {
     if (this.customer) {
       // Redirige a la ruta de agregar orden de trabajo con el ID del cliente seleccionado

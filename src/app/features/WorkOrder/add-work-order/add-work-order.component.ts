@@ -2,10 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PaymentMethod, Status, WorkOrderService, WorkOrder } from '../../../core/services/work-order.service';
+import { WorkOrderService} from '../../../core/services/work-order.service';
 import { ServicesService } from '../../../core/services/service.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { CustomersService } from '../../../core/services/customers.service';
+import { Status } from '../../../core/enums/status.enum';
+import { PaymentMethod } from '../../../core/enums/payment-method.enum';
+import { WorkOrder } from '../../../core/models/work-order.model';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({

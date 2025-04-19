@@ -9,7 +9,7 @@
           <p><span class="font-bold">Nombre:</span> {{ customer.name }}</p>
           <p><span class="font-bold">Apellido:</span> {{ customer.lastName }}</p>
           <p><span class="font-bold">Email:</span> {{ customer.email }}</p>
-          <p><span class="font-bold">Tipo de Documento:</span> {{ customer.typeDocument }}</p>
+          <p><span class="font-bold">Tipo de Documento:</span> {{ documentTypeMap[customer.typeDocument] }}</p>
           <p><span class="font-bold">Documento:</span> {{ customer.document }}</p>
         </div>
         <div>

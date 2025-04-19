@@ -2,26 +2,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface PagedResult<T> {
-  totalPages: number;
-  totalElements: number;
-  items: T[];
-}
-
-export interface Customer {
-  id: number;
-  document: string;
-  typeDocument: number
-  name: string;
-  lastName: string;
-  email: string;
-  birthday: string;
-  cellphone: string;
-  instagram: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import { PagedResult } from '../models/paged-result.model';
+import { Customer } from '../models/customer.model';
 
 @Injectable({
   providedIn: 'root'
