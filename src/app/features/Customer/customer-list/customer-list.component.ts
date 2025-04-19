@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomersService, Customer } from '../../../core/services/customers.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { SpeedDialComponent } from '../../../shared/speed-dial/speed-dial.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-customers-list',
   standalone: true,
-  imports: [CommonModule, SpeedDialComponent],
+  imports: [CommonModule, SpeedDialComponent,FormsModule],
   templateUrl: './customer-list.component.html',
   styleUrl: './customer-list.component.css'
 })
@@ -16,6 +17,7 @@ export class CustomersListComponent implements OnInit {
   selectedCustomer: Customer | null = null;
   pageNumber = 1;
   pageSize = 15;
+  searchTerm = '';
 
   // Mapeo de valores numéricos a cadenas de texto
   documentTypeMap: { [key: number]: string } = {
@@ -33,7 +35,7 @@ export class CustomersListComponent implements OnInit {
   }
 
   loadCustomers() {
-    this.customersService.getCustomers(this.pageNumber, this.pageSize).subscribe(data => {
+    this.customersService.getCustomers(this.pageNumber, this.pageSize, this.searchTerm).subscribe((data) => {
       this.customers = data;
       this.selectedCustomer = null;
     });
@@ -59,6 +61,12 @@ export class CustomersListComponent implements OnInit {
 
   trackByCustomerId(index: number, customer: Customer): number {
     return customer.id;
+  }
+
+  onSearchTermChange(searchTerm: string) {
+    this.searchTerm = searchTerm;
+    this.pageNumber = 1;
+    this.loadCustomers();
   }
 
 }

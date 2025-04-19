@@ -34,10 +34,11 @@ export class CustomersService {
     return this.http.post(`${this.apiUrl}${this.endpoint}/add-customer-token/${token}`,customer);
   }
 
-  getCustomers(pageNumber: number, pageSize: number): Observable<Customer[]> {
+  getCustomers(pageNumber: number, pageSize: number, search: string = ''): Observable<Customer[]> {
     const params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
-      .set('pageSize', pageSize.toString());
+      .set('pageSize', pageSize.toString())
+      .set('search', search);
     return this.http.get<Customer[]>(`${this.apiUrl}${this.endpoint}`, { params });
   }
 
