@@ -1,6 +1,7 @@
 <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Lista de Ordenes de Trabajo</h1>
    
+    <h1 class="text-2xl font-bold mb-4">Lista de Ordenes de Trabajo</h1>
+      
     <div class="flex justify-end mb-4">
         <!-- Botón global para agregar Work Order, visible si se ha seleccionado un cliente -->
       <div class="mt-2 flex space-x-2">
@@ -18,6 +19,7 @@
     (ngModelChange)="onSearchTermChange($event)"
     class="w-full p-2 mb-4 border rounded mt-4"
   />
+  <div *ngIf="workOrders; else loading">
     <!-- Vista en Tarjetas para dispositivos pequeños -->
     <div class="block sm:hidden">
       <div class="space-y-4">
@@ -118,5 +120,9 @@
         Siguiente
       </button>
     </div>
+    </div>
+    <ng-template #loading>
+      <div class="text-center text-gray-500">Cargando tatuajes...</div>
+    </ng-template>
   </div>
   

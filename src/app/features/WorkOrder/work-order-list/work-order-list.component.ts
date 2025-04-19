@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './work-order-list.component.css'
 })
 export class WorkOrderListComponent implements OnInit {
-  workOrders: WorkOrderDto[] = [];
+  workOrders?: WorkOrderDto[] = undefined;
   pageNumber = 1;
   pageSize = 10;
   totalPages = 1;
