@@ -3,6 +3,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface PagedResult<T> {
+  totalPages: number;
+  totalElements: number;
+  items: T[];
+}
+
 export interface Customer {
   id: number;
   document: string;
@@ -34,12 +40,12 @@ export class CustomersService {
     return this.http.post(`${this.apiUrl}${this.endpoint}/add-customer-token/${token}`,customer);
   }
 
-  getCustomers(pageNumber: number, pageSize: number, search: string = ''): Observable<Customer[]> {
+  getCustomers(pageNumber: number, pageSize: number, search: string = ''): Observable<PagedResult<Customer>> {
     const params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString())
       .set('search', search);
-    return this.http.get<Customer[]>(`${this.apiUrl}${this.endpoint}`, { params });
+    return this.http.get<PagedResult<Customer>>(`${this.apiUrl}${this.endpoint}`, { params });
   }
 
   getCustomer(customerId: number): Observable<Customer> {

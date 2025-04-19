@@ -16,7 +16,10 @@ export class CustomersListComponent implements OnInit {
   customers: Customer[] = [];
   selectedCustomer: Customer | null = null;
   pageNumber = 1;
-  pageSize = 15;
+  totalPages = 1;
+  pageSize = 10;
+  hasPreviousPage = false;
+  hasNextPage = false;
   searchTerm = '';
 
   // Mapeo de valores numéricos a cadenas de texto
@@ -36,7 +39,10 @@ export class CustomersListComponent implements OnInit {
 
   loadCustomers() {
     this.customersService.getCustomers(this.pageNumber, this.pageSize, this.searchTerm).subscribe((data) => {
-      this.customers = data;
+      this.customers = data.items;
+      this.hasPreviousPage = this.pageNumber > 1;
+      this.hasNextPage = data.totalPages > this.pageNumber;
+      this.totalPages = data.totalPages;
       this.selectedCustomer = null;
     });
   }
