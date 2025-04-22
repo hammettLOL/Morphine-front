@@ -4,7 +4,9 @@ export interface AccountingWorkOrder {
     id: number;
     workOrderId: number;
     customerName: string;
-    description: string;
+    dni: string;
+    email: string;
+    schedulerName: string;
     scheduledDate: string;
     paymentMethod: PaymentMethod;
     advancePrice: number;

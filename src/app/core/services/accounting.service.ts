@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { AccountingWorkOrder } from '../models/accounting-work-order.model';
+import { AccountingResult } from '../models/accounting-result.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,11 @@ export class AccountingService {
     private readonly http: HttpClient
   ) { }
 
-  getAccountingWorkOrders(year: number, month: number): Observable<AccountingWorkOrder[]>{
+  getAccountingWorkOrders(year: number, month: number): Observable<AccountingResult>{
         const params = new HttpParams()
           .set('year', year.toString())
           .set('month', month.toString());
-        return this.http.get<AccountingWorkOrder[]>(`${this.apiUrl}/${this.endpoint}`, { params });
+        return this.http.get<AccountingResult>(`${this.apiUrl}/${this.endpoint}`, { params });
       }
 
   update(id: number, accountingWorkOrder: AccountingWorkOrder): Observable<AccountingWorkOrder> {

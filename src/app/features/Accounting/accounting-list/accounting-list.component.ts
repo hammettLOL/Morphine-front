@@ -35,6 +35,7 @@ export class AccountingListComponent implements OnInit {
   ];
 
   accountingWorkOrders: AccountingWorkOrder[] = [];
+  totalAmount: number = 0;
   today = new Date();
 
   constructor(
@@ -51,7 +52,13 @@ export class AccountingListComponent implements OnInit {
     this.limitMonth();
     this.loadAccountingWorkOrders();
   }
-
+  paymentMethodMap: { [key: number]: string } = {
+    0: 'Plin',
+    1: 'Yape',
+    2: 'Efectivo',
+    3: 'Tarjeta',
+    4: 'Transferencia'
+  };
    // Impide elegir mes/año en el futuro
    limitMonth() {
     const y = this.periodForm.value.year!;
@@ -62,7 +69,8 @@ export class AccountingListComponent implements OnInit {
 
   loadAccountingWorkOrders() {
     this.accountingService.getAccountingWorkOrders(this.periodForm.value.year!, this.periodForm.value.month!).subscribe((data) => {
-      this.accountingWorkOrders = data;
+      this.accountingWorkOrders = data.items;
+      this.totalAmount = data.totalAmount;
       console.log(this.accountingWorkOrders);
     });
   }

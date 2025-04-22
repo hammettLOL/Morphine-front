@@ -1,5 +1,5 @@
 <div class="p-4">
-    <h1 class="text-2xl font-bold mb-4">Contabilidad</h1>
+    <h1 class="text-2xl font-bold mb-4">SUNAT</h1>
   
     <!-- Selección de período -->
     <form [formGroup]="periodForm" (ngSubmit)="onPeriodChange()" class="flex flex-col sm:flex-row gap-4 mb-6">
@@ -27,16 +27,23 @@
         Cargar
       </button>
     </form>
-  
+  <div>
+    <span class="text-gray-500 text-lg font-bold">
+      Monto total: {{ totalAmount | currency:'S/ ':'symbol':'1.2-2' }}
+    </span>
+  </div>
     <!-- Tabla de WorkOrders -->
     <div *ngIf="accountingWorkOrders.length; else sinDatos" class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
             <th class="px-4 py-2  w-40 text-left">Cliente</th>
-            <th class="px-4 py-2 text-left">Descripción</th>
-            <th class="px-4 py-2 text-left">Fecha</th>
+            <th class="px-4 py-2 text-left">DNI</th>
+            <th class="px-4 py-2 text-left">Email</th>
+            <th class="px-4 py-2 text-right">Por</th>
+            <th class="px-4 py-2 text-right">Adelanto</th>
             <th class="px-4 py-2 text-right">Total</th>
+            <th class="px-4 py-2 text-left">Medio</th>
             <th class="px-4 py-2 text-center">Verificado</th>
             <th class="px-4 py-2 text-left">Observación</th>
             <th class="px-4 py-2 text-center">Emitido</th>
@@ -48,10 +55,12 @@
           <tr *ngFor="let wo of accountingWorkOrders" class="hover:bg-gray-100">
             <!-- solo lectura -->
             <td class="px-4 py-2 w-40">{{ wo.customerName }}</td>
-            <td class="px-4 py-2">{{ wo.description }}</td>
-            <td class="px-4 py-2">{{ wo.scheduledDate  | date:'dd/MM/yyyy' }}</td>
+            <td class="px-4 py-2">{{ wo.dni }}</td>
+            <td class="px-4 py-2">{{ wo.email  }}</td>
+            <td class="px-4 py-2">{{ wo.schedulerName  }}</td>
+            <td class="px-4 py-2 text-right">{{ wo.advancePrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
             <td class="px-4 py-2 text-right">{{ wo.totalPrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
-  
+            <td class="px-4 py-2 text-left">{{ paymentMethodMap[wo.paymentMethod] }}</td>
             <!-- campos editables -->
             <td class="px-4 py-2 text-center">
               <select [(ngModel)]="wo.verified" class="p-1 border rounded">
