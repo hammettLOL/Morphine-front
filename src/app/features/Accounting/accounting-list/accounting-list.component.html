@@ -1,0 +1,99 @@
+<div class="p-4">
+    <h1 class="text-2xl font-bold mb-4">Contabilidad</h1>
+  
+    <!-- Selección de período -->
+    <form [formGroup]="periodForm" (ngSubmit)="onPeriodChange()" class="flex flex-col sm:flex-row gap-4 mb-6">
+      <div>
+        <label class="block font-medium">Año</label>
+        <select formControlName="year" class="p-2 border rounded">
+          <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-medium">Mes</label>
+        <select formControlName="month" class="p-2 border rounded">
+          <option *ngFor="let m of months" [value]="m.value" [disabled]="
+              periodForm.value.year === today.getFullYear() && m.value > today.getMonth() + 1
+            ">
+            {{ m.name }}
+          </option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        [disabled]="periodForm.invalid"
+        class="self-end bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Cargar
+      </button>
+    </form>
+  
+    <!-- Tabla de WorkOrders -->
+    <div *ngIf="accountingWorkOrders.length; else sinDatos" class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2  w-40 text-left">Cliente</th>
+            <th class="px-4 py-2 text-left">Descripción</th>
+            <th class="px-4 py-2 text-left">Fecha</th>
+            <th class="px-4 py-2 text-right">Total</th>
+            <th class="px-4 py-2 text-center">Verificado</th>
+            <th class="px-4 py-2 text-left">Observación</th>
+            <th class="px-4 py-2 text-center">Emitido</th>
+            <th class="px-4 py-2 w-24 text-right">Monto</th>
+            <th class="px-4 py-2 text-center">Acción</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let wo of accountingWorkOrders" class="hover:bg-gray-100">
+            <!-- solo lectura -->
+            <td class="px-4 py-2 w-40">{{ wo.customerName }}</td>
+            <td class="px-4 py-2">{{ wo.description }}</td>
+            <td class="px-4 py-2">{{ wo.scheduledDate  | date:'dd/MM/yyyy' }}</td>
+            <td class="px-4 py-2 text-right">{{ wo.totalPrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
+  
+            <!-- campos editables -->
+            <td class="px-4 py-2 text-center">
+              <select [(ngModel)]="wo.verified" class="p-1 border rounded">
+                <option [ngValue]="true">Si</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </td>
+            <td class="px-4 py-2">
+              <input
+                type="text"
+                [(ngModel)]="wo.remarks"
+                maxlength="100"
+                class="w-full p-1 border rounded"
+              />
+            </td>
+            <td class="px-4 py-2 text-center">
+              <select [(ngModel)]="wo.emitted" class="p-1 border rounded">
+                <option [ngValue]="true">Si</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </td>
+            <td class="px-4 py-2 w-24 text-right">
+              <input
+                type="number"
+                [(ngModel)]="wo.amount"
+                class="w-24 p-1 border rounded text-right"
+              />
+            </td>
+            <td class="px-4 py-2 text-center">
+                <button
+                  (click)="saveRow(wo)"
+                  class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                >
+                  Guardar
+                </button>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <ng-template #sinDatos>
+      <p class="text-center text-gray-500 mt-8">No hay órdenes de trabajo para este período.</p>
+    </ng-template>
+  </div>
