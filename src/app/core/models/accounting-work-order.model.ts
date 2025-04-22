@@ -15,4 +15,11 @@ export interface AccountingWorkOrder {
     remarks: string;
     emitted: boolean;
     amount: number;
+    original: {
+        verified: boolean;
+        remarks: string;
+        emitted: boolean;
+        amount: number;
+      };
+      isModified: boolean;
 }

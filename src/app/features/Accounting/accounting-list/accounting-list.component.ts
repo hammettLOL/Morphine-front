@@ -69,11 +69,49 @@ export class AccountingListComponent implements OnInit {
 
   loadAccountingWorkOrders() {
     this.accountingService.getAccountingWorkOrders(this.periodForm.value.year!, this.periodForm.value.month!).subscribe((data) => {
-      this.accountingWorkOrders = data.items;
+      this.accountingWorkOrders = data.items.map(o => {
+        const wo :AccountingWorkOrder= {
+          id: o.id,
+          workOrderId: o.workOrderId,
+          customerName: o.customerName,
+          dni: o.dni,
+          email: o.email,
+          schedulerName: o.schedulerName,
+          scheduledDate: o.scheduledDate,
+          paymentMethod: o.paymentMethod,
+          advancePrice: o.advancePrice,
+          totalPrice: o.totalPrice,
+          verified: o.verified,
+          remarks: o.remarks,
+          emitted: o.emitted,
+          amount: o.amount,
+          original: {
+            verified: o.verified,
+            remarks: o.remarks,
+            emitted: o.emitted,
+            amount: o.amount,
+          },
+          isModified: false
+        };
+        return wo;
+      });
+
+
+
       this.totalAmount = data.totalAmount;
       console.log(this.accountingWorkOrders);
     });
   }
+
+  onFieldChange(wo: AccountingWorkOrder) {
+    const o = wo.original;
+    wo.isModified =
+      wo.verified  !== o.verified   ||
+      wo.remarks   !== o.remarks  ||
+      wo.emitted   !== o.emitted      ||
+      wo.amount    !== o.amount;
+  }
+  
 
   onPeriodChange() {
     this.limitMonth();
