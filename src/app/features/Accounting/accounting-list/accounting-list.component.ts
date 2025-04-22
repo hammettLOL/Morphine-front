@@ -4,6 +4,8 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { AccountingWorkOrder } from '../../../core/models/accounting-work-order.model';
 import { AccountingService } from '../../../core/services/accounting.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { CreateAccountingWorkOrders } from '../../../core/models/create-accounting-work-orders.model';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-accounting-list',
@@ -33,14 +35,18 @@ export class AccountingListComponent implements OnInit {
     {value: 11, name: 'Noviembre'},
     {value: 12, name: 'Diciembre'}
   ];
-
+  creaateAccountingWorkOrder: CreateAccountingWorkOrders = {
+    year: 0,
+    month: 0
+  };
   accountingWorkOrders: AccountingWorkOrder[] = [];
   totalAmount: number = 0;
   today = new Date();
 
   constructor(
     private readonly accountingService: AccountingService,
-    private readonly toastService: ToastService
+    private readonly toastService: ToastService,
+    private readonly modalService: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +56,7 @@ export class AccountingListComponent implements OnInit {
       this.years.push(y);
     }
     this.limitMonth();
-    this.loadAccountingWorkOrders();
+    this.loadAndCreateAccountingWorkOrders();
   }
   paymentMethodMap: { [key: number]: string } = {
     0: 'Plin',
@@ -65,6 +71,43 @@ export class AccountingListComponent implements OnInit {
     if (y === this.today.getFullYear() && this.periodForm.value.month! > this.today.getMonth() + 1) {
       this.periodForm.patchValue({ month: this.today.getMonth() + 1 });
     }
+  }
+
+  loadAndCreateAccountingWorkOrders() {
+    this.creaateAccountingWorkOrder.month = this.periodForm.value.month!;
+    this.creaateAccountingWorkOrder.year = this.periodForm.value.year!;
+
+    this.accountingService.createAccountingWorkOrders(this.creaateAccountingWorkOrder).subscribe((data) => {
+      this.accountingWorkOrders = data.items.map(o => {
+        const wo :AccountingWorkOrder= {
+          id: o.id,
+          workOrderId: o.workOrderId,
+          customerName: o.customerName,
+          dni: o.dni,
+          email: o.email,
+          schedulerName: o.schedulerName,
+          scheduledDate: o.scheduledDate,
+          paymentMethod: o.paymentMethod,
+          advancePrice: o.advancePrice,
+          totalPrice: o.totalPrice,
+          verified: o.verified,
+          remarks: o.remarks,
+          emitted: o.emitted,
+          amount: o.amount,
+          original: {
+            verified: o.verified,
+            remarks: o.remarks,
+            emitted: o.emitted,
+            amount: o.amount,
+          },
+          isModified: false
+        };
+        return wo;
+      });
+
+      this.totalAmount = data.totalAmount;
+      
+    });
   }
 
   loadAccountingWorkOrders() {
@@ -96,10 +139,8 @@ export class AccountingListComponent implements OnInit {
         return wo;
       });
 
-
-
       this.totalAmount = data.totalAmount;
-      console.log(this.accountingWorkOrders);
+      
     });
   }
 
@@ -115,7 +156,7 @@ export class AccountingListComponent implements OnInit {
 
   onPeriodChange() {
     this.limitMonth();
-    this.loadAccountingWorkOrders();
+    this.loadAndCreateAccountingWorkOrders();
   } 
   
   saveRow(wo: AccountingWorkOrder) {
@@ -126,6 +167,22 @@ export class AccountingListComponent implements OnInit {
       },
       error: (err) => {
         this.toastService.showToast('Error al guardar los datos', 'danger');
+      }
+    });
+  }
+
+  deleteRow(wo: AccountingWorkOrder) {
+    this.modalService.confirm({message: `Estas seguro de borrar la orden de ${wo.customerName}`, title: 'Confirmar Eliminación'}).subscribe((result)=>{
+      if (result) {
+        this.accountingService.delete(wo.id).subscribe({
+          next: () => {
+            this.toastService.showToast('Datos eliminados correctamente', 'success');
+            this.loadAccountingWorkOrders();
+          },
+          error: (err) => {
+            this.toastService.showToast('Error al eliminar los datos', 'danger');
+          }
+        });
       }
     });
   }

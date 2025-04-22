@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { AccountingWorkOrder } from '../models/accounting-work-order.model';
 import { AccountingResult } from '../models/accounting-result.model';
+import { CreateAccountingWorkOrders } from '../models/create-accounting-work-orders.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,10 @@ export class AccountingService {
     private readonly http: HttpClient
   ) { }
 
-  getAccountingWorkOrders(year: number, month: number): Observable<AccountingResult>{
+    createAccountingWorkOrders(createAccountingWorkOrders: CreateAccountingWorkOrders): Observable<AccountingResult>{
+        return this.http.post<AccountingResult>(`${this.apiUrl}/${this.endpoint}`, createAccountingWorkOrders);
+      }
+      getAccountingWorkOrders(year: number, month: number): Observable<AccountingResult>{
         const params = new HttpParams()
           .set('year', year.toString())
           .set('month', month.toString());

@@ -91,10 +91,11 @@
               <input
                 type="number"
                 [(ngModel)]="wo.amount"
+                (ngModelChange)="onFieldChange(wo)"
                 class="w-24 p-1 border rounded text-right"
               />
             </td>
-            <td class="px-4 py-2 text-center">
+            <td class="px-4 py-2 whitespace-nowrap text-center space-x-2">
                 <button
                   (click)="saveRow(wo)"
                   [disabled]="!wo.isModified"
@@ -102,6 +103,10 @@
                 >
                   Guardar
                 </button>
+                <button (click)="deleteRow(wo)"
+                      class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
+                Eliminar
+              </button>
               </td>
           </tr>
         </tbody>
