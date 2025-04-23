@@ -20,6 +20,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
   workOrderForm!: FormGroup;
   workOrderId!: number;
   customerId!: number;
+  serviceId!: number;
   services: any[] = []; 
   Status = Status; // Exponer el enum para el template
   PaymentMethod = PaymentMethod; // Exponer el enum
@@ -70,6 +71,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       next:({ services, workOrder }) => {
         this.services = services;
         this.customerId = workOrder.customerId;
+        this.serviceId = workOrder.serviceId;
         this.workOrderForm.patchValue({
           customerName: workOrder.customerName,
           serviceType: workOrder.serviceType,
@@ -116,6 +118,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       paymentMethod : Number(this.workOrderForm.value.paymentMethod),
       status: Number(this.workOrderForm.value.status),
       customerId: this.customerId,
+      serviceId: this.serviceId,
       id: this.workOrderId
     };
     this.workOrderService.update(this.workOrderId, updatedWorkOrder).subscribe({

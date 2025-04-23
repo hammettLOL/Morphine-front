@@ -19,6 +19,27 @@
     (ngModelChange)="onSearchTermChange($event)"
     class="w-full p-2 mb-4 border rounded mt-4"
   />
+   <!-- filtro de año -->
+   <select
+   [(ngModel)]="year"
+   (ngModelChange)="onYearChange($event)"
+   class="p-2 border rounded w-full sm:w-32 mb-2 sm:mb-0"
+ >
+   <option selected [ngValue]="0">Todos los años</option>
+   <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+ </select>
+
+ <!-- filtro de mes -->
+ <select
+   [(ngModel)]="month"
+   (ngModelChange)="onMonthChange($event)"
+   class="p-2 border rounded w-full sm:w-32"
+ >
+   <option selected [ngValue]="0">Todos los meses</option>
+   <option *ngFor="let m of months" [ngValue]="m.value">
+     {{ m.name }}
+   </option>
+ </select>
   <div *ngIf="workOrders; else loading">
     <!-- Vista en Tarjetas para dispositivos pequeños -->
     <div class="block sm:hidden">
@@ -41,13 +62,13 @@
             <span class="font-bold">Método de Pago:</span> {{ paymentMethodMap[workOrder.paymentMethod] }}
           </div>
           <div class="mb-1">
-            <span class="font-bold">Día</span> {{ workOrder.scheduleDate | date:'shortDate' }}
+            <span class="font-bold">Día</span> {{ workOrder.scheduleDate | date:'dd/MM/yyyy' }}
           </div>
           <div class="mb-1">
-            <span class="font-bold">Adelanto:</span> {{ workOrder.advancePrice }}
+            <span class="font-bold">Adelanto:</span> {{ workOrder.advancePrice | currency:'S/ ':'symbol':'1.2-2' }}
           </div>
           <div class="mb-1">
-            <span class="font-bold">Precio Total:</span> {{ workOrder.totalPrice }}
+            <span class="font-bold">Precio Total:</span> {{ workOrder.totalPrice | currency:'S/ ':'symbol':'1.2-2' }}
           </div>
           <!-- Acciones -->
           <div class="mt-2 flex space-x-2">
@@ -87,9 +108,9 @@
             <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.schedulerName }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.description }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ paymentMethodMap[workOrder.paymentMethod] }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.scheduleDate | date:'shortDate' }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.advancePrice }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.totalPrice }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.scheduleDate | date:'dd/MM/yyyy' }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.advancePrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
+            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.totalPrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
             <td class="px-4 py-2 whitespace-nowrap text-center space-x-2">
               <button (click)="editWorkOrder(workOrder)" 
                       class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
