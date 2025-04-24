@@ -44,8 +44,8 @@ export class WorkOrderListComponent implements OnInit {
   paymentMethodMap: { [key: number]: string } = {
     0: 'Plin',
     1: 'Yape',
-    2: 'Efectivo',
-    3: 'Tarjeta',
+    2: 'Tarjeta',
+    3: 'Efectivo',
     4: 'Transferencia'
   };
 
