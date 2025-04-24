@@ -65,7 +65,8 @@
             <td class="px-4 py-2 text-center">
               <select [(ngModel)]="wo.verified"
                (ngModelChange)="onFieldChange(wo)"
-               class="p-1 border rounded">
+               [disabled]="paymentMethodMap[wo.paymentMethod] === 'Tarjeta'"
+               class="p-1 border rounded disabled:opacity-50">
                 <option [ngValue]="true">Si</option>
                 <option [ngValue]="false">No</option>
               </select>
@@ -75,14 +76,16 @@
                 type="text"
                 [(ngModel)]="wo.remarks"
                 (ngModelChange)="onFieldChange(wo)"
+                [disabled]="paymentMethodMap[wo.paymentMethod] === 'Tarjeta'"
                 maxlength="100"
-                class="w-full p-1 border rounded"
+                class="w-full p-1 border rounded disabled:opacity-50"
               />
             </td>
             <td class="px-4 py-2 text-center">
               <select [(ngModel)]="wo.emitted" 
               (ngModelChange)="onFieldChange(wo)"
-              class="p-1 border rounded">
+              [disabled]="paymentMethodMap[wo.paymentMethod] === 'Tarjeta'"
+              class="p-1 border rounded disabled:opacity-50">
                 <option [ngValue]="true">Si</option>
                 <option [ngValue]="false">No</option>
               </select>
@@ -91,8 +94,9 @@
               <input
                 type="number"
                 [(ngModel)]="wo.amount"
+                [disabled]="paymentMethodMap[wo.paymentMethod] === 'Tarjeta'"
                 (ngModelChange)="onFieldChange(wo)"
-                class="w-24 p-1 border rounded text-right"
+                class="w-24 p-1 border rounded text-right disabled:opacity-50"
               />
             </td>
             <td class="px-4 py-2 whitespace-nowrap text-center space-x-2">

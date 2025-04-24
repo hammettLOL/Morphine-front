@@ -61,8 +61,8 @@ export class AccountingListComponent implements OnInit {
   paymentMethodMap: { [key: number]: string } = {
     0: 'Plin',
     1: 'Yape',
-    2: 'Efectivo',
-    3: 'Tarjeta',
+    2: 'Tarjeta',
+    3: 'Efectivo',
     4: 'Transferencia'
   };
    // Impide elegir mes/año en el futuro
@@ -106,7 +106,6 @@ export class AccountingListComponent implements OnInit {
       });
 
       this.totalAmount = data.totalAmount;
-      
     });
   }
 
