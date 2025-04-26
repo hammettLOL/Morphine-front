@@ -1,149 +1,251 @@
-<div class="container mx-auto p-4">
-   
-    <h1 class="text-2xl font-bold mb-4">Lista de Ordenes de Trabajo</h1>
+<div class="container mx-auto p-6 bg-white">
+  <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">Lista de Órdenes de Trabajo</h1>
+    
+    <button (click)="addWorkOrder()" 
+            class="mt-4 md:mt-0 bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2 shadow-sm font-medium">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="12" y1="18" x2="12" y2="12"></line>
+        <line x1="9" y1="15" x2="15" y2="15"></line>
+      </svg>
+      <span>Agregar Orden de Trabajo</span>
+    </button>
+  </header>
+
+  <!-- Filtros y búsqueda -->
+  <div class="bg-gray-50 p-4 rounded-lg mb-6 shadow-sm">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="col-span-1 md:col-span-3">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Buscar tatuaje..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchTermChange($event)"
+            class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+      </div>
       
-    <div class="flex justify-end mb-4">
-        <!-- Botón global para agregar Work Order, visible si se ha seleccionado un cliente -->
-      <div class="mt-2 flex space-x-2">
-     
-      <button (click)="addWorkOrder()"
-              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-        Agregar Orden de Trabajo
-      </button>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Año</label>
+        <select
+          [(ngModel)]="year"
+          (ngModelChange)="onYearChange($event)"
+          class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option [ngValue]="0">Todos los años</option>
+          <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Mes</label>
+        <select
+          [(ngModel)]="month"
+          (ngModelChange)="onMonthChange($event)"
+          class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option [ngValue]="0">Todos los meses</option>
+          <option *ngFor="let m of months" [ngValue]="m.value">
+            {{ m.name }}
+          </option>
+        </select>
       </div>
     </div>
-    <input
-    type="text"
-    placeholder="Buscar tatuaje..."
-    [(ngModel)]="searchTerm"
-    (ngModelChange)="onSearchTermChange($event)"
-    class="w-full p-2 mb-4 border rounded mt-4"
-  />
-   <!-- filtro de año -->
-   <select
-   [(ngModel)]="year"
-   (ngModelChange)="onYearChange($event)"
-   class="p-2 border rounded w-full sm:w-32 mb-2 sm:mb-0"
- >
-   <option selected [ngValue]="0">Todos los años</option>
-   <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
- </select>
+  </div>
 
- <!-- filtro de mes -->
- <select
-   [(ngModel)]="month"
-   (ngModelChange)="onMonthChange($event)"
-   class="p-2 border rounded w-full sm:w-32"
- >
-   <option selected [ngValue]="0">Todos los meses</option>
-   <option *ngFor="let m of months" [ngValue]="m.value">
-     {{ m.name }}
-   </option>
- </select>
   <div *ngIf="workOrders; else loading">
     <!-- Vista en Tarjetas para dispositivos pequeños -->
     <div class="block sm:hidden">
-      <div class="space-y-4">
+      <div class="grid grid-cols-1 gap-4">
         <div *ngFor="let workOrder of workOrders; trackBy: trackByWorkOrderId"
-          class="bg-white p-4 rounded shadow">
-          <div class="mb-1">
-            <span class="font-bold">Nombre:</span> {{ workOrder.customerName }}
+          class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+          
+          <div class="flex justify-between items-start mb-3">
+            <h3 class="font-semibold text-lg text-gray-800">{{ workOrder.customerName }}</h3>
+            <span [ngClass]="{
+              'bg-green-100 text-green-800': statusMap[workOrder.status] === 'Completado',
+              'bg-yellow-100 text-yellow-800': statusMap[workOrder.status] === 'En progreso',
+              'bg-blue-100 text-blue-800': statusMap[workOrder.status] === 'Agendado',
+              'bg-red-100 text-red-800': statusMap[workOrder.status] === 'Cancelado',
+              'bg-gray-100 text-gray-800': !statusMap[workOrder.status]
+            }" class="px-2.5 py-1 rounded-full text-xs font-medium">
+              {{ statusMap[workOrder.status] }}
+            </span>
           </div>
-          <div class="mb-1">
-            <span class="font-bold">Estado:</span> {{ statusMap[workOrder.status] }}
+          
+          <div class="space-y-2 mb-4">
+            <div class="flex items-start">
+              <span class="text-gray-500 min-w-24">Agendado por:</span>
+              <span class="font-medium text-gray-700">{{ workOrder.schedulerName }}</span>
+            </div>
+            
+            <div class="flex items-start">
+              <span class="text-gray-500 min-w-24">Descripción:</span>
+              <span class="font-medium text-gray-700">{{ workOrder.description }}</span>
+            </div>
+            
+            <div class="flex items-start">
+              <span class="text-gray-500 min-w-24">Medio de Pago:</span>
+              <span class="font-medium text-gray-700">{{ paymentMethodMap[workOrder.paymentMethod] }}</span>
+            </div>
+            
+            <div class="flex items-start">
+              <span class="text-gray-500 min-w-24">Fecha:</span>
+              <span class="font-medium text-gray-700">{{ workOrder.scheduleDate | date:'dd/MM/yyyy' }}</span>
+            </div>
           </div>
-          <div class="mb-1">
-            <span class="font-bold">Agendado por:</span> {{ workOrder.schedulerName }}
-          </div>
-          <div class="mb-1">
-            <span class="font-bold">Descripción:</span> {{ workOrder.description }}
-          </div>
-          <div class="mb-1">
-            <span class="font-bold">Método de Pago:</span> {{ paymentMethodMap[workOrder.paymentMethod] }}
-          </div>
-          <div class="mb-1">
-            <span class="font-bold">Día</span> {{ workOrder.scheduleDate | date:'dd/MM/yyyy' }}
-          </div>
-          <div class="mb-1">
-            <span class="font-bold">Adelanto:</span> {{ workOrder.advancePrice | currency:'S/ ':'symbol':'1.2-2' }}
-          </div>
-          <div class="mb-1">
-            <span class="font-bold">Precio Total:</span> {{ workOrder.totalPrice | currency:'S/ ':'symbol':'1.2-2' }}
-          </div>
-          <!-- Acciones -->
-          <div class="mt-2 flex space-x-2">
-            <button (click)="editWorkOrder(workOrder)"
-                    class="flex-1 bg-green-500 text-white py-1 rounded hover:bg-green-600">
-              Editar
-            </button>
-            <button (click)="deleteWorkOrder(workOrder)"
-                    class="flex-1 bg-red-500 text-white py-1 rounded hover:bg-red-600">
-              Eliminar
-            </button>
+          
+          <div class="flex justify-between items-center pt-3 border-t border-gray-100">
+            <div>
+              <div class="text-sm text-gray-500">Adelanto</div>
+              <div class="font-semibold text-gray-800">{{ workOrder.advancePrice | currency:'S/ ':'symbol':'1.2-2' }}</div>
+            </div>
+            
+            <div>
+              <div class="text-sm text-gray-500">Precio Total</div>
+              <div class="font-semibold text-gray-800">{{ workOrder.totalPrice | currency:'S/ ':'symbol':'1.2-2' }}</div>
+            </div>
+            
+            <div class="flex space-x-2">
+              <button (click)="editWorkOrder(workOrder)" 
+                      class="p-2 rounded-lg bg-green-50 text-green-600 hover:bg-green-100">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
+              
+              <button (click)="deleteWorkOrder(workOrder)" 
+                      class="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  
+
     <!-- Vista en Tabla para pantallas medianas y superiores -->
     <div class="hidden sm:block overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+      <table class="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg">
+        <thead class="bg-gray-100">
           <tr>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agendado por</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Medio de Pago</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Día</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Adelanto</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Total</th>
-            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Nombre</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Estado</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Agendado por</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Descripción</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Medio de Pago</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Día</th>
+            <th class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Adelanto</th>
+            <th class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Precio Total</th>
+            <th class="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Acciones</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr *ngFor="let workOrder of workOrders; trackBy: trackByWorkOrderId">
-            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.customerName }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ statusMap[workOrder.status] }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.schedulerName }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.description }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ paymentMethodMap[workOrder.paymentMethod] }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.scheduleDate | date:'dd/MM/yyyy' }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.advancePrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ workOrder.totalPrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
-            <td class="px-4 py-2 whitespace-nowrap text-center space-x-2">
-              <button (click)="editWorkOrder(workOrder)" 
-                      class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
-                Editar
-              </button>
-              <button (click)="deleteWorkOrder(workOrder)" 
-                      class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
-                Eliminar
-              </button>
+          <tr *ngFor="let workOrder of workOrders; trackBy: trackByWorkOrderId" class="hover:bg-gray-50 transition-colors duration-150">
+            <td class="px-4 py-3 text-sm text-gray-800">{{ workOrder.customerName }}</td>
+            <td class="px-4 py-3">
+              <span [ngClass]="{
+                'bg-green-100 text-green-800': statusMap[workOrder.status] === 'Completado',
+                'bg-yellow-100 text-yellow-800': statusMap[workOrder.status] === 'En progreso',
+                'bg-blue-100 text-blue-800': statusMap[workOrder.status] === 'Agendado',
+                'bg-red-100 text-red-800': statusMap[workOrder.status] === 'Cancelado',
+                'bg-gray-100 text-gray-800': !statusMap[workOrder.status]
+              }" class="px-2.5 py-1 rounded-full text-xs font-medium">
+                {{ statusMap[workOrder.status] }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-600">{{ workOrder.schedulerName }}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">{{ workOrder.description }}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">{{ paymentMethodMap[workOrder.paymentMethod] }}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">{{ workOrder.scheduleDate | date:'dd/MM/yyyy' }}</td>
+            <td class="px-4 py-3 text-sm text-gray-800 text-right">{{ workOrder.advancePrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
+            <td class="px-4 py-3 text-sm text-gray-800 text-right font-medium">{{ workOrder.totalPrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
+            <td class="px-4 py-3 whitespace-nowrap">
+              <div class="flex justify-center space-x-2">
+                <button (click)="editWorkOrder(workOrder)" 
+                        class="p-1.5 rounded-md bg-green-50 text-green-600 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-150" 
+                        title="Editar">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+                
+                <button (click)="deleteWorkOrder(workOrder)" 
+                        class="p-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-150" 
+                        title="Eliminar">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                  </svg>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-  
-  
-    <!-- Paginación (visible en todas las vistas) -->
-    <div class="flex justify-center mt-4">
-      <button (click)="prevPage()"
-              [disabled]="!hasPreviousPage"
-              class="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50 mr-2">
-        Anterior
-      </button>
-      <span class="self-center">Página {{ pageNumber }} de {{ totalPages }}</span>
-      <button (click)="nextPage()"
-              [disabled]="!hasNextPage"
-              class="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50 ml-2">
-        Siguiente
-      </button>
+
+    <!-- Estado vacío -->
+    <div *ngIf="workOrders.length === 0" class="bg-gray-50 py-16 px-4 rounded-lg text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <h3 class="mt-2 text-lg font-medium text-gray-900">Sin órdenes de trabajo</h3>
+      <p class="mt-1 text-sm text-gray-500">No se encontraron órdenes de trabajo con los filtros aplicados.</p>
     </div>
+
+    <!-- Paginación -->
+    <div *ngIf="workOrders.length > 0" class="flex justify-center mt-6">
+        <div class="flex items-center mt-2 sm:mt-0">
+          <button (click)="prevPage()"
+                  [disabled]="!hasPreviousPage"
+                  class="relative inline-flex items-center px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Anterior
+          </button>
+          
+          <span class="mx-4 text-sm text-gray-700">
+            Página {{ pageNumber }} de {{ totalPages }}
+          </span>
+          
+          <button (click)="nextPage()"
+                  [disabled]="!hasNextPage"
+                  class="relative inline-flex items-center px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Siguiente
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
     </div>
-    <ng-template #loading>
-      <div class="text-center text-gray-500">Cargando tatuajes...</div>
-    </ng-template>
   </div>
-  
+
+  <!-- Loading state -->
+  <ng-template #loading>
+    <div class="py-20 text-center bg-gray-50 rounded-lg">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-blue-600"></div>
+      <p class="mt-4 text-gray-600">Cargando órdenes de trabajo...</p>
+    </div>
+  </ng-template>
+</div>
