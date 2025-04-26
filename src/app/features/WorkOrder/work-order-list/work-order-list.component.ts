@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { WorkOrderService } from '../../../core/services/work-order.service';
 import { WorkOrderDto } from '../../../core/models/work-order-dto.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { ModalService } from '../../../core/services/modal.service';
 import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-work-order-list',
@@ -22,8 +23,9 @@ export class WorkOrderListComponent implements OnInit {
   hasPreviousPage = false;
   hasNextPage = false;
   searchTerm = '';
-  year: number = 0;
-  month: number = 0;
+  today = new Date();
+  year  = this.today.getFullYear();
+  month = this.today.getMonth() + 1;
   months = [
     { value:1, name:'Enero'},{ value:2, name:'Febrero'},{ value:3, name:'Marzo' },
     { value:4, name:'Abril'},{ value:5, name:'Mayo'},{ value:6, name:'Junio' },
@@ -31,7 +33,7 @@ export class WorkOrderListComponent implements OnInit {
     { value:10, name:'Octubre'},{ value:11, name:'Noviembre'},{ value:12, name:'Diciembre' }
   ];
   years: number[] = [];
-  today = new Date();
+  
 
 
   statusMap: { [key: number]: string } = {
@@ -52,6 +54,7 @@ export class WorkOrderListComponent implements OnInit {
   constructor(
     private readonly workOrderService: WorkOrderService,
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly  toastService: ToastService,
     private readonly modalService: ModalService
   ) {}
@@ -61,7 +64,17 @@ export class WorkOrderListComponent implements OnInit {
     for (let y = 2024; y <= currentYear; y++) {
       this.years.push(y);
     }
-    this.loadWorkOrders();
+
+    this.route.queryParams.subscribe(params => {
+      this.pageNumber = +params['pageNumber'] || 1;
+      // Aquí comprobamos si viene explicitamente el parámetro,
+      // aunque sea “0”, y si no, dejamos 0 por defecto.
+      this.year  = params['year']  !== undefined ? +params['year']  : 0;
+      this.month = params['month'] !== undefined ? +params['month'] : 0;
+
+      this.loadWorkOrders();
+    });
+   
   }
 
   loadWorkOrders() {
@@ -74,15 +87,21 @@ export class WorkOrderListComponent implements OnInit {
   }
 
   onMonthChange(m: number) {
-    this.month = m;
-    this.pageNumber = 1;
-    this.loadWorkOrders();
+    const qp: any = { pageNumber: 1 };
+    qp.month = m !== 0 ? m : null;       // null eliminará el param
+    this.router.navigate(
+    ['/work-orders'],
+    { queryParams: qp, queryParamsHandling: 'merge' }
+    );
   }
 
   onYearChange(y: number) {
-    this.year = y;
-    this.pageNumber = 1;
-    this.loadWorkOrders();
+    const qp: any = { pageNumber: 1 };
+    qp.year = y !== 0 ? y : null;
+    this.router.navigate(
+      ['/work-orders'],
+      { queryParams: qp, queryParamsHandling: 'merge' }
+    );
   }
 
   addWorkOrder(): void {
@@ -92,13 +111,23 @@ export class WorkOrderListComponent implements OnInit {
 
   nextPage() {
     this.pageNumber++;
-    this.loadWorkOrders();
+    this.router.navigate(
+      ['/work-orders'],
+      { queryParams: { pageNumber: this.pageNumber},
+        queryParamsHandling: 'merge'
+    }
+    );
   }
 
   prevPage() {
     if (this.pageNumber > 1) {
       this.pageNumber--;
-      this.loadWorkOrders();
+      this.router.navigate(
+        ['/work-orders'],
+        { queryParams: { pageNumber: this.pageNumber},
+          queryParamsHandling: 'merge'
+      }
+      );
     }
   }
 
