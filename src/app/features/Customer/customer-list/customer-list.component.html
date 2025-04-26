@@ -1,38 +1,57 @@
-<div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Lista de Clientes</h1>
+<div class="container mx-auto p-6 max-w-6xl">
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Lista de Clientes</h1>
+    <p class="text-gray-600">Selecciona un cliente para agregar una nueva orden de trabajo</p>
+  </header>
+
+  <div class="relative mb-6">
+    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+      </svg>
+    </div>
     <input
       type="text"
-      placeholder="Buscar cliente..."
+      placeholder="Buscar cliente por nombre, apellido"
       [(ngModel)]="searchTerm"
       (ngModelChange)="onSearchTermChange($event)"
-      class="w-full p-2 mb-4 border rounded"
+      class="w-full p-3 pl-10 bg-white border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
     />
-    <div *ngIf="customers; else loading">
-    <p>Selecciona un cliente para agregar una nueva orden de trabajo</p>
+  </div>
+
+  <div *ngIf="customers; else loading" class="bg-white rounded-lg shadow-sm border border-gray-100">
     <!-- Vista en Tarjetas para dispositivos pequeños -->
     <div class="block sm:hidden">
-      <div class="space-y-4">
-        <div *ngFor="let customer of customers; trackBy: trackByCustomerId"
+      <div class="divide-y divide-gray-100">
+        <div 
+          *ngFor="let customer of customers; trackBy: trackByCustomerId"
           (click)="selectCustomer(customer)"
-           [ngClass]="{'bg-blue-100': selectedCustomer?.id === customer.id}"
-          class="bg-white p-4 rounded shadow">
-          <div class="mb-1">
-            <span class="font-bold">Nombre:</span> {{ customer.name }}
+          [ngClass]="{'bg-blue-50 border-l-4 border-red-500': selectedCustomer?.id === customer.id}"
+          class="p-4 transition-all hover:bg-gray-50 cursor-pointer"
+        >
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="font-medium text-gray-900">{{ customer.name }} {{ customer.lastName }}</h3>
+            <span class="text-xs bg-gray-100 text-gray-800 py-1 px-2 rounded-full">{{ documentTypeMap[customer.typeDocument] }}</span>
           </div>
-          <div class="mb-1">
-            <span class="font-bold">Apellido:</span> {{ customer.lastName }}
-          </div>
-          <div class="mb-1">
-            <span class="font-bold">Tipo de Documento:</span> {{ documentTypeMap[customer.typeDocument] }}
-          </div>
-          <div class="mb-1">
-            <span class="font-bold">Documento:</span> {{ customer.document }}
-          </div>
-          <div class="mb-1">
-            <span class="font-bold">Celular:</span> {{ customer.cellphone }}
-          </div>
-          <div class="mb-1">
-            <span class="font-bold">Creado:</span> {{ customer.createdAt | date:'dd/MM/yyyy' }}
+          <div class="grid grid-cols-1 gap-1 text-sm text-gray-600">
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4h3a3 3 0 006 0h3a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45 4a2.5 2.5 0 10-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd" />
+              </svg>
+              <span>{{ customer.document }}</span>
+            </div>
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+              </svg>
+              <span>{{ customer.cellphone }}</span>
+            </div>
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+              </svg>
+              <span>{{ customer.createdAt | date:'dd/MM/yyyy' }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -40,56 +59,73 @@
   
     <!-- Vista en Tabla para pantallas medianas y superiores -->
     <div class="hidden sm:block overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200 mt-4">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de Documento</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documento</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Celular</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creado</th>
+      <table class="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Nombre</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Apellido</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Tipo de Doc.</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Documento</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Celular</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Creado</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr *ngFor="let customer of customers; trackBy: trackByCustomerId"
-          (click)="selectCustomer(customer)"
-          [ngClass]="{'bg-blue-200': selectedCustomer?.id === customer.id}"
-          class="cursor-pointer hover:bg-red-100"
+          <tr 
+            *ngFor="let customer of customers; trackBy: trackByCustomerId"
+            (click)="selectCustomer(customer)"
+            [ngClass]="{'bg-blue-50 border-l-4 border-blue-500': selectedCustomer?.id === customer.id}"
+            class="hover:bg-gray-50 cursor-pointer transition-all"
           >
-            <td class="px-4 py-2 whitespace-nowrap">{{ customer.name }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ customer.lastName }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ documentTypeMap[customer.typeDocument] }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ customer.document }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ customer.cellphone }}</td>
-            <td class="px-4 py-2 whitespace-nowrap">{{ customer.createdAt | date:'dd/MM/yyyy' }}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">{{ customer.name }}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">{{ customer.lastName }}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                {{ documentTypeMap[customer.typeDocument] }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-600">{{ customer.document }}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">{{ customer.cellphone }}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">{{ customer.createdAt | date:'dd/MM/yyyy' }}</td>
           </tr>
         </tbody>
       </table>
     </div>
   
-  
-    <!-- Paginación (visible en todas las vistas) -->
-    <div class="flex justify-center mt-4 items-center">
+  </div>
+  <!-- Paginación (visible en todas las vistas) -->
+  <div *ngIf="customers" class="flex justify-center mt-6">
+    <div class="flex items-center mt-2 sm:mt-0">
       <button (click)="prevPage()"
               [disabled]="!hasPreviousPage"
-              class="p-2 rounded disabled:opacity-50 mr-2 flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              class="relative inline-flex items-center px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
           <polyline points="15 18 9 12 15 6"></polyline>
         </svg>
+        Anterior
       </button>
-      <span class="self-center">Página {{ pageNumber }} de {{ totalPages }}</span>
+      
+      <span class="mx-4 text-sm text-gray-700">
+        Página {{ pageNumber }} de {{ totalPages }}
+      </span>
+      
       <button (click)="nextPage()"
               [disabled]="!hasNextPage"
-              class="p-2 rounded disabled:opacity-50 ml-2 flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              class="relative inline-flex items-center px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+        Siguiente
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1">
           <polyline points="9 18 15 12 9 6"></polyline>
         </svg>
       </button>
     </div>
+</div>
+
+  <ng-template #loading>
+    <div class="flex justify-center items-center p-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      <span class="ml-3 text-gray-600">Cargando clientes...</span>
     </div>
-    <ng-template #loading>
-      <div class="text-center text-gray-500">Cargando clientes...</div>
-    </ng-template>
-  </div>
+  </ng-template>
+
   <app-speed-dial></app-speed-dial>
+</div>

@@ -3,7 +3,7 @@
     <h1 class="text-3xl font-bold text-gray-800">Lista de Órdenes de Trabajo</h1>
     
     <button (click)="addWorkOrder()" 
-            class="mt-4 md:mt-0 bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2 shadow-sm font-medium">
+            class="mt-4 md:mt-0 bg-red-600 text-white px-5 py-2.5 rounded-lg hover:bg-red-700 transition-colors duration-200 flex items-center gap-2 shadow-sm font-medium">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
         <polyline points="14 2 14 8 20 8"></polyline>
@@ -30,7 +30,7 @@
             placeholder="Buscar tatuaje..."
             [(ngModel)]="searchTerm"
             (ngModelChange)="onSearchTermChange($event)"
-            class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class="w-full p-3 pl-10 bg-white border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
           />
         </div>
       </div>
@@ -40,7 +40,7 @@
         <select
           [(ngModel)]="year"
           (ngModelChange)="onYearChange($event)"
-          class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition "
         >
           <option [ngValue]="0">Todos los años</option>
           <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
@@ -52,7 +52,7 @@
         <select
           [(ngModel)]="month"
           (ngModelChange)="onMonthChange($event)"
-          class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
         >
           <option [ngValue]="0">Todos los meses</option>
           <option *ngFor="let m of months" [ngValue]="m.value">
@@ -85,22 +85,22 @@
           
           <div class="space-y-2 mb-4">
             <div class="flex items-start">
-              <span class="text-gray-500 min-w-24">Agendado por:</span>
+              <span class="text-gray-500 min-w-24">Agendado por: </span>
               <span class="font-medium text-gray-700">{{ workOrder.schedulerName }}</span>
             </div>
             
             <div class="flex items-start">
-              <span class="text-gray-500 min-w-24">Descripción:</span>
+              <span class="text-gray-500 min-w-24">Descripción: </span>
               <span class="font-medium text-gray-700">{{ workOrder.description }}</span>
             </div>
             
             <div class="flex items-start">
-              <span class="text-gray-500 min-w-24">Medio de Pago:</span>
+              <span class="text-gray-500 min-w-24">Medio de Pago: </span>
               <span class="font-medium text-gray-700">{{ paymentMethodMap[workOrder.paymentMethod] }}</span>
             </div>
             
             <div class="flex items-start">
-              <span class="text-gray-500 min-w-24">Fecha:</span>
+              <span class="text-gray-500 min-w-24">Fecha: </span>
               <span class="font-medium text-gray-700">{{ workOrder.scheduleDate | date:'dd/MM/yyyy' }}</span>
             </div>
           </div>
