@@ -55,7 +55,7 @@
           <tr *ngFor="let customer of customers; trackBy: trackByCustomerId"
           (click)="selectCustomer(customer)"
           [ngClass]="{'bg-blue-200': selectedCustomer?.id === customer.id}"
-          class="cursor-pointer hover:bg-blue-100"
+          class="cursor-pointer hover:bg-red-100"
           >
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.name }}</td>
             <td class="px-4 py-2 whitespace-nowrap">{{ customer.lastName }}</td>
@@ -70,17 +70,21 @@
   
   
     <!-- Paginación (visible en todas las vistas) -->
-    <div class="flex justify-center mt-4">
+    <div class="flex justify-center mt-4 items-center">
       <button (click)="prevPage()"
               [disabled]="!hasPreviousPage"
-              class="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50 mr-2">
-        Anterior
+              class="p-2 rounded disabled:opacity-50 mr-2 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
       </button>
       <span class="self-center">Página {{ pageNumber }} de {{ totalPages }}</span>
       <button (click)="nextPage()"
               [disabled]="!hasNextPage"
-              class="px-4 py-2 bg-blue-500 text-white disabled:opacity-50 rounded ml-2">
-        Siguiente
+              class="p-2 rounded disabled:opacity-50 ml-2 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
       </button>
     </div>
     </div>
