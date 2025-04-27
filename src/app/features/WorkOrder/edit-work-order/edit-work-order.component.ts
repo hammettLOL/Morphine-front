@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { WorkOrderService } from '../../../core/services/work-order.service';
 import { PaymentMethod } from '../../../core/enums/payment-method.enum';
 import { Status } from '../../../core/enums/status.enum';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
-import { ServicesService } from '../../../core/services/service.service';
+import { Service, ServicesService } from '../../../core/services/service.service';
 import { forkJoin, Subject, takeUntil} from 'rxjs';
+import { WorkOrderDto } from '../../../core/models/work-order-dto.model';
+
 
 @Component({
   selector: 'app-edit-work-order',
@@ -17,8 +19,14 @@ import { forkJoin, Subject, takeUntil} from 'rxjs';
   styleUrl: './edit-work-order.component.css'
 })
 export class EditWorkOrderComponent implements OnInit, OnDestroy {
+  @Input () workOrderId!: number | undefined;
+  @Output() workOrderSaved = new EventEmitter<void>();
+  @Output() workOrderCancelled = new EventEmitter<void>();
+
   workOrderForm!: FormGroup;
-  workOrderId!: number;
+  loading = true;
+  error: any;
+  
   customerId!: number;
   serviceId!: number;
   services: any[] = []; 
@@ -26,16 +34,12 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
   PaymentMethod = PaymentMethod; // Exponer el enum
    private readonly destroy$ = new Subject<void>();
   constructor(
-    private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly fb: FormBuilder,
     private readonly workOrderService: WorkOrderService,
     private readonly toastService: ToastService,
     private readonly servicesService: ServicesService
-  ) { }
-
-  ngOnInit(): void {
-    this.workOrderId = Number(this.route.snapshot.paramMap.get('id'));
+  ) {
     this.workOrderForm = this.fb.group({
       customerName: [{value: '', disabled: true}, Validators.required],
       serviceType: [{value: '', disabled: true}, Validators.required],
@@ -47,7 +51,10 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       advancePrice: [0, [Validators.min(0)]],
       paymentMethod: [PaymentMethod.Efectivo, Validators.required]
     });
+   }
 
+  ngOnInit(): void {
+    this.loadWorkOrder();
     // Suscribirse a los cambios en totalPrice
     const totalPriceControl = this.workOrderForm.get('totalPrice');
        if (totalPriceControl) {
@@ -63,34 +70,49 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
              }
            });
        }
-
-    forkJoin({
-      services: this.servicesService.getServices(1,10),
-      workOrder: this.workOrderService.getById(this.workOrderId)
-    }).subscribe({
-      next:({ services, workOrder }) => {
-        this.services = services;
-        this.customerId = workOrder.customerId;
-        this.serviceId = workOrder.serviceId;
-        this.workOrderForm.patchValue({
-          customerName: workOrder.customerName,
-          serviceType: workOrder.serviceType,
-          schedulerId: workOrder.schedulerId,
-          status: workOrder.status,
-          description: workOrder.description,
-          scheduleDate: this.formatDateForInput(workOrder.scheduleDate) || null, // Si es necesario formatear la fecha
-          totalPrice: workOrder.totalPrice,
-          advancePrice: workOrder.advancePrice,
-          paymentMethod: workOrder.paymentMethod
-        });
-      },
-      error: (err) => {
-        this.toastService.showToast('Error al cargar datos', 'danger');
-        this.router.navigate(['/work-orders']);
-      }
-    });
-    
   }
+
+  loadWorkOrder() {
+    if(this.workOrderId) {
+      this.loading = true;
+      forkJoin({
+        services: this.servicesService.getServices(1,10),
+        workOrder: this.workOrderService.getById(this.workOrderId)
+      }).subscribe({
+        next:({ services, workOrder }) => {
+          console.log(workOrder);
+          this.setFormValues(services, workOrder);
+          this.loading = false;
+        },
+        error: (err) => {
+          this.toastService.showToast('Error al cargar datos', 'danger');
+          this.loading = false;
+          this.router.navigate(['/work-orders']);
+        }
+      });
+    } else{
+      this.loading = false;
+    }
+  }
+
+  setFormValues(services: Service[], workOrders: WorkOrderDto) {
+    this.services = services;
+    this.customerId = workOrders.customerId;
+    this.serviceId = workOrders.serviceId;
+    this.workOrderForm.patchValue({
+      customerName: workOrders.customerName,
+      serviceType: workOrders.serviceType,
+      schedulerId: workOrders.schedulerId,
+      status: workOrders.status,
+      description: workOrders.description,
+      scheduleDate: this.formatDateForInput(workOrders.scheduleDate) || null, // Si es necesario formatear la fecha
+      totalPrice: workOrders.totalPrice,
+      advancePrice: workOrders.advancePrice,
+      paymentMethod: workOrders.paymentMethod
+    });
+
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -113,27 +135,22 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       this.workOrderForm.markAllAsTouched();
       return;
     }
-    const updatedWorkOrder: any = {
-      ...this.workOrderForm.value,
-      paymentMethod : Number(this.workOrderForm.value.paymentMethod),
-      status: Number(this.workOrderForm.value.status),
-      customerId: this.customerId,
-      serviceId: this.serviceId,
-      id: this.workOrderId
-    };
-    this.workOrderService.update(this.workOrderId, updatedWorkOrder).subscribe({
-      next: () => {
-        this.toastService.showToast('Orden de trabajo actualizada correctamente','success');
-        this.router.navigate(['/work-orders']);
-      },
-      error: (err) => {
-        this.toastService.showToast('Error al actualizar la orden de trabajo','danger');
-      }
-    });
+    if(this.workOrderId) {
+      const updatedWorkOrder: any = {
+        ...this.workOrderForm.value,
+        paymentMethod : Number(this.workOrderForm.value.paymentMethod),
+        status: Number(this.workOrderForm.value.status),
+        customerId: this.customerId,
+        serviceId: this.serviceId,
+        id: this.workOrderId
+      };
+     this.workOrderSaved.emit(updatedWorkOrder);
+    }
+
   }
 
   cancel() {
-    this.router.navigate(['/work-orders']);
+    this.workOrderCancelled.emit();
   }
 
 }

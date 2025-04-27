@@ -244,8 +244,24 @@
   <!-- Loading state -->
   <ng-template #loading>
     <div class="py-20 text-center bg-gray-50 rounded-lg">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-blue-600"></div>
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-red-600"></div>
       <p class="mt-4 text-gray-600">Cargando órdenes de trabajo...</p>
     </div>
   </ng-template>
 </div>
+<div class="container mx-auto p-6 bg-white">
+  <div *ngIf="isModalOpen" [@modalAnimation] class="fixed inset-0 z-50 overflow-auto bg-black/60 backdrop-blur-sm">
+      <div [@contentAnimation] class="relative top-20 mx-auto p-8 bg-white rounded-xl shadow-lg max-w-xl">
+          <app-edit-work-order
+              [workOrderId]="selectedWorkOrderId"  (workOrderSaved)="onWorkOrderSaved($event)"
+              (workOrderCancelled)="onWorkOrderCanceled()"
+          ></app-edit-work-order>
+          <button (click)="closeEditModal()" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+          </button>
+      </div>
+  </div>
+
+  </div>

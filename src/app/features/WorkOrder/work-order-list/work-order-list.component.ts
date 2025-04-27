@@ -6,17 +6,39 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { ModalService } from '../../../core/services/modal.service';
 import { FormsModule } from '@angular/forms';
-
+import { EditWorkOrderComponent } from '../../WorkOrder/edit-work-order/edit-work-order.component';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-work-order-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, EditWorkOrderComponent],
   templateUrl: './work-order-list.component.html',
-  styleUrl: './work-order-list.component.css'
+  animations: [
+      trigger('modalAnimation', [
+        transition(':enter', [
+          style({ opacity: 0 }),
+          animate('150ms ease-out', style({ opacity: 1 }))
+        ]),
+        transition(':leave', [
+          animate('120ms ease-in', style({ opacity: 0 }))
+        ])
+      ]),
+      trigger('contentAnimation', [
+        transition(':enter', [
+          style({ opacity: 0, transform: 'translateY(10px)' }),
+          animate('200ms 50ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+        ]),
+        transition(':leave', [
+          animate('120ms ease-in', style({ opacity: 0, transform: 'translateY(10px)' }))
+        ])
+      ])
+    ]
 })
 export class WorkOrderListComponent implements OnInit {
   workOrders?: WorkOrderDto[] = undefined;
+  isModalOpen = false;
+  selectedWorkOrderId: number | undefined;
   pageNumber = 1;
   pageSize = 10;
   totalPages = 1;
@@ -135,11 +157,6 @@ export class WorkOrderListComponent implements OnInit {
       return workOrder.id;
   }
 
-  editWorkOrder(workOrder: WorkOrderDto) {
-      // Navegar a la pantalla de edición pasando el ID del cliente
-      this.router.navigate(['/edit-work-order', workOrder.id]);
-  }
-
   deleteWorkOrder(workOrder: WorkOrderDto) {
       this.modalService.confirm({message: `Estas seguro de borrar la orden de ${workOrder.customerName}`, title: 'Confirmar Eliminación'}).subscribe((result)=>{
         if (result) {
@@ -161,6 +178,35 @@ export class WorkOrderListComponent implements OnInit {
       this.searchTerm = searchTerm;
       this.pageNumber = 1;
       this.loadWorkOrders();
+    }
+
+    editWorkOrder(workOrder: WorkOrderDto) {
+      this.selectedWorkOrderId = workOrder.id;
+      this.isModalOpen = true;
+    }
+
+    closeEditModal() {
+      this.isModalOpen = false;
+      this.selectedWorkOrderId = undefined;
+    }
+
+    onWorkOrderCanceled() {
+      this.closeEditModal();
+      this.loadWorkOrders();
+    }
+
+    onWorkOrderSaved(workOrder: any) {
+      this.workOrderService.update(workOrder.id, workOrder).subscribe({
+        next: () => {
+          this.toastService.showToast('Orden de trabajo actualizada correctamente','success');
+          this.closeEditModal();
+          this.loadWorkOrders();
+        },
+        error: (err) => {
+          this.toastService.showToast('Error al actualizar la orden de trabajo','danger');
+        }
+      });
+      
     }
 
 }
