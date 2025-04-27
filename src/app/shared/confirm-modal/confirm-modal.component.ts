@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalService, ModalRequest } from '../../core/services/modal.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -7,7 +8,27 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './confirm-modal.component.html',
-  styleUrls: ['./confirm-modal.component.scss']
+  styleUrls: ['./confirm-modal.component.scss'],
+  animations: [
+    trigger('modalAnimation', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('150ms ease-out', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('120ms ease-in', style({ opacity: 0 }))
+      ])
+    ]),
+    trigger('contentAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(10px)' }),
+        animate('200ms 50ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('120ms ease-in', style({ opacity: 0, transform: 'translateY(10px)' }))
+      ])
+    ])
+  ]
 })
 export class ConfirmModalComponent implements OnInit {
   isOpen = false;
