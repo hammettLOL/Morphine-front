@@ -56,7 +56,7 @@ export class AccountingListComponent implements OnInit {
       this.years.push(y);
     }
     this.limitMonth();
-    this.loadAndCreateAccountingWorkOrders();
+    this.loadAccountingWorkOrders();
   }
   paymentMethodMap: { [key: number]: string } = {
     0: 'Plin',
