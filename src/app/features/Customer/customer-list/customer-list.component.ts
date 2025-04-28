@@ -5,6 +5,8 @@ import { CommonModule, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { SpeedDialComponent } from '../../../shared/speed-dial/speed-dial.component';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../../core/services/toast.service';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-customers-list',
@@ -32,6 +34,8 @@ export class CustomersListComponent implements OnInit {
 
   constructor(private readonly customersService: CustomersService, 
     private readonly router: Router,
+    private readonly toastService: ToastService,
+    private readonly modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -47,12 +51,6 @@ export class CustomersListComponent implements OnInit {
       this.selectedCustomer = null;
     });
   }
-
-  selectCustomer(customer: Customer): void {
-    this.selectedCustomer = customer;
-    this.router.navigate(['/customer/detail/', customer.id]);
-  }
-
 
   nextPage() {
     this.pageNumber++;
@@ -74,6 +72,40 @@ export class CustomersListComponent implements OnInit {
     this.searchTerm = searchTerm;
     this.pageNumber = 1;
     this.loadCustomers();
+  }
+
+  addWorkOrder(customer: Customer): void {
+    if (customer) {
+      // Redirige a la ruta de agregar orden de trabajo con el ID del cliente seleccionado
+      this.router.navigate(['/add-work-order/', customer.id]);
+    }
+  }
+
+  editCustomer(customer: Customer): void {
+    if (customer) {
+      this.router.navigate(['/edit-customer', customer.id]);
+    }
+  }
+  deleteCustomer(customer: Customer) {
+    if (customer) {
+      const customerId = customer.id;
+      const customerName = customer.name;
+        this.modalService.confirm({message: `Estas seguro de borrar a ${customerName}`, title: 'Confirmar Eliminación'}).subscribe((result)=>{
+          if (result) {
+            this.customersService.deleteCustomer(customerId).subscribe({
+              next: () => {
+                this.toastService.showToast('Cliente eliminado','success');
+                this.loadCustomers();
+              },
+              error: (err) => {
+                this.toastService.showToast('Error al eliminar cliente','danger');
+              }
+            });
+          }
+        });
+      }else{
+        this.toastService.showToast('No hay un cliente válido para eliminar','warning');
+      }
   }
 
 }
