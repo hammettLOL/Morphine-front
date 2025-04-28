@@ -5,13 +5,14 @@ import { Observable } from 'rxjs';
 import { WorkOrder } from '../models/work-order.model';
 import { WorkOrderDto } from '../models/work-order-dto.model';
 import { PagedResult } from '../models/paged-result.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WorkOrderService {
   // Ajusta la URL base a la configuración de tu backend
-  private readonly apiUrl = 'http://localhost:5102';
+  private readonly apiUrl = environment.baseUrl;
   private readonly endpoint ='api/workorders'; 
 
   constructor(private readonly http: HttpClient) {}

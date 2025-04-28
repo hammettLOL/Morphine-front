@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { AccountingWorkOrder } from '../models/accounting-work-order.model';
 import { AccountingResult } from '../models/accounting-result.model';
 import { CreateAccountingWorkOrders } from '../models/create-accounting-work-orders.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { CreateAccountingWorkOrders } from '../models/create-accounting-work-ord
 export class AccountingService {
 
    // Ajusta la URL base a la configuración de tu backend
-   private readonly apiUrl = 'http://localhost:5102';
+   private readonly apiUrl = environment.baseUrl;
    private readonly endpoint ='api/accountingWorkOrder'; 
   constructor(
     private readonly http: HttpClient

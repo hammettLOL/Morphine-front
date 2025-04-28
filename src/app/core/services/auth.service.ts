@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../../environments/environment';
 
 export interface LoginResponse {
   token: string;
@@ -20,7 +21,8 @@ interface JwtPayload {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:5102/api/auth'; // Ajusta la URL según tu API
+  private readonly baseUrl = environment.baseUrl;
+  private readonly apiUrl = `${this.baseUrl}/api/auth`; 
   private readonly tokenKey = 'token';
   private readonly userNameKey = 'userName';
   private readonly userLastNameKey = 'userLastName';
