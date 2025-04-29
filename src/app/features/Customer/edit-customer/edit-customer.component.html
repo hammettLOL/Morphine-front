@@ -1,69 +1,112 @@
 <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Editar Cliente</h1>
-    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded shadow-md">
-      <div class="mb-4">
-        <label for="name" class="block font-bold mb-1">Nombre</label>
-        <input id="name" formControlName="name" type="text" class="w-full p-2 border border-gray-300 rounded" 
-        [ngClass]="{'border-red-500': customerForm.get('name')?.invalid && customerForm.get('name')?.touched}"
-        />
-        <div *ngIf="customerForm.get('name')?.invalid && customerForm.get('name')?.touched" class="text-red-500 text-sm mt-1">
-          El nombre es requerido.
-        </div>
+  <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 md:mb-8">
+    {{ customerId ? 'Editar Cliente' : 'Agregar Cliente' }}
+  </h1>
+
+  <div *ngIf="loading" class="flex justify-center items-center py-8">
+    <div class="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-t-red-600"></div>
+    <p class="ml-3 text-gray-600">Cargando datos...</p>
+  </div>
+
+  <div *ngIf="error" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md mb-6">
+    <div class="flex items-center">
+      <svg class="h-6 w-6 text-red-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <p class="font-medium">Error al cargar la orden de trabajo: {{ error?.message || 'Desconocido' }}</p>
+    </div>
+  </div>
+
+    <form *ngIf="!loading && !error" [formGroup]="customerForm" (ngSubmit)="onSubmit()" class="bg-white shadow-lg rounded-xl p-5 md:p-8 max-w-2xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="md:col-span-2">
+            <label for="name" class="block text-gray-700 font-medium mb-2">Nombre</label>
+            <input 
+            id="name" 
+            formControlName="name" 
+            type="text" 
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition" 
+            [ngClass]="{'border-red-500': customerForm.get('name')?.invalid && customerForm.get('name')?.touched}"
+            />
+            <div *ngIf="customerForm.get('name')?.invalid && customerForm.get('name')?.touched" class="text-red-500 text-sm mt-1">
+              El nombre es requerido.
+            </div>
+          </div>
+          <div class="md:col-span-2">
+            <label for="lastName" class="block text-gray-700 font-medium mb-2">Apellido</label>
+            <input id="lastName" formControlName="lastName" type="text" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+            [ngClass]="{'border-red-500': customerForm.get('lastName')?.invalid && customerForm.get('lastName')?.touched}"
+            />
+            <div *ngIf="customerForm.get('lastName')?.invalid && customerForm.get('lastName')?.touched" class="text-red-500 text-sm mt-1">
+              El apellido es requerido.
+            </div>
+          </div>
+          <div class="md:col-span-2">
+            <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+            <input id="email" formControlName="email" type="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+            [ngClass]="{'border-red-500': customerForm.get('email')?.invalid && customerForm.get('email')?.touched}"
+            />
+            <div *ngIf="customerForm.get('email')?.invalid && customerForm.get('email')?.touched" class="text-red-500 text-sm mt-1">
+              Ingrese un email válido.
+            </div>
+          </div>
+          <!-- Campo para Tipo de Documento -->
+          <div class="md:col-span-2">
+            <label for="typeDocument" class="block text-gray-700 font-medium mb-2">Tipo de Documento</label>
+            <select id="typeDocument" formControlName="typeDocument" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+            >
+              <option value=0>DNI</option>
+              <option value=1>CE</option>
+              <option value=2>Pasaporte</option>
+            </select>
+          </div>
+          <!-- Campo para Documento -->
+          <div class="md:col-span-2">
+            <label for="document" class="block text-gray-700 font-medium mb-2">Documento</label>
+            <input id="document" formControlName="document" type="text" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition" />
+            <div *ngIf="customerForm.get('document')?.invalid && customerForm.get('document')?.touched" class="text-red-500 text-sm mt-1">
+              Ingrese un documento válido.
+            </div>
+          </div>
+          <div class="md:col-span-2">
+            <label for="cellphone" class="block text-gray-700 font-medium mb-2">Celular</label>
+            <input id="cellphone" formControlName="cellphone" type="number" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition" />
+            <div *ngIf="customerForm.get('cellphone')?.invalid && customerForm.get('cellphone')?.touched" class="text-red-500 text-sm mt-1">
+              Ingrese numero de celular válido.
+            </div>
+          </div>
+          <div class="md:col-span-2">
+            <label for="birthday" class="block text-gray-700 font-medium mb-2">Cumpleaños</label>
+            <input id="birthday" formControlName="birthday" type="date" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition" />
+            <div *ngIf="customerForm.get('birthday')?.invalid && customerForm.get('birthday')?.touched" class="text-red-500 text-sm mt-1">
+              Ingrese numero de celular válido.
+            </div>
+          </div>
+          <div class="md:col-span-2">
+            <label for="instagram" class="block text-gray-700 font-medium mb-2">Instagram</label>
+            <input id="instagram" formControlName="instagram" type="text" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition" />
+            <div *ngIf="customerForm.get('instagram')?.invalid && customerForm.get('instagram')?.touched" class="text-red-500 text-sm mt-1">
+              Ingrese numero de celular válido.
+            </div>
+          </div>
       </div>
-      <div class="mb-4">
-        <label for="lastName" class="block font-bold mb-1">Apellido</label>
-        <input id="lastName" formControlName="lastName" type="text" class="w-full p-2 border border-gray-300 rounded"
-        [ngClass]="{'border-red-500': customerForm.get('lastName')?.invalid && customerForm.get('lastName')?.touched}"
-        />
-        <div *ngIf="customerForm.get('lastName')?.invalid && customerForm.get('lastName')?.touched" class="text-red-500 text-sm mt-1">
-          El apellido es requerido.
-        </div>
-      </div>
-      <div class="mb-4">
-        <label for="email" class="block font-bold mb-1">Email</label>
-        <input id="email" formControlName="email" type="email" class="w-full p-2 border border-gray-300 rounded"
-        [ngClass]="{'border-red-500': customerForm.get('email')?.invalid && customerForm.get('email')?.touched}"
-        />
-        <div *ngIf="customerForm.get('email')?.invalid && customerForm.get('email')?.touched" class="text-red-500 text-sm mt-1">
-          Ingrese un email válido.
-        </div>
-      </div>
-       <!-- Campo para Tipo de Documento -->
-       <div class="mb-4">
-        <label for="typeDocument" class="block font-bold mb-1">Tipo de Documento</label>
-        <select id="typeDocument" formControlName="typeDocument" class="w-full p-2 border border-gray-300 rounded"
-        >
-          <option value=0>DNI</option>
-          <option value=1>CE</option>
-          <option value=2>Pasaporte</option>
-        </select>
-      </div>
-      <!-- Campo para Documento -->
-      <div class="mb-4">
-        <label for="document" class="block font-bold mb-1">Documento</label>
-        <input id="document" formControlName="document" type="text" class="w-full p-2 border border-gray-300 rounded" />
-      </div>
-      <div class="mb-4">
-        <label for="cellphone" class="block font-bold mb-1">Celular</label>
-        <input id="cellphone" formControlName="cellphone" type="number" class="w-full p-2 border border-gray-300 rounded" />
-      </div>
-      <div class="mb-4">
-        <label for="birthday" class="block font-bold mb-1">Cumpleaños</label>
-        <input id="birthday" formControlName="birthday" type="date" class="w-full p-2 border border-gray-300 rounded" />
-      </div>
-      <div class="mb-4">
-        <label for="instagram" class="block font-bold mb-1">Instagram</label>
-        <input id="instagram" formControlName="instagram" type="text" class="w-full p-2 border border-gray-300 rounded" />
-      </div>
-      <div class="flex flex-col sm:flex-row justify-between gap-2 mt-4">
-        <button type="submit" class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
-          Guardar Cambios
-        </button>
-        <button type="button" class="flex-1 bg-gray-500 text-white py-2 rounded hover:bg-gray-600"
-          (click)="cancel()">
-          Cancelar
-        </button>
-      </div>
+      <!-- Botones -->
+    <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8">
+      <button 
+        type="button" 
+        (click)="cancel()" 
+        class="w-full  bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-6 rounded-lg border border-gray-300 transition-all focus:outline-none focus:ring-2 focus:ring-gray-400"
+      >
+        Cancelar
+      </button>
+      <button 
+        type="submit" 
+        [disabled]="customerForm.invalid"
+        class="w-full  bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-red-500"
+      >
+        {{ customerId ? 'Actualizar Cliente' : 'Crear Cliente' }}
+      </button>
+    </div>
     </form>
   </div>
   

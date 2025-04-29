@@ -1,6 +1,6 @@
 // src/app/components/edit-customer/edit-customer.component.ts
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
 import { CustomersService} from '../../../core/services/customers.service';
 import { Customer } from '../../../core/models/customer.model';
@@ -23,7 +23,6 @@ export class EditCustomerComponent implements OnInit {
   error?: any;
 
   constructor(
-    private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly fb: FormBuilder,
     private readonly customersService: CustomersService,
