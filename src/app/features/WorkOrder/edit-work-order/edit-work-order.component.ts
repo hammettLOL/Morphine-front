@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { WorkOrderService } from '../../../core/services/work-order.service';
 import { PaymentMethod } from '../../../core/enums/payment-method.enum';
 import { Status } from '../../../core/enums/status.enum';
-import { ActivatedRoute, Router } from '@angular/router';
+import {  Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { Service, ServicesService } from '../../../core/services/service.service';
 import { forkJoin, Subject, takeUntil} from 'rxjs';
@@ -15,12 +15,11 @@ import { WorkOrderDto } from '../../../core/models/work-order-dto.model';
   selector: 'app-edit-work-order',
   standalone: true,
   imports: [CommonModule,ReactiveFormsModule],
-  templateUrl: './edit-work-order.component.html',
-  styleUrl: './edit-work-order.component.css'
+  templateUrl: './edit-work-order.component.html'
 })
 export class EditWorkOrderComponent implements OnInit, OnDestroy {
   @Input () workOrderId!: number | undefined;
-  @Output() workOrderSaved = new EventEmitter<void>();
+  @Output() workOrderSaved = new EventEmitter<WorkOrderDto>();
   @Output() workOrderCancelled = new EventEmitter<void>();
 
   workOrderForm!: FormGroup;
@@ -136,7 +135,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       return;
     }
     if(this.workOrderId) {
-      const updatedWorkOrder: any = {
+      const updatedWorkOrder: WorkOrderDto = {
         ...this.workOrderForm.value,
         paymentMethod : Number(this.workOrderForm.value.paymentMethod),
         status: Number(this.workOrderForm.value.status),
