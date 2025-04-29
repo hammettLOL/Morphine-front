@@ -1,5 +1,5 @@
 <div class="container mx-auto p-4 ">
-  <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 md:mb-8">
+  <h1 class="text-3xl font-bold text-gray-800 mb-2">
     {{ workOrderId ? 'Editar Orden de Trabajo' : 'Crear Nueva Orden de Trabajo' }}
   </h1>
 
@@ -17,8 +17,9 @@
     </div>
   </div>
 
-  <form *ngIf="!loading && !error" [formGroup]="workOrderForm" (ngSubmit)="onSubmit()" class="bg-white shadow-lg rounded-xl p-5 md:p-8 max-w-2xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+  <form *ngIf="!loading && !error" [formGroup]="workOrderForm" (ngSubmit)="onSubmit()" 
+  class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Nombre del Cliente -->
       <div class="md:col-span-2">
         <label for="customerName" class="block text-gray-700 font-medium mb-2">Nombre del Cliente</label>
@@ -26,7 +27,7 @@
           id="customerName" 
           type="text" 
           formControlName="customerName" 
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all" 
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all opacity-60" 
           placeholder="Ingrese el nombre del cliente"
         >
       </div>
@@ -38,7 +39,7 @@
           id="serviceType" 
           type="text" 
           formControlName="serviceType" 
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all" 
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all opacity-60" 
           placeholder="Tipo de servicio"
         >
       </div>
@@ -182,21 +183,12 @@
     </div>
 
     <!-- Botones -->
-    <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8">
-      <button 
-        type="button" 
-        (click)="cancel()" 
-        class="w-full  bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-6 rounded-lg border border-gray-300 transition-all focus:outline-none focus:ring-2 focus:ring-gray-400"
-      >
-        Cancelar
-      </button>
-      <button 
-        type="submit" 
-        [disabled]="workOrderForm.invalid"
-        class="w-full  bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-red-500"
-      >
-        {{ workOrderId ? 'Actualizar Orden' : 'Crear Orden' }}
+    <div class="pt-4">
+      <button type="submit" 
+              class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg">
+        {{ customerId ? 'Actualizar Cliente' : 'Crear Cliente' }}
       </button>
     </div>
+    
   </form>
 </div>

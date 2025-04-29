@@ -198,7 +198,7 @@
 </div>
 <div class="container mx-auto p-6 bg-white">
   <div *ngIf="isModalOpen" [@modalAnimation] class="fixed inset-0 z-50 overflow-auto bg-black/60 backdrop-blur-sm">
-      <div [@contentAnimation] class="relative top-20 mx-auto p-6 bg-white rounded-xl shadow-lg max-w-md">
+      <div [@contentAnimation] class="relative top-30 mx-auto p-6 bg-white rounded-xl shadow-lg max-w-3xl">
           <app-edit-customer
               [customerId]="selectedCustomerId"  (customerSaved)="onCustomerSaved($event)"
               (customerCancelled)="onCustomerCanceled()"
