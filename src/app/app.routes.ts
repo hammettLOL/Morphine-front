@@ -23,7 +23,6 @@ export const routes: Routes = [
   { path: 'customer/detail/:id', component: CustomerDetailComponent, canActivate: [AuthGuard] },
   { path: 'add-customer-public/:token', component: AddCustomerPublicComponent, data:{ hideSidebar: true, canActivate:[NoAuthGuard] } },
   { path: 'work-orders', component: WorkOrderListComponent, canActivate: [AuthGuard] },
-  { path: 'add-work-order/:customerId', component: AddWorkOrderComponent, canActivate: [AuthGuard] },
   { path: 'add-service', component: AddServiceComponent, canActivate: [AuthGuard]},
   { path: 'add-customer', component: AddCustomerComponent, canActivate: [AuthGuard]},
   { path: '**', redirectTo: '/', pathMatch: 'full'},

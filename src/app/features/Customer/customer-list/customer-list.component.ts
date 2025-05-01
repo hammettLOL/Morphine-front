@@ -8,12 +8,15 @@ import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../core/services/toast.service';
 import { ModalService } from '../../../core/services/modal.service';
 import { EditCustomerComponent } from '../edit-customer/edit-customer.component';
+import { AddWorkOrderComponent } from '../../WorkOrder/add-work-order/add-work-order.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { WorkOrder } from '../../../core/models/work-order.model';
+import { WorkOrderService } from '../../../core/services/work-order.service';
 
 @Component({
   selector: 'app-customers-list',
   standalone: true,
-  imports: [CommonModule, SpeedDialComponent,FormsModule, EditCustomerComponent],
+  imports: [CommonModule, SpeedDialComponent,FormsModule, EditCustomerComponent,AddWorkOrderComponent],
   templateUrl: './customer-list.component.html',
   animations: [
         trigger('modalAnimation', [
@@ -38,7 +41,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 export class CustomersListComponent implements OnInit {
   customers?: Customer[] = undefined;
-  isModalOpen = false;
+  isModalEditCustomerOpen = false;
+  isModalAddWorkOrderOpen = false;
   selectedCustomerId: number | undefined;
   selectedCustomer: Customer | null = null;
   pageNumber = 1;
@@ -58,7 +62,8 @@ export class CustomersListComponent implements OnInit {
   constructor(private readonly customersService: CustomersService, 
     private readonly router: Router,
     private readonly toastService: ToastService,
-    private readonly modalService: ModalService
+    private readonly modalService: ModalService,
+    private readonly  workOrderService: WorkOrderService
   ) {}
 
   ngOnInit(): void {
@@ -99,15 +104,15 @@ export class CustomersListComponent implements OnInit {
 
   addWorkOrder(customer: Customer): void {
     if (customer) {
-      // Redirige a la ruta de agregar orden de trabajo con el ID del cliente seleccionado
-      this.router.navigate(['/add-work-order/', customer.id]);
+      this.selectedCustomerId = customer.id;
+      this.isModalAddWorkOrderOpen = true;
     }
   }
 
   editCustomer(customer: Customer): void {
     if (customer) {
       this.selectedCustomerId = customer.id;
-      this.isModalOpen = true;
+      this.isModalEditCustomerOpen = true;
     }
   }
   deleteCustomer(customer: Customer) {
@@ -132,15 +137,20 @@ export class CustomersListComponent implements OnInit {
       }
   }
 
-  closeEditModal() {
-    this.isModalOpen = false;
+  closeEditCustomerModal() {
+    this.isModalEditCustomerOpen = false;
+    this.selectedCustomerId = undefined;
+  }
+
+  closeAddWorkOrderModal() {
+    this.isModalAddWorkOrderOpen = false;
     this.selectedCustomerId = undefined;
   }
   onCustomerSaved(customer: any) {
     this.customersService.updateCustomer(customer).subscribe({
       next: () => {
         this.toastService.showToast('Cliente actualizado correctamente','success');
-        this.closeEditModal();
+        this.closeEditCustomerModal();
         this.loadCustomers();
       },
       error: (err) => {
@@ -149,8 +159,23 @@ export class CustomersListComponent implements OnInit {
     });
   }
   onCustomerCanceled() {
-    this.closeEditModal();
-    this.loadCustomers();
+    this.closeEditCustomerModal();
+  }
+
+  onWorkOrderCreated(workOrder: WorkOrder) {
+    this.workOrderService.create(workOrder).subscribe({
+      next: (newOrder: WorkOrder) => {
+        this.toastService.showToast('Orden de trabajo creada correctamente','success');
+        this.router.navigate(['/work-orders']);
+      },
+      error: (err) => {
+        this.toastService.showToast('Error al crear la orden de trabajo','danger');
+      }
+    });
+  }
+
+  onWorkOrderCancelled() {
+    this.closeAddWorkOrderModal();
   }
 
 }

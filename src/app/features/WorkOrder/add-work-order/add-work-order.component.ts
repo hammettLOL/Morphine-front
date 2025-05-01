@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { WorkOrderService} from '../../../core/services/work-order.service';
+import { Router } from '@angular/router';
 import { ServicesService } from '../../../core/services/service.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { CustomersService } from '../../../core/services/customers.service';
 import { Status } from '../../../core/enums/status.enum';
 import { PaymentMethod } from '../../../core/enums/payment-method.enum';
 import { WorkOrder } from '../../../core/models/work-order.model';
-import { Subject, takeUntil } from 'rxjs';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-work-order',
@@ -19,40 +18,42 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './add-work-order.component.css'
 })
 export class AddWorkOrderComponent implements OnInit, OnDestroy {
+  @Input() customerId!: number | undefined;
+  @Output() workOrderCreated = new EventEmitter<WorkOrder>();
+  @Output() workOrderCancelled = new EventEmitter<void>();
   workOrderForm!: FormGroup;
-  customerId!: number;
   customer: any;
   services: any[] = []; 
   Status = Status; // Exponer el enum para el template
   PaymentMethod = PaymentMethod; // Exponer el enum
+  loading = false;
+  error: any;
   private readonly destroy$ = new Subject<void>();
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly workOrderService: WorkOrderService,
     private readonly serviceService: ServicesService,
     private readonly customerService: CustomersService,
     private readonly toastService: ToastService
-  ) { }
+  ) {
+
+    this.workOrderForm = this.fb.group({
+      customerId: [this.customerId, Validators.required],
+      serviceId: ['', Validators.required],
+      schedulerId: [1, Validators.required],
+      description: [''],
+      status: [Status.Pendiente, Validators.required],
+      scheduleDate: ['', Validators.required],
+      totalPrice: [0, [Validators.required, Validators.min(0)]],
+      advancePrice: [0],
+      paymentMethod: [PaymentMethod.Efectivo, Validators.required]
+    });
+   }
 
   ngOnInit(): void {
-     // Obtener el ID del customer desde la URL
-     this.customerId = Number(this.route.snapshot.paramMap.get('customerId'));
-     this.workOrderForm = this.fb.group({
-       customerId: [this.customerId, Validators.required],
-       serviceId: ['', Validators.required],
-       schedulerId: [1, Validators.required],
-       description: [''],
-       status: [Status.Pendiente, Validators.required],
-       scheduleDate: ['', Validators.required],
-       totalPrice: [0, [Validators.required, Validators.min(0)]],
-       advancePrice: [0],
-       paymentMethod: [PaymentMethod.Efectivo, Validators.required]
-     });
+     this.loadCustomerAndServices();
 
-   
     const totalPriceControl = this.workOrderForm.get('totalPrice');
     if (totalPriceControl) {
       totalPriceControl.valueChanges
@@ -68,25 +69,30 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
         });
     }
 
-     // Cargar la lista de servicios para el select
-    this.serviceService.getServices(1,10).subscribe({
-      next: (data) => {
-        this.services = data;
-      },
-      error: (err) => {
-        this.toastService.showToast('Error al cargar servicios','danger');
-        this.router.navigate(['/customers']);
-      }
-    });
 
-    this.customerService.getCustomer(this.customerId).subscribe({
-      next: (customer) => {
-        this.customer = customer;
-      },
-      error: (err) => {
-        this.toastService.showToast('Error al cargar el cliente','danger');
-      }
-    });
+     
+  }
+
+  loadCustomerAndServices() {
+    if(this.customerId) {
+      this.loading = true;
+      forkJoin({
+        customer: this.customerService.getCustomer(this.customerId),
+        services: this.serviceService.getServices(1,10)
+      }).subscribe({
+        next:({ customer, services }) => {
+          this.services = services;
+          this.customer = customer;
+          this.loading = false;
+        },
+        error: (err) => {
+          this.toastService.showToast('Error al cargar datos', 'danger');
+          this.loading = false;
+          this.router.navigate(['/customers']);
+        }
+      });
+    }
+    
   }
 
   ngOnDestroy(): void {
@@ -99,28 +105,22 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       this.workOrderForm.markAllAsTouched();
       return;
     }
-    const createWorkOrder: WorkOrder = {
-         ...this.workOrderForm.value,
-         paymentMethod : Number(this.workOrderForm.value.paymentMethod),
-         status: Number(this.workOrderForm.value.status),
-         schedulerId: Number(this.workOrderForm.value.schedulerId),
-         customerId: Number(this.workOrderForm.value.customerId),
-         serviceId: Number(this.workOrderForm.value.serviceId)
-       };
-    this.workOrderService.create(createWorkOrder).subscribe({
-      next: (newOrder: WorkOrder) => {
-        // Opcional: mostrar un toast de éxito y redirigir a la lista de órdenes o al detalle del customer
-        this.toastService.showToast('Orden de trabajo creada correctamente','success');
-        this.router.navigate(['/work-orders']);
-      },
-      error: (err) => {
-        this.toastService.showToast('Error al crear la orden de trabajo','danger');
-      }
-    });
+    if(this.customerId) {
+      const createWorkOrder: WorkOrder = {
+        ...this.workOrderForm.value,
+        paymentMethod : Number(this.workOrderForm.value.paymentMethod),
+        status: Number(this.workOrderForm.value.status),
+        schedulerId: Number(this.workOrderForm.value.schedulerId),
+        customerId: Number(this.workOrderForm.value.customerId),
+        serviceId: Number(this.workOrderForm.value.serviceId)
+      };
+
+      this.workOrderCreated.emit(createWorkOrder);
+    }
   }
 
   cancel(): void {
-    this.router.navigate(['/customers']);
+    this.workOrderCancelled.emit();
   }
 
 }
