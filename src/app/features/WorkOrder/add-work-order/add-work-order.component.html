@@ -52,7 +52,7 @@
             formControlName="serviceId" 
             class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
           >
-          <option value="">Seleccione un servicio</option>
+          <option value="" disabled selected>Seleccione un servicio</option>
           <option *ngFor="let service of services" [value]="service.id">
             {{ service.type }}
           </option>
@@ -112,6 +112,9 @@
             </svg>
           </div>
         </div>
+        <div *ngIf="workOrderForm.get('status')?.invalid && workOrderForm.get('status')?.touched" class="text-red-500 text-sm mt-1">
+          Ingrese un Estado válido.
+        </div>
       </div>
 
       <!-- Descripción -->
@@ -124,6 +127,9 @@
           class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition" 
           placeholder="Detalles del trabajo"
         ></textarea>
+        <div *ngIf="workOrderForm.get('description')?.invalid && workOrderForm.get('description')?.touched" class="text-red-500 text-sm mt-1">
+          Ingrese una descripción válida.
+        </div>
       </div>
 
       <!-- Fecha Programada -->

@@ -38,6 +38,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
     private readonly toastService: ToastService
   ) {
 
+   
     this.workOrderForm = this.fb.group({
       customerId: [this.customerId, Validators.required],
       serviceId: ['', Validators.required],
@@ -52,7 +53,10 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void {
-     this.loadCustomerAndServices();
+    if(this.customerId) {
+      this.workOrderForm.get('customerId')?.setValue(this.customerId);
+      this.loadCustomerAndServices();
+    }
 
     const totalPriceControl = this.workOrderForm.get('totalPrice');
     if (totalPriceControl) {
