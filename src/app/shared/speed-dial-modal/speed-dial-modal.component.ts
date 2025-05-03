@@ -30,6 +30,5 @@ import { trigger, transition, style, animate } from '@angular/animations';
 export class SpeedDialModalComponent {
   @Output() closed = new EventEmitter<void>();
   @Output() generateLink = new EventEmitter<void>();
-  @Output() addCustomer = new EventEmitter<void>();
 
 }

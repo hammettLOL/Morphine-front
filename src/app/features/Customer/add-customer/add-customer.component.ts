@@ -1,6 +1,6 @@
 // src/app/components/add-customer/add-customer.component.ts
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { CustomersService} from '../../../core/services/customers.service';
 import { Customer } from '../../../core/models/customer.model';
 import { Router } from '@angular/router';
@@ -16,6 +16,11 @@ import { ToastService } from '../../../core/services/toast.service';
 })
 export class AddCustomerComponent implements OnInit {
   customerForm!: FormGroup;
+  loading = false;
+  error : any;
+  @Output() customerCreated = new EventEmitter<Customer>();
+  @Output() customerCancelled = new EventEmitter<void>();
+
 
   constructor(
     private readonly fb: FormBuilder,
@@ -29,7 +34,7 @@ export class AddCustomerComponent implements OnInit {
       name: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.email]],
-      document: ['', [Validators.maxLength(14)]],
+      document: ['', [Validators.required, Validators.pattern(/^[0-9]{8}$/)]],
       typeDocument: [0],
       cellphone: ['',[Validators.minLength(9)]],
       birthday: [''],
@@ -37,8 +42,40 @@ export class AddCustomerComponent implements OnInit {
     });
   }
 
+  applyDocumentValidators(type: number) {
+    
+    const documentFormControl = this.customerForm.get('document')!;
+    const validators = [ Validators.required ];
+    switch (type) {
+      case 0: // DNI Peruano: exactamente 8 dígitos numéricos
+        validators.push(Validators.pattern(/^[0-9]{8}$/));
+        break;
+
+      case 1: // CE: Carné de extranjería, 9 caracteres alfanuméricos
+        validators.push(Validators.pattern(/^[A-Za-z0-9]{9}$/));
+        break;
+
+      case 2: // Pasaporte: entre 6 y 9 caracteres alfanuméricos
+        validators.push(Validators.pattern(/^[A-Za-z0-9]{6,11}$/));
+        break;
+    }
+
+    documentFormControl.setValidators(validators);
+
+    const currentValue = documentFormControl.value;
+    documentFormControl.setValue(currentValue);
+    
+  }
+
+  get documentFormControl(): AbstractControl {
+    return this.customerForm.get('document')!;
+  }
+
   onSubmit(): void {
-    if (this.customerForm.invalid) return;
+    if (this.customerForm.invalid) {
+      this.customerForm.markAllAsTouched();
+      return;
+    }
 
     // Convertir el valor de tipoDocumento a número si la API lo requiere
     const formValues = this.customerForm.value;
@@ -48,23 +85,15 @@ export class AddCustomerComponent implements OnInit {
       lastName: formValues.lastName,
       email: formValues.email,
       document: formValues.document,
-      typeDocument: formValues.typeDocument,
+      typeDocument: Number(formValues.typeDocument),
       birthday: formValues.birthday || null,
       cellphone: String(formValues.cellphone),
       instagram: formValues.instagram
     };
 
-    this.customersService.addCustomer(newCustomer).subscribe({
-      next: (response) => {
-        this.toastService.showToast('Cliente agregado correctamente.', 'success');
-        this.router.navigate(['/customers']);
-      },
-      error: (err) => {
-        this.toastService.showToast('Error al agregar el cliente.', 'danger');
-      }
-    });
+    this.customerCreated.emit(newCustomer);
   }
   cancel() {
-    this.router.navigate(['/customers']);
+    this.customerCancelled.emit();
   }
 }

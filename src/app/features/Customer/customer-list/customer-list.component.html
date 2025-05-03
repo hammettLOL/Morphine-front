@@ -1,7 +1,15 @@
 <div class="container mx-auto p-6 max-w-6xl">
-  <header class="mb-8">
+  <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
     <h1 class="text-3xl font-bold text-gray-800 mb-2">Lista de Clientes</h1>
-    <p class="text-gray-600">Selecciona un cliente para agregar una nueva orden de trabajo</p>
+    <button
+    (click)="addCustomer()"
+    class="mt-4 md:mt-0 bg-red-600 text-white px-5 py-2.5 rounded-lg hover:bg-red-700 transition-colors duration-200 flex items-center gap-2 shadow-sm font-medium"
+    >
+    <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+    </svg>
+    Agregar cliente
+  </button>
   </header>
 
   <div class="relative mb-6">
@@ -200,8 +208,8 @@
   <div *ngIf="isModalEditCustomerOpen" [@modalAnimation] class="fixed inset-0 z-50 overflow-auto bg-black/60 backdrop-blur-sm">
       <div [@contentAnimation] class="relative top-30 mx-auto p-6 bg-white rounded-xl shadow-lg max-w-3xl">
           <app-edit-customer
-              [customerId]="selectedCustomerId"  (customerSaved)="onCustomerSaved($event)"
-              (customerCancelled)="onCustomerCanceled()"
+              [customerId]="selectedCustomerId"  (customerSaved)="onCustomerEditSaved($event)"
+              (customerCancelled)="onCustomerEditCanceled()"
           ></app-edit-customer>
           <button (click)="closeEditCustomerModal()" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -229,3 +237,18 @@
     </div>
   
     </div>
+
+    <div class="container mx-auto p-6 bg-white">
+      <div *ngIf="isModalAddCustomerOpen" [@modalAnimation] class="fixed inset-0 z-50 overflow-auto bg-black/60 backdrop-blur-sm">
+          <div [@contentAnimation] class="relative top-30 mx-auto p-6 bg-white rounded-xl shadow-lg max-w-3xl">
+              <app-add-customer
+                  (customerCreated)="onCustomerAddCreated($event)"
+                  (customerCancelled)="onCustomerAddCanceled()"
+              ></app-add-customer>
+              <button (click)="closeAddCustomerModal()" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+              </button>
+          </div>
+      </div>

@@ -12,11 +12,12 @@ import { AddWorkOrderComponent } from '../../WorkOrder/add-work-order/add-work-o
 import { trigger, transition, style, animate } from '@angular/animations';
 import { WorkOrder } from '../../../core/models/work-order.model';
 import { WorkOrderService } from '../../../core/services/work-order.service';
+import { AddCustomerComponent } from '../add-customer/add-customer.component';
 
 @Component({
   selector: 'app-customers-list',
   standalone: true,
-  imports: [CommonModule, SpeedDialComponent,FormsModule, EditCustomerComponent,AddWorkOrderComponent],
+  imports: [CommonModule, SpeedDialComponent,FormsModule, EditCustomerComponent,AddWorkOrderComponent,AddCustomerComponent],
   templateUrl: './customer-list.component.html',
   animations: [
         trigger('modalAnimation', [
@@ -43,6 +44,7 @@ export class CustomersListComponent implements OnInit {
   customers?: Customer[] = undefined;
   isModalEditCustomerOpen = false;
   isModalAddWorkOrderOpen = false;
+  isModalAddCustomerOpen = false;
   selectedCustomerId: number | undefined;
   selectedCustomer: Customer | null = null;
   pageNumber = 1;
@@ -146,7 +148,7 @@ export class CustomersListComponent implements OnInit {
     this.isModalAddWorkOrderOpen = false;
     this.selectedCustomerId = undefined;
   }
-  onCustomerSaved(customer: any) {
+  onCustomerEditSaved(customer: any) {
     this.customersService.updateCustomer(customer).subscribe({
       next: () => {
         this.toastService.showToast('Cliente actualizado correctamente','success');
@@ -158,7 +160,7 @@ export class CustomersListComponent implements OnInit {
       }
     });
   }
-  onCustomerCanceled() {
+  onCustomerEditCanceled() {
     this.closeEditCustomerModal();
   }
 
@@ -176,6 +178,33 @@ export class CustomersListComponent implements OnInit {
 
   onWorkOrderCancelled() {
     this.closeAddWorkOrderModal();
+  }
+
+  addCustomer() {
+    this.isModalAddCustomerOpen = true;
+  }
+
+  closeAddCustomerModal() {
+    this.isModalAddCustomerOpen = false;
+  }
+  onCustomerAddCreated(customer: Customer) {
+    this.customersService.addCustomer(customer).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.toastService.showToast('Cliente agregado correctamente.', 'success');
+        this.closeAddCustomerModal();
+        this.loadCustomers();
+      },
+      error: (err) => {
+        this.toastService.showToast('Error al agregar el cliente.', 'danger');
+        console.log(err);
+      }
+    });
+   
+  }
+
+  onCustomerAddCanceled() {
+    this.closeAddCustomerModal();
   }
 
 }
