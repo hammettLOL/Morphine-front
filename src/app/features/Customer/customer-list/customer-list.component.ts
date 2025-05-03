@@ -129,6 +129,11 @@ export class CustomersListComponent implements OnInit {
                 this.loadCustomers();
               },
               error: (err) => {
+                if(err.error.message)
+                {
+                  this.toastService.showToast(`${err.error.message}`,'danger');
+                }
+                else
                 this.toastService.showToast('Error al eliminar cliente','danger');
               }
             });
