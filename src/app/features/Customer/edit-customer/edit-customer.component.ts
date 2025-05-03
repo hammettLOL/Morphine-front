@@ -1,7 +1,7 @@
 // src/app/components/edit-customer/edit-customer.component.ts
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators,ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { CustomersService} from '../../../core/services/customers.service';
 import { Customer } from '../../../core/models/customer.model';
 import { CommonModule } from '@angular/common';
@@ -40,6 +40,34 @@ export class EditCustomerComponent implements OnInit {
     });
 
   }
+  applyDocumentValidators(type: number) {
+      
+      const documentFormControl = this.customerForm.get('document')!;
+      const validators = [ Validators.required ];
+      switch (type) {
+        case 0: // DNI Peruano: exactamente 8 dígitos numéricos
+          validators.push(Validators.pattern(/^[0-9]{8}$/));
+          break;
+  
+        case 1: // CE: Carné de extranjería, 9 caracteres alfanuméricos
+          validators.push(Validators.pattern(/^[A-Za-z0-9]{9}$/));
+          break;
+  
+        case 2: // Pasaporte: entre 6 y 9 caracteres alfanuméricos
+          validators.push(Validators.pattern(/^[A-Za-z0-9]{6,11}$/));
+          break;
+      }
+  
+      documentFormControl.setValidators(validators);
+  
+      const currentValue = documentFormControl.value;
+      documentFormControl.setValue(currentValue);
+      
+    }
+  
+    get documentFormControl(): AbstractControl {
+      return this.customerForm.get('document')!;
+    }
 
   ngOnInit(): void {
     
