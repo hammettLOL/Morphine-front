@@ -32,7 +32,7 @@ export class EditCustomerComponent implements OnInit {
       name: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.email]],
-      document: ['', [Validators.maxLength(14)]],
+      document: ['', [Validators.pattern(/^[0-9]{8}$/)]],
       typeDocument: [0],
       cellphone: ['',[Validators.minLength(9),Validators.maxLength(12)]],
       birthday: [''],

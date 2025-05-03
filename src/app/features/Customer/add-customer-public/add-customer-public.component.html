@@ -87,8 +87,17 @@
                 class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
                 [ngClass]="{'border-red-500 ring-1 ring-red-500': customerForm.get('document')?.invalid && customerForm.get('document')?.touched}"
           />
-          <div *ngIf="customerForm.get('document')?.invalid && customerForm.get('document')?.touched" class="text-red-500 text-sm mt-1">
-            El documento es requerido.        
+          <div *ngIf="documentFormControl.invalid && documentFormControl.touched" class="text-red-500 text-sm mt-1">
+            <div *ngIf="documentFormControl.errors?.['required']">El documento es requerido.</div>
+            <div *ngIf="documentFormControl.errors?.['pattern'] && customerForm.value.typeDocument === 0">
+              DNI debe tener <strong>8 dígitos</strong>.
+            </div>
+            <div *ngIf="documentFormControl.errors?.['pattern'] && customerForm.value.typeDocument === 1">
+              CE debe tener <strong>9 caracteres</strong> (letras o números).
+            </div>
+            <div *ngIf="documentFormControl.errors?.['pattern'] && customerForm.value.typeDocument === 2">
+              Pasaporte debe tener entre <strong>6 y 11 caracteres</strong> (letras o números).
+            </div>
           </div>
         </div>
       </div>

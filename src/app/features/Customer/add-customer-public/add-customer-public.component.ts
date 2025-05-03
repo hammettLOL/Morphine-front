@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomersService } from '../../../core/services/customers.service';
 import { Customer } from '../../../core/models/customer.model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -51,13 +51,42 @@ export class AddCustomerPublicComponent implements OnInit {
       name: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      document: ['', [Validators.required, Validators.maxLength(14)]],
+      document: ['', [Validators.required, Validators.pattern(/^[0-9]{8}$/)]],
       typeDocument: [0,Validators.required],
       cellphone: ['',[Validators.required,Validators.minLength(9)]],
       birthday: ['',Validators.required],
       instagram: ['']
     });
   }
+
+  applyDocumentValidators(type: number) {
+        
+        const documentFormControl = this.customerForm.get('document')!;
+        const validators = [ Validators.required ];
+        switch (type) {
+          case 0: // DNI Peruano: exactamente 8 dígitos numéricos
+            validators.push(Validators.pattern(/^[0-9]{8}$/));
+            break;
+    
+          case 1: // CE: Carné de extranjería, 9 caracteres alfanuméricos
+            validators.push(Validators.pattern(/^[A-Za-z0-9]{9}$/));
+            break;
+    
+          case 2: // Pasaporte: entre 6 y 9 caracteres alfanuméricos
+            validators.push(Validators.pattern(/^[A-Za-z0-9]{6,11}$/));
+            break;
+        }
+    
+        documentFormControl.setValidators(validators);
+    
+        const currentValue = documentFormControl.value;
+        documentFormControl.setValue(currentValue);
+        
+      }
+    
+      get documentFormControl(): AbstractControl {
+        return this.customerForm.get('document')!;
+      }
 
     onSubmit(): void {
       if (this.customerForm.invalid) 
