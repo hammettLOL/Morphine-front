@@ -48,27 +48,50 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       scheduleDate: ['', Validators.required],
       totalPrice: [0, [Validators.required, Validators.min(0)]],
       advancePrice: [0, [Validators.min(0)]],
-      paymentMethod: [PaymentMethod.Efectivo, Validators.required]
+      paymentMethod: [PaymentMethod.Efectivo, Validators.required],
+      percentage: [30]
     });
    }
 
   ngOnInit(): void {
     this.loadWorkOrder();
-    // Suscribirse a los cambios en totalPrice
+    this.onTotalPriceChange();
+    this.onPercentageChange();
+  }
+  onTotalPriceChange() {
     const totalPriceControl = this.workOrderForm.get('totalPrice');
-       if (totalPriceControl) {
-         totalPriceControl.valueChanges
-           .pipe(takeUntil(this.destroy$))
-           .subscribe(totalPrice => {
-             if (totalPrice) {
-               // Calcula el 40% del precio total y actualiza advancePrice
-               const advanceValue = parseFloat(totalPrice) * 0.4;
-               this.workOrderForm.get('advancePrice')?.setValue(advanceValue.toFixed(0), { emitEvent: false });
-             } else {
-               this.workOrderForm.get('advancePrice')?.setValue('', { emitEvent: false });
-             }
-           });
-       }
+    const percentageControl = this.workOrderForm.get('percentage');
+    if (totalPriceControl) {
+      totalPriceControl.valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(totalPrice => {
+          if (totalPrice) {
+            // Calcula el 40% del precio total y actualiza advancePrice
+            const advanceValue = parseFloat(totalPrice) * (parseFloat(percentageControl?.value) / 100);
+            this.workOrderForm.get('advancePrice')?.setValue(advanceValue.toFixed(0), { emitEvent: false });
+          } else {
+            this.workOrderForm.get('advancePrice')?.setValue('', { emitEvent: false });
+          }
+        });
+    }
+  }
+
+  onPercentageChange() {
+    const totalPriceControl = this.workOrderForm.get('totalPrice');
+    const percentageControl = this.workOrderForm.get('percentage');
+    if (percentageControl) {
+      percentageControl.valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(percentage => {
+          if (percentage) {
+            // Calcula el 40% del precio total y actualiza advancePrice
+            const advanceValue = parseFloat(totalPriceControl?.value) * (parseFloat(percentage) / 100);
+            this.workOrderForm.get('advancePrice')?.setValue(advanceValue.toFixed(0), { emitEvent: false });
+          } else {
+            this.workOrderForm.get('advancePrice')?.setValue('', { emitEvent: false });
+          }
+        });
+    }
   }
 
   loadWorkOrder() {
@@ -79,7 +102,6 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
         workOrder: this.workOrderService.getById(this.workOrderId)
       }).subscribe({
         next:({ services, workOrder }) => {
-          console.log(workOrder);
           this.setFormValues(services, workOrder);
           this.loading = false;
         },
@@ -107,7 +129,8 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       scheduleDate: this.formatDateForInput(workOrders.scheduleDate) || null, // Si es necesario formatear la fecha
       totalPrice: workOrders.totalPrice,
       advancePrice: workOrders.advancePrice,
-      paymentMethod: workOrders.paymentMethod
+      paymentMethod: workOrders.paymentMethod,
+      percentage : workOrders.percentage
     });
 
   }
