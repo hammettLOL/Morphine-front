@@ -195,14 +195,12 @@ export class CustomersListComponent implements OnInit {
   onCustomerAddCreated(customer: Customer) {
     this.customersService.addCustomer(customer).subscribe({
       next: (response) => {
-        console.log(response);
         this.toastService.showToast('Cliente agregado correctamente.', 'success');
         this.closeAddCustomerModal();
         this.loadCustomers();
       },
       error: (err) => {
         this.toastService.showToast('Error al agregar el cliente.', 'danger');
-        console.log(err);
       }
     });
    

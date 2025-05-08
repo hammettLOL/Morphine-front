@@ -38,7 +38,9 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
     private readonly toastService: ToastService
   ) {
 
-   
+   }
+
+   initForm(){
     this.workOrderForm = this.fb.group({
       customerId: [this.customerId, Validators.required],
       serviceId: ['', Validators.required],
@@ -46,6 +48,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       description: [''],
       status: [Status.Pendiente, Validators.required],
       scheduleDate: ['', Validators.required],
+      percentage: [30],
       totalPrice: [0, [Validators.required, Validators.min(0)]],
       advancePrice: [0],
       paymentMethod: [PaymentMethod.Efectivo, Validators.required]
@@ -53,29 +56,53 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void {
+    this.initForm();
     if(this.customerId) {
       this.workOrderForm.get('customerId')?.setValue(this.customerId);
       this.loadCustomerAndServices();
     }
 
+   this.onTotalPriceChange();
+   this.onPercentageChange();
+
+  }
+  onTotalPriceChange() {
     const totalPriceControl = this.workOrderForm.get('totalPrice');
+    const percentageControl = this.workOrderForm.get('percentage');
     if (totalPriceControl) {
       totalPriceControl.valueChanges
         .pipe(takeUntil(this.destroy$))
         .subscribe(totalPrice => {
           if (totalPrice) {
             // Calcula el 40% del precio total y actualiza advancePrice
-            const advanceValue = parseFloat(totalPrice) * 0.4;
+            const advanceValue = parseFloat(totalPrice) * (parseFloat(percentageControl?.value) / 100);
             this.workOrderForm.get('advancePrice')?.setValue(advanceValue.toFixed(0), { emitEvent: false });
           } else {
             this.workOrderForm.get('advancePrice')?.setValue('', { emitEvent: false });
           }
         });
     }
-
-
-     
   }
+
+  onPercentageChange() {
+    const totalPriceControl = this.workOrderForm.get('totalPrice');
+    const percentageControl = this.workOrderForm.get('percentage');
+    if (percentageControl) {
+      percentageControl.valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(percentage => {
+          if (percentage) {
+            // Calcula el 40% del precio total y actualiza advancePrice
+            const advanceValue = parseFloat(totalPriceControl?.value) * (parseFloat(percentage) / 100);
+            this.workOrderForm.get('advancePrice')?.setValue(advanceValue.toFixed(0), { emitEvent: false });
+          } else {
+            this.workOrderForm.get('advancePrice')?.setValue('', { emitEvent: false });
+          }
+        });
+    }
+  }
+
+  
 
   loadCustomerAndServices() {
     if(this.customerId) {
