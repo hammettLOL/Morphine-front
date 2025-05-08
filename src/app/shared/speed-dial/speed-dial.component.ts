@@ -30,17 +30,19 @@ closeModal() {
 
 handleGenerateLink() {
   // Aquí llamas tu lógica para generar el link
-  this.modalOpen = false;
   this.customerService.generateRegistrationLink().subscribe({
     next: ({ link }) => {
       // Copia el link al portapapeles
       navigator.clipboard.writeText(link);
       this.toast.showToast('Link copiado al portapapeles', 'success',5000);
+      
     },
     error: (error) => {
       this.toast.showToast('Error al generar el link', 'danger',5000);
     }
   });
+
+  this.modalOpen = false;
 }
 
 handleAddCustomer() {
