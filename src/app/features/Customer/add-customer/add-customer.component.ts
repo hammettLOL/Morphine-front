@@ -24,9 +24,6 @@ export class AddCustomerComponent implements OnInit {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly customersService: CustomersService,
-    private readonly toastService :ToastService,
-    private readonly router: Router
   ) {}
 
   ngOnInit(): void {

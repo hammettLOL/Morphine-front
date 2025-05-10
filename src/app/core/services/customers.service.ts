@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { PagedResult } from '../models/paged-result.model';
 import { Customer } from '../models/customer.model';
 import { environment } from '../../../environments/environment';
+import { CustomerByDocument } from '../models/customer-by-document.model';
 
 @Injectable({
   providedIn: 'root'
@@ -49,4 +50,12 @@ export class CustomersService {
   generateRegistrationLink(): Observable<any> {
     return this.http.get(`${this.apiUrl}/${this.endpoint}/generate-registration-link`);
   }
+  findCustomerByDocumentNumber(token: string, typeDocument: string, documentNumber: string): Observable<CustomerByDocument> {
+    const params = new HttpParams()
+      .set('token', token)
+      .set('typeDocument', typeDocument)
+      .set('documentNumber', documentNumber);
+    return this.http.get<Customer>(`${this.apiUrl}/${this.endpoint}/get-customer-by-document`, { params });
+  }
+    
 }
