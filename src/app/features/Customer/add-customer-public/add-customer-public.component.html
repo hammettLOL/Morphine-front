@@ -60,8 +60,9 @@
       <!-- Botón verificar -->
       <div class="pt-4">
         <button type="submit" 
+                [disabled]="isVerifyDocumentSubmitted"
                 class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg">
-          VERIFICAR
+          {{ isVerifyDocumentSubmitted ? 'PROCESANDO...' : 'VERIFICAR' }}
         </button>
       </div>
     </form>
@@ -224,9 +225,10 @@
 
       <!-- Botones -->
       <div class="pt-4">
-        <button type="submit" 
+        <button type="submit"
+                [disabled]="isSubmitted"
                 class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg">
-          RESERVAR MI CITA
+          {{ isSubmitted ? 'PROCESANDO...' : 'RESERVAR MI CITA' }}
         </button>
         <p class="text-gray-500 text-xs text-center mt-3">Al registrarte, aceptas nuestras políticas de privacidad</p>
       </div>

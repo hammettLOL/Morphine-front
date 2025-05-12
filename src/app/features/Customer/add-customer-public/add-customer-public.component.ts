@@ -26,6 +26,9 @@ export class AddCustomerPublicComponent implements OnInit {
   isValid = false;
   customerVerified = false;
   existingCustomer: CustomerByDocument | null = null;
+  isVerifyDocumentSubmitted = false;
+  isSubmitted = false;
+
 
   constructor(
     private readonly fb: FormBuilder,
@@ -53,6 +56,8 @@ export class AddCustomerPublicComponent implements OnInit {
         this.message = 'El enlace no es válido o ha expirado.';
       }
     });
+    this.isVerifyDocumentSubmitted = false;
+    this.isSubmitted = false;
   }
 
   buildForm(document: string, typeDocument: string) {
@@ -99,6 +104,11 @@ export class AddCustomerPublicComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.isSubmitted) {
+      return;
+    }
+    this.isSubmitted = true;
+
     if (this.customerForm.invalid) {
       this.customerForm.markAllAsTouched();
       return;
@@ -132,6 +142,7 @@ export class AddCustomerPublicComponent implements OnInit {
           this.createWorkOrder(customer.id, reference);
         },
         error: (err) => {
+          this.isSubmitted = false;
           this.toastService.showToast('Error al agregar el cliente.', 'danger');
         }
       });
@@ -174,6 +185,11 @@ export class AddCustomerPublicComponent implements OnInit {
 
   // Método para verificar un documento
   verifyDocument(): void {
+    if (this.isVerifyDocumentSubmitted) {
+      return;
+    }
+    this.isVerifyDocumentSubmitted = true;
+
     if (this.verificationForm.invalid) {
       this.verificationForm.markAllAsTouched();
       return;
@@ -198,6 +214,7 @@ export class AddCustomerPublicComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
+        this.isVerifyDocumentSubmitted = false;
         this.toastService.showToast('Error al verificar el documento.', 'danger');
       }
     });
