@@ -1,11 +1,8 @@
 // src/app/components/add-customer/add-customer.component.ts
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
-import { CustomersService} from '../../../core/services/customers.service';
 import { Customer } from '../../../core/models/customer.model';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-add-customer',
@@ -20,6 +17,7 @@ export class AddCustomerComponent implements OnInit {
   error : any;
   @Output() customerCreated = new EventEmitter<Customer>();
   @Output() customerCancelled = new EventEmitter<void>();
+  isSubmitted = false;
 
 
   constructor(
@@ -37,6 +35,7 @@ export class AddCustomerComponent implements OnInit {
       birthday: [''],
       instagram: ['']
     });
+    this.isSubmitted = false;
   }
 
   applyDocumentValidators(type: number) {
@@ -69,10 +68,15 @@ export class AddCustomerComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if(this.isSubmitted) {
+      return;
+    }
+
     if (this.customerForm.invalid) {
       this.customerForm.markAllAsTouched();
       return;
     }
+    this.isSubmitted = true;
 
     // Convertir el valor de tipoDocumento a número si la API lo requiere
     const formValues = this.customerForm.value;
@@ -89,6 +93,7 @@ export class AddCustomerComponent implements OnInit {
     };
 
     this.customerCreated.emit(newCustomer);
+    this.isSubmitted = false;
   }
   cancel() {
     this.customerCancelled.emit();

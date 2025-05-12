@@ -3,21 +3,7 @@
     Agregar Cliente
   </h1>
 
-  <div *ngIf="loading" class="flex justify-center items-center py-8">
-    <div class="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-t-red-600"></div>
-    <p class="ml-3 text-gray-600">Cargando datos...</p>
-  </div>
-
-  <div *ngIf="error" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md mb-6">
-    <div class="flex items-center">
-      <svg class="h-6 w-6 text-red-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-      </svg>
-      <p class="font-medium">Error al cargar la orden de trabajo: {{ error?.message || 'Desconocido' }}</p>
-    </div>
-  </div>
-
-    <form *ngIf="!loading && !error" [formGroup]="customerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Nombre -->
         <div>
@@ -130,8 +116,9 @@
       <!-- Botones -->
       <div class="pt-4">
         <button type="submit" 
-                class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg">
-          Crear Cliente
+        [disabled]="isSubmitted"
+        class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg">
+          {{ isSubmitted ? 'PROCESANDO...' : 'CREAR CLIENTE' }}
         </button>
       </div>
     </form>

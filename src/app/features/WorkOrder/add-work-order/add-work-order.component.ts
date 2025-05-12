@@ -28,6 +28,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
   PaymentMethod = PaymentMethod; // Exponer el enum
   loading = false;
   error: any;
+  isSumitted = false;
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -61,7 +62,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       this.workOrderForm.get('customerId')?.setValue(this.customerId);
       this.loadCustomerAndServices();
     }
-
+   this.isSumitted = false;
    this.onTotalPriceChange();
    this.onPercentageChange();
 
@@ -132,6 +133,11 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
+    if(this.isSumitted) {
+      return;
+    }
+    this.isSumitted = true;
+
     if (this.workOrderForm.invalid) {
       this.workOrderForm.markAllAsTouched();
       return;
@@ -147,6 +153,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       };
 
       this.workOrderCreated.emit(createWorkOrder);
+      this.isSumitted = false;
     }
   }
 
