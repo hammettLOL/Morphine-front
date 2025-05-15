@@ -38,6 +38,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 export class WorkOrderListComponent implements OnInit {
   workOrders?: WorkOrderDto[] = undefined;
   isModalOpen = false;
+  isModalPreviewOpen = false;
   selectedWorkOrderId: number | undefined;
   pageNumber = 1;
   pageSize = 10;
@@ -184,9 +185,17 @@ export class WorkOrderListComponent implements OnInit {
       this.selectedWorkOrderId = workOrder.id;
       this.isModalOpen = true;
     }
+    previewWorkOrder(workOrder: WorkOrderDto) {
+      this.selectedWorkOrderId = workOrder.id;
+      this.isModalPreviewOpen = true;
+    }
 
     closeEditModal() {
       this.isModalOpen = false;
+      this.selectedWorkOrderId = undefined;
+    }
+     closePreviewModal() {
+      this.isModalPreviewOpen = false;
       this.selectedWorkOrderId = undefined;
     }
 
