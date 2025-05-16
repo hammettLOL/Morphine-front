@@ -8,11 +8,12 @@ import { ModalService } from '../../../core/services/modal.service';
 import { FormsModule } from '@angular/forms';
 import { EditWorkOrderComponent } from '../../WorkOrder/edit-work-order/edit-work-order.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { PreviewWorkOrderComponent } from '../preview-work-order/preview-work-order.component';
 
 @Component({
   selector: 'app-work-order-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, EditWorkOrderComponent],
+  imports: [CommonModule, FormsModule, EditWorkOrderComponent, PreviewWorkOrderComponent],
   templateUrl: './work-order-list.component.html',
   animations: [
       trigger('modalAnimation', [
