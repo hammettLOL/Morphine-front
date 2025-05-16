@@ -8,11 +8,12 @@ import { ModalService } from '../../../core/services/modal.service';
 import { FormsModule } from '@angular/forms';
 import { EditWorkOrderComponent } from '../../WorkOrder/edit-work-order/edit-work-order.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { PreviewWorkOrderComponent } from '../preview-work-order/preview-work-order.component';
 
 @Component({
   selector: 'app-work-order-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, EditWorkOrderComponent],
+  imports: [CommonModule, FormsModule, EditWorkOrderComponent, PreviewWorkOrderComponent],
   templateUrl: './work-order-list.component.html',
   animations: [
       trigger('modalAnimation', [
@@ -38,6 +39,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 export class WorkOrderListComponent implements OnInit {
   workOrders?: WorkOrderDto[] = undefined;
   isModalOpen = false;
+  isModalPreviewOpen = false;
   selectedWorkOrderId: number | undefined;
   pageNumber = 1;
   pageSize = 10;
@@ -184,9 +186,17 @@ export class WorkOrderListComponent implements OnInit {
       this.selectedWorkOrderId = workOrder.id;
       this.isModalOpen = true;
     }
+    previewWorkOrder(workOrder: WorkOrderDto) {
+      this.selectedWorkOrderId = workOrder.id;
+      this.isModalPreviewOpen = true;
+    }
 
     closeEditModal() {
       this.isModalOpen = false;
+      this.selectedWorkOrderId = undefined;
+    }
+     closePreviewModal() {
+      this.isModalPreviewOpen = false;
       this.selectedWorkOrderId = undefined;
     }
 

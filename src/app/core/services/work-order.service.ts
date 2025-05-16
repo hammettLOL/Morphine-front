@@ -6,6 +6,7 @@ import { WorkOrder } from '../models/work-order.model';
 import { WorkOrderDto } from '../models/work-order-dto.model';
 import { PagedResult } from '../models/paged-result.model';
 import { environment } from '../../../environments/environment';
+import { WorkOrderPreview } from '../models/work-order-preview.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,5 +48,9 @@ export class WorkOrderService {
   // Eliminar una orden de trabajo
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${this.endpoint}/${id}`);
+  }
+  
+  getWorkOrderPreview(id: number): Observable<WorkOrderPreview> {
+    return this.http.get<WorkOrderPreview>(`${this.apiUrl}/${this.endpoint}/preview/${id}`);
   }
 }
