@@ -107,12 +107,13 @@ export class AddCustomerPublicComponent implements OnInit {
     if (this.isSubmitted) {
       return;
     }
-    this.isSubmitted = true;
+    
 
     if (this.customerForm.invalid) {
       this.customerForm.markAllAsTouched();
       return;
     }
+    this.isSubmitted = true;
 
     // Obtener valores del formulario
     const formValues = this.customerForm.value;
@@ -213,7 +214,6 @@ export class AddCustomerPublicComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.log(err);
         this.isVerifyDocumentSubmitted = false;
         this.toastService.showToast('Error al verificar el documento.', 'danger');
       }
