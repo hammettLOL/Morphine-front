@@ -189,12 +189,13 @@ export class AddCustomerPublicComponent implements OnInit {
     if (this.isVerifyDocumentSubmitted) {
       return;
     }
-    this.isVerifyDocumentSubmitted = true;
-
+    
     if (this.verificationForm.invalid) {
       this.verificationForm.markAllAsTouched();
       return;
     }
+
+    this.isVerifyDocumentSubmitted = true;
 
     const typeDocument = this.verificationForm.get('typeDocument')?.value;
     const document = this.verificationForm.get('document')?.value;
