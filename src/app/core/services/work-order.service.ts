@@ -53,4 +53,7 @@ export class WorkOrderService {
   getWorkOrderPreview(id: number): Observable<WorkOrderPreview> {
     return this.http.get<WorkOrderPreview>(`${this.apiUrl}/${this.endpoint}/preview/${id}`);
   }
+  addWorkOrderByToken(token: string, workOrder: WorkOrder): Observable<WorkOrder> {
+    return this.http.post<WorkOrder>(`${this.apiUrl}/${this.endpoint}/add-workOrder-token/${token}`, workOrder);
+  }
 }

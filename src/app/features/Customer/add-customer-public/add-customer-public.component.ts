@@ -239,14 +239,13 @@ export class AddCustomerPublicComponent implements OnInit {
       // Agregar otros campos que pueda requerir tu modelo WorkOrder
     };
 
-    this.workOrdersService.create(workOrder).subscribe({
+    this.workOrdersService.addWorkOrderByToken(this.token, workOrder).subscribe({
       next: (response) => {
         this.isValid = false;
         this.message = 'Gracias por registrarte. Nos comunicaremos contigo próximamente.';
-        this.toastService.showToast('Solicitud de tatuaje recibida.', 'success');
       },
       error: (err) => {
-        this.toastService.showToast('Error al crear la solicitud de tatuaje.', 'danger');
+         this.message = 'Error al crear la solicitud de tatuaje. Comuniquese con Morphine.';
       }
     });
   }
