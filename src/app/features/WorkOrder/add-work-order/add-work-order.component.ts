@@ -49,6 +49,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       description: [''],
       status: [Status.Pendiente, Validators.required],
       scheduleDate: ['', Validators.required],
+      scheduleTime: ['', Validators.required],
       percentage: [30],
       totalPrice: [0, [Validators.required, Validators.min(0)]],
       advancePrice: [0],
@@ -144,6 +145,10 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       return;
     }
     if(this.customerId) {
+      // Combinar fecha y hora
+      const date = this.workOrderForm.value.scheduleDate;
+      const time = this.workOrderForm.value.scheduleTime;
+      const combinedDateTime = `${date}T${time}:00`;
       const createWorkOrder: WorkOrder = {
         ...this.workOrderForm.value,
         paymentMethod : Number(this.workOrderForm.value.paymentMethod),
@@ -151,7 +156,8 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
         status: Number(this.workOrderForm.value.status),
         schedulerId: Number(this.workOrderForm.value.schedulerId),
         customerId: Number(this.workOrderForm.value.customerId),
-        serviceId: Number(this.workOrderForm.value.serviceId)
+        serviceId: Number(this.workOrderForm.value.serviceId),
+        scheduleDate: combinedDateTime
       };
 
       this.workOrderCreated.emit(createWorkOrder);

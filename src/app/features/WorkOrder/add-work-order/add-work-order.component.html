@@ -1,104 +1,160 @@
-<div class="container mx-auto p-4 ">
+<div class="container mx-auto p-4">
   <h1 class="text-3xl font-bold text-gray-800 mb-2">
     Crear Nueva Orden de Trabajo
   </h1>
 
   <div *ngIf="loading" class="flex justify-center items-center py-8">
-    <div class="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-t-red-600"></div>
+    <div
+      class="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-t-red-600"
+    ></div>
     <p class="ml-3 text-gray-600">Cargando datos...</p>
   </div>
 
-  <div *ngIf="error" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md mb-6">
+  <div
+    *ngIf="error"
+    class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md mb-6"
+  >
     <div class="flex items-center">
-      <svg class="h-6 w-6 text-red-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      <svg
+        class="h-6 w-6 text-red-500 mr-3"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+        />
       </svg>
-      <p class="font-medium">Error al cargar la orden de trabajo: {{ error?.message || 'Desconocido' }}</p>
+      <p class="font-medium">
+        Error al cargar la orden de trabajo:
+        {{ error?.message || "Desconocido" }}
+      </p>
     </div>
   </div>
 
-  <form *ngIf="!loading && !error" [formGroup]="workOrderForm" (ngSubmit)="onSubmit()" 
-  class="space-y-6">
+  <form
+    *ngIf="!loading && !error"
+    [formGroup]="workOrderForm"
+    (ngSubmit)="onSubmit()"
+    class="space-y-6"
+  >
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Nombre del Cliente -->
       <div class="md:col-span-2">
-        <label for="customerName" class="block text-gray-700 font-medium mb-2">Nombre del Cliente</label>
-        <input 
-          id="customerName" 
+        <label for="customerName" class="block text-gray-700 font-medium mb-2"
+          >Nombre del Cliente</label
+        >
+        <input
+          id="customerName"
           type="text"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all opacity-60" 
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all opacity-60"
           [value]="customer?.name"
           disabled
-        >
+        />
       </div>
 
       <div class="md:col-span-2">
-        <label for="customerName" class="block text-gray-700 font-medium mb-2">Apellido del Cliente</label>
-        <input 
-          id="customerName" 
+        <label for="customerName" class="block text-gray-700 font-medium mb-2"
+          >Apellido del Cliente</label
+        >
+        <input
+          id="customerName"
           type="text"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all opacity-60" 
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all opacity-60"
           [value]="customer?.lastName"
           disabled
-        >
+        />
       </div>
 
       <!-- Servicio -->
       <div>
-        <label for="serviceId" class="block text-gray-700 font-medium mb-2">Servicio</label>
+        <label for="serviceId" class="block text-gray-700 font-medium mb-2"
+          >Servicio</label
+        >
         <div class="relative">
-          <select 
-            id="serviceId" 
-            formControlName="serviceId" 
+          <select
+            id="serviceId"
+            formControlName="serviceId"
             class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
           >
-          <option value="" disabled selected>Seleccione un servicio</option>
-          <option *ngFor="let service of services" [value]="service.id">
-            {{ service.type }}
-          </option>
+            <option value="" disabled selected>Seleccione un servicio</option>
+            <option *ngFor="let service of services" [value]="service.id">
+              {{ service.type }}
+            </option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
-            <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M7 10l5 5 5-5H7z"/>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+          >
+            <svg
+              class="fill-current h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M7 10l5 5 5-5H7z" />
             </svg>
           </div>
         </div>
-        <div *ngIf="workOrderForm.get('serviceId')?.invalid && workOrderForm.get('serviceId')?.touched" class="text-red-500 text-sm mt-1">
+        <div
+          *ngIf="
+            workOrderForm.get('serviceId')?.invalid &&
+            workOrderForm.get('serviceId')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
           Seleccione un servicio.
         </div>
       </div>
 
       <!-- Agendado por -->
       <div>
-        <label for="schedulerId" class="block text-gray-700 font-medium mb-2">Agendado por</label>
+        <label for="schedulerId" class="block text-gray-700 font-medium mb-2"
+          >Agendado por</label
+        >
         <div class="relative">
-          <select 
-            id="schedulerId" 
-            formControlName="schedulerId" 
+          <select
+            id="schedulerId"
+            formControlName="schedulerId"
             class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
           >
             <option value="" disabled selected>Seleccionar</option>
             <option value="1">Morphine</option>
             <option value="2">Lima Espacio</option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
-            <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M7 10l5 5 5-5H7z"/>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+          >
+            <svg
+              class="fill-current h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M7 10l5 5 5-5H7z" />
             </svg>
           </div>
         </div>
-        <div *ngIf="workOrderForm.get('schedulerId')?.invalid && workOrderForm.get('schedulerId')?.touched" class="text-red-500 text-sm mt-1">
+        <div
+          *ngIf="
+            workOrderForm.get('schedulerId')?.invalid &&
+            workOrderForm.get('schedulerId')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
           Seleccione un agendador.
         </div>
       </div>
 
       <!-- Estado -->
       <div>
-        <label for="status" class="block text-gray-700 font-medium mb-2">Estado</label>
+        <label for="status" class="block text-gray-700 font-medium mb-2"
+          >Estado</label
+        >
         <div class="relative">
-          <select 
-            id="status" 
-            formControlName="status" 
+          <select
+            id="status"
+            formControlName="status"
             class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
           >
             <option [ngValue]="Status.Pendiente">Pendiente</option>
@@ -106,112 +162,203 @@
             <option [ngValue]="Status.Completado">Completada</option>
             <option [ngValue]="Status.Cancelado">Cancelada</option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
-            <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M7 10l5 5 5-5H7z"/>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+          >
+            <svg
+              class="fill-current h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M7 10l5 5 5-5H7z" />
             </svg>
           </div>
         </div>
-        <div *ngIf="workOrderForm.get('status')?.invalid && workOrderForm.get('status')?.touched" class="text-red-500 text-sm mt-1">
+        <div
+          *ngIf="
+            workOrderForm.get('status')?.invalid &&
+            workOrderForm.get('status')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
           Ingrese un Estado válido.
         </div>
       </div>
 
       <!-- Descripción -->
       <div class="md:col-span-2">
-        <label for="description" class="block text-gray-700 font-medium mb-2">Descripción</label>
-        <textarea 
-          id="description" 
-          formControlName="description" 
-          rows="4" 
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition" 
+        <label for="description" class="block text-gray-700 font-medium mb-2"
+          >Descripción</label
+        >
+        <textarea
+          id="description"
+          formControlName="description"
+          rows="4"
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
           placeholder="Detalles del trabajo"
         ></textarea>
-        <div *ngIf="workOrderForm.get('description')?.invalid && workOrderForm.get('description')?.touched" class="text-red-500 text-sm mt-1">
+        <div
+          *ngIf="
+            workOrderForm.get('description')?.invalid &&
+            workOrderForm.get('description')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
           Ingrese una descripción válida.
         </div>
       </div>
 
       <!-- Fecha Programada -->
       <div>
-        <label for="scheduleDate" class="block text-gray-700 font-medium mb-2">Fecha Programada</label>
-        <input 
-          id="scheduleDate" 
-          formControlName="scheduleDate" 
-          type="date" 
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+        <label for="scheduleDate" class="block text-gray-700 font-medium mb-2"
+          >Fecha Programada</label
         >
-        <div *ngIf="workOrderForm.get('scheduleDate')?.invalid && workOrderForm.get('scheduleDate')?.touched" class="text-red-500 text-sm mt-1">
+        <input
+          id="scheduleDate"
+          formControlName="scheduleDate"
+          type="date"
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+        />
+        <div
+          *ngIf="
+            workOrderForm.get('scheduleDate')?.invalid &&
+            workOrderForm.get('scheduleDate')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
           La fecha es requerida.
         </div>
       </div>
 
-       <!-- Medio de Pago (Adelanto) -->
       <div>
-        <label for="paymentMethodAdvance" class="block text-gray-700 font-medium mb-2">Medio de Pago (Adelanto)</label>
+        <label for="scheduleTime" class="block text-gray-700 font-medium mb-2"
+          >Hora Programada</label
+        >
+        <input
+          id="scheduleTime"
+          formControlName="scheduleTime"
+          type="time"
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+        />
+        <div
+          *ngIf="
+            workOrderForm.get('scheduleTime')?.invalid &&
+            workOrderForm.get('scheduleTime')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
+          La hora es requerida.
+        </div>
+      </div>
+
+      <!-- Medio de Pago (Adelanto) -->
+      <div>
+        <label
+          for="paymentMethodAdvance"
+          class="block text-gray-700 font-medium mb-2"
+          >Medio de Pago (Adelanto)</label
+        >
         <div class="relative">
-          <select 
-            id="paymentMethodAdvance" 
-            formControlName="paymentMethodAdvance" 
+          <select
+            id="paymentMethodAdvance"
+            formControlName="paymentMethodAdvance"
             class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
           >
             <option [ngValue]="PaymentMethod.Plin">Plin</option>
             <option [ngValue]="PaymentMethod.Yape">Yape</option>
             <option [ngValue]="PaymentMethod.Efectivo">Efectivo</option>
             <option [ngValue]="PaymentMethod.Tarjeta">Tarjeta</option>
-            <option [ngValue]="PaymentMethod.Transferencia">Transferencia</option>
+            <option [ngValue]="PaymentMethod.Transferencia">
+              Transferencia
+            </option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
-            <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M7 10l5 5 5-5H7z"/>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+          >
+            <svg
+              class="fill-current h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M7 10l5 5 5-5H7z" />
             </svg>
           </div>
         </div>
-        <div *ngIf="workOrderForm.get('paymentMethodAdvance')?.invalid && workOrderForm.get('paymentMethodAdvance')?.touched" class="text-red-500 text-sm mt-1">
+        <div
+          *ngIf="
+            workOrderForm.get('paymentMethodAdvance')?.invalid &&
+            workOrderForm.get('paymentMethodAdvance')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
           Seleccione un método de pago.
         </div>
       </div>
 
       <!-- Medio de Pago -->
       <div>
-        <label for="paymentMethod" class="block text-gray-700 font-medium mb-2">Medio de Pago</label>
+        <label for="paymentMethod" class="block text-gray-700 font-medium mb-2"
+          >Medio de Pago</label
+        >
         <div class="relative">
-          <select 
-            id="paymentMethod" 
-            formControlName="paymentMethod" 
+          <select
+            id="paymentMethod"
+            formControlName="paymentMethod"
             class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
           >
             <option [ngValue]="PaymentMethod.Plin">Plin</option>
             <option [ngValue]="PaymentMethod.Yape">Yape</option>
             <option [ngValue]="PaymentMethod.Efectivo">Efectivo</option>
             <option [ngValue]="PaymentMethod.Tarjeta">Tarjeta</option>
-            <option [ngValue]="PaymentMethod.Transferencia">Transferencia</option>
+            <option [ngValue]="PaymentMethod.Transferencia">
+              Transferencia
+            </option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
-            <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M7 10l5 5 5-5H7z"/>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+          >
+            <svg
+              class="fill-current h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M7 10l5 5 5-5H7z" />
             </svg>
           </div>
         </div>
-        <div *ngIf="workOrderForm.get('paymentMethod')?.invalid && workOrderForm.get('paymentMethod')?.touched" class="text-red-500 text-sm mt-1">
+        <div
+          *ngIf="
+            workOrderForm.get('paymentMethod')?.invalid &&
+            workOrderForm.get('paymentMethod')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
           Seleccione un método de pago.
         </div>
       </div>
 
       <div>
-        <label for="percentage" class="block text-gray-700 font-medium mb-2">Porcentaje de adelanto</label>
+        <label for="percentage" class="block text-gray-700 font-medium mb-2"
+          >Porcentaje de adelanto</label
+        >
         <div class="relative">
-          <select 
-            id="percentage" 
-            formControlName="percentage" 
+          <select
+            id="percentage"
+            formControlName="percentage"
             class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
           >
             <option selected [ngValue]="30">30%</option>
             <option [ngValue]="40">40%</option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
-            <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M7 10l5 5 5-5H7z"/>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+          >
+            <svg
+              class="fill-current h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M7 10l5 5 5-5H7z" />
             </svg>
           </div>
         </div>
@@ -219,52 +366,67 @@
 
       <!-- Precio Total -->
       <div>
-        <label for="totalPrice" class="block text-gray-700 font-medium mb-2">Precio Bruto</label>
+        <label for="totalPrice" class="block text-gray-700 font-medium mb-2"
+          >Precio Bruto</label
+        >
         <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <div
+            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+          >
             <span class="text-gray-500">S/</span>
           </div>
-          <input 
-            id="totalPrice" 
-            formControlName="totalPrice" 
-            type="number" 
-            step="0.01" 
-            class="w-full px-4 py-3 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition" 
+          <input
+            id="totalPrice"
+            formControlName="totalPrice"
+            type="number"
+            step="0.01"
+            class="w-full px-4 py-3 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
             placeholder="0.00"
-          >
+          />
         </div>
-        <div *ngIf="workOrderForm.get('totalPrice')?.invalid && workOrderForm.get('totalPrice')?.touched" class="text-red-500 text-sm mt-1">
+        <div
+          *ngIf="
+            workOrderForm.get('totalPrice')?.invalid &&
+            workOrderForm.get('totalPrice')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
           Ingrese un precio válido.
         </div>
       </div>
 
       <!-- Precio Adelantado -->
       <div>
-        <label for="advancePrice" class="block text-gray-700 font-medium mb-2">Precio Adelantado</label>
+        <label for="advancePrice" class="block text-gray-700 font-medium mb-2"
+          >Precio Adelantado</label
+        >
         <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <div
+            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+          >
             <span class="text-gray-500">S/</span>
           </div>
-          <input 
-            id="advancePrice" 
-            formControlName="advancePrice" 
-            type="number" 
-            step="0.01" 
-            class="w-full px-4 py-3 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition" 
+          <input
+            id="advancePrice"
+            formControlName="advancePrice"
+            type="number"
+            step="0.01"
+            class="w-full px-4 py-3 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
             placeholder="0.00"
-          >
+          />
         </div>
       </div>
     </div>
 
     <!-- Botones -->
     <div class="pt-4">
-      <button type="submit"
-              [disabled]="isSumitted"
-              class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg">
-              {{ isSumitted ? 'PROCESANDO...' : 'CREAR NUEVO TATUAJE' }}
+      <button
+        type="submit"
+        [disabled]="isSumitted"
+        class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg"
+      >
+        {{ isSumitted ? "PROCESANDO..." : "CREAR NUEVO TATUAJE" }}
       </button>
     </div>
-    
   </form>
 </div>
