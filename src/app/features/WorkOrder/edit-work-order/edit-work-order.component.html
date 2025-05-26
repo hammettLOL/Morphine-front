@@ -251,8 +251,9 @@
     <!-- Botones -->
     <div class="pt-4">
       <button type="submit" 
+              [disabled]="isSumitted"
               class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg">
-        {{ workOrderId ? 'Editar Tatuaje' : 'Crear Nuevo Tatuaje' }}
+        {{ isSumitted ? 'PROCESANDO...' : 'EDITAR TATUAJE' }}
       </button>
     </div>
     

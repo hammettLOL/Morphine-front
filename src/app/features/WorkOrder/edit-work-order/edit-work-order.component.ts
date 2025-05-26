@@ -26,6 +26,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
   loading = true;
   error: any;
   
+  isSumitted = false;
   customerId!: number;
   serviceId!: number;
   services: any[] = []; 
@@ -56,6 +57,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void {
+    this.isSumitted = false;
     this.loadWorkOrder();
     this.onTotalPriceChange();
     this.onPercentageChange();
@@ -168,6 +170,9 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
 }
 
   onSubmit(): void {
+     if(this.isSumitted) {
+      return;
+    }
     if (this.workOrderForm.invalid) {
       this.workOrderForm.markAllAsTouched();
       return;
@@ -186,7 +191,9 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
         id: this.workOrderId,
         scheduleDate: combinedDateTime
       };
+     this.isSumitted = true;;
      this.workOrderSaved.emit(updatedWorkOrder);
+     this.isSumitted = false;
     }
 
   }

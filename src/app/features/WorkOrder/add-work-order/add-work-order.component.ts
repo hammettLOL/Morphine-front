@@ -138,7 +138,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
     if(this.isSumitted) {
       return;
     }
-    this.isSumitted = true;
+   
 
     if (this.workOrderForm.invalid) {
       this.workOrderForm.markAllAsTouched();
@@ -159,7 +159,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
         serviceId: Number(this.workOrderForm.value.serviceId),
         scheduleDate: combinedDateTime
       };
-
+      this.isSumitted = true;
       this.workOrderCreated.emit(createWorkOrder);
       this.isSumitted = false;
     }
