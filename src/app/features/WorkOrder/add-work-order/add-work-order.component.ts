@@ -49,10 +49,12 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       description: [''],
       status: [Status.Pendiente, Validators.required],
       scheduleDate: ['', Validators.required],
+      scheduleTime: ['', Validators.required],
       percentage: [30],
       totalPrice: [0, [Validators.required, Validators.min(0)]],
       advancePrice: [0],
-      paymentMethod: [PaymentMethod.Efectivo, Validators.required]
+      paymentMethod: [PaymentMethod.Efectivo, Validators.required],
+      paymentMethodAdvance: [PaymentMethod.Efectivo, Validators.required]
     });
    }
 
@@ -136,22 +138,28 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
     if(this.isSumitted) {
       return;
     }
-    this.isSumitted = true;
+   
 
     if (this.workOrderForm.invalid) {
       this.workOrderForm.markAllAsTouched();
       return;
     }
     if(this.customerId) {
+      // Combinar fecha y hora
+      const date = this.workOrderForm.value.scheduleDate;
+      const time = this.workOrderForm.value.scheduleTime;
+      const combinedDateTime = `${date}T${time}:00`;
       const createWorkOrder: WorkOrder = {
         ...this.workOrderForm.value,
         paymentMethod : Number(this.workOrderForm.value.paymentMethod),
+        paymentMethodAdvance : Number(this.workOrderForm.value.paymentMethodAdvance),
         status: Number(this.workOrderForm.value.status),
         schedulerId: Number(this.workOrderForm.value.schedulerId),
         customerId: Number(this.workOrderForm.value.customerId),
-        serviceId: Number(this.workOrderForm.value.serviceId)
+        serviceId: Number(this.workOrderForm.value.serviceId),
+        scheduleDate: combinedDateTime
       };
-
+      this.isSumitted = true;
       this.workOrderCreated.emit(createWorkOrder);
       this.isSumitted = false;
     }

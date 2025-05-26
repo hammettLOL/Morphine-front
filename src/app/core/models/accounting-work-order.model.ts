@@ -9,6 +9,7 @@ export interface AccountingWorkOrder {
     schedulerName: string;
     scheduledDate: string;
     paymentMethod: PaymentMethod;
+    paymentMethodAdvance: PaymentMethod;
     advancePrice: number;
     totalPrice: number;
     verified: boolean;

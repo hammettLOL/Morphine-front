@@ -66,9 +66,11 @@ export class PreviewWorkOrderComponent implements OnInit {
         Documento: ${this.workOrderPreview.document}
         Teléfono: ${this.workOrderPreview.cellphone}
         Email: ${this.workOrderPreview.email}
-        Fecha: ${new Date(this.workOrderPreview.dateTime).toLocaleString()}
+        Fecha: ${new Date(this.workOrderPreview.dateTime).toISOString().split('T')[0]}
+        Hora: ${new Date(this.workOrderPreview.dateTime).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false })}
         Monto: S/ ${this.workOrderPreview.totalPrice.toFixed(2)}
-      `;
+        Referencia: ${this.workOrderPreview.reference}
+      `.replace(/^\s+/gm, '').trim();
       
       // Usar la API del portapapeles, compatible con Safari en iOS 13.4+
       if (navigator.clipboard) {
@@ -130,11 +132,13 @@ export class PreviewWorkOrderComponent implements OnInit {
       const shareData = {
         title: `Información de Cliente: ${this.workOrderPreview.customerName}`,
         text: `Cliente: ${this.workOrderPreview.customerName}
-              Documento: ${this.workOrderPreview.document}
-              Teléfono: ${this.workOrderPreview.cellphone}
-              Email: ${this.workOrderPreview.email}
-              Fecha: ${new Date(this.workOrderPreview.dateTime).toLocaleString()}
-              Monto: S/ ${this.workOrderPreview.totalPrice.toFixed(2)}`,
+               Documento: ${this.workOrderPreview.document}
+               Teléfono: ${this.workOrderPreview.cellphone}
+               Email: ${this.workOrderPreview.email}
+               Fecha: ${new Date(this.workOrderPreview.dateTime).toISOString().split('T')[0]}
+               Hora: ${new Date(this.workOrderPreview.dateTime).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false })}
+               Monto: S/ ${this.workOrderPreview.totalPrice.toFixed(2)}
+               Referencia: ${this.workOrderPreview.reference}`.replace(/^\s+/gm, '').trim(),
         // URL opcional si quisieras incluirla
         // url: window.location.href
       };

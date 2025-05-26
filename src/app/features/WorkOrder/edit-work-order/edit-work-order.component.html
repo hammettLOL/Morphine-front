@@ -116,6 +116,53 @@
         </div>
       </div>
 
+       <div>
+        <label for="scheduleTime" class="block text-gray-700 font-medium mb-2"
+          >Hora Programada</label
+        >
+        <input
+          id="scheduleTime"
+          formControlName="scheduleTime"
+          type="time"
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+        />
+        <div
+          *ngIf="
+            workOrderForm.get('scheduleTime')?.invalid &&
+            workOrderForm.get('scheduleTime')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
+          La hora es requerida.
+        </div>
+      </div>
+
+      <!-- Medio de Pago Adelanto -->
+      <div>
+        <label for="paymentMethodAdvance" class="block text-gray-700 font-medium mb-2">Medio de Pago (Adelanto)</label>
+        <div class="relative">
+          <select 
+            id="paymentMethodAdvance" 
+            formControlName="paymentMethodAdvance" 
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+          >
+            <option [ngValue]="PaymentMethod.Plin">Plin</option>
+            <option [ngValue]="PaymentMethod.Yape">Yape</option>
+            <option [ngValue]="PaymentMethod.Efectivo">Efectivo</option>
+            <option [ngValue]="PaymentMethod.Tarjeta">Tarjeta</option>
+            <option [ngValue]="PaymentMethod.Transferencia">Transferencia</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
+            <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M7 10l5 5 5-5H7z"/>
+            </svg>
+          </div>
+        </div>
+        <div *ngIf="workOrderForm.get('paymentMethodAdvance')?.invalid && workOrderForm.get('paymentMethodAdvance')?.touched" class="text-red-500 text-sm mt-1">
+          Seleccione un método de pago.
+        </div>
+      </div>
+
       <!-- Medio de Pago -->
       <div>
         <label for="paymentMethod" class="block text-gray-700 font-medium mb-2">Medio de Pago</label>
@@ -204,8 +251,9 @@
     <!-- Botones -->
     <div class="pt-4">
       <button type="submit" 
+              [disabled]="isSumitted"
               class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg">
-        {{ workOrderId ? 'Editar Tatuaje' : 'Crear Nuevo Tatuaje' }}
+        {{ isSumitted ? 'PROCESANDO...' : 'EDITAR TATUAJE' }}
       </button>
     </div>
     

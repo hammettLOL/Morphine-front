@@ -26,6 +26,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
   loading = true;
   error: any;
   
+  isSumitted = false;
   customerId!: number;
   serviceId!: number;
   services: any[] = []; 
@@ -46,14 +47,17 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       description: [''],
       status: [Status.Pendiente, Validators.required],
       scheduleDate: ['', Validators.required],
+      scheduleTime: ['', Validators.required],
       totalPrice: [0, [Validators.required, Validators.min(0)]],
       advancePrice: [0, [Validators.min(0)]],
       paymentMethod: [PaymentMethod.Efectivo, Validators.required],
+      paymentMethodAdvance: [PaymentMethod.Efectivo, Validators.required],
       percentage: [30]
     });
    }
 
   ngOnInit(): void {
+    this.isSumitted = false;
     this.loadWorkOrder();
     this.onTotalPriceChange();
     this.onPercentageChange();
@@ -127,9 +131,11 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       status: workOrders.status,
       description: workOrders.description,
       scheduleDate: this.formatDateForInput(workOrders.scheduleDate) || null, // Si es necesario formatear la fecha
+      scheduleTime: this.formatTimeForInput(workOrders.scheduleDate) || null, // Si es necesario formatear la fecha
       totalPrice: workOrders.totalPrice,
       advancePrice: workOrders.advancePrice,
       paymentMethod: workOrders.paymentMethod,
+      paymentMethodAdvance: workOrders.paymentMethodAdvance,
       percentage : workOrders.percentage
     });
 
@@ -152,21 +158,42 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
     return `${year}-${month}-${day}`;
   }
 
+  private formatTimeForInput(dateValue: string): string {
+  // Si la fecha es el valor por defecto o nula, retorna cadena vacía
+  if (!dateValue || dateValue.startsWith("0001-01-01")) {
+    return '';
+  }
+  const date = new Date(dateValue);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
   onSubmit(): void {
+     if(this.isSumitted) {
+      return;
+    }
     if (this.workOrderForm.invalid) {
       this.workOrderForm.markAllAsTouched();
       return;
     }
     if(this.workOrderId) {
+      const date = this.workOrderForm.value.scheduleDate;
+      const time = this.workOrderForm.value.scheduleTime;
+      const combinedDateTime = `${date}T${time}:00`;
       const updatedWorkOrder: WorkOrderDto = {
         ...this.workOrderForm.value,
         paymentMethod : Number(this.workOrderForm.value.paymentMethod),
+        paymentMethodAdvance: Number(this.workOrderForm.value.paymentMethodAdvance),
         status: Number(this.workOrderForm.value.status),
         customerId: this.customerId,
         serviceId: this.serviceId,
-        id: this.workOrderId
+        id: this.workOrderId,
+        scheduleDate: combinedDateTime
       };
+     this.isSumitted = true;;
      this.workOrderSaved.emit(updatedWorkOrder);
+     this.isSumitted = false;
     }
 
   }
