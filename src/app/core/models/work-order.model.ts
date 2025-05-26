@@ -14,6 +14,7 @@ export interface WorkOrder {
   createdAt?: Date;
   updatedAt?: Date;
   paymentMethod?: PaymentMethod;
+  paymentMethodAdvance?: PaymentMethod;
 
   // Propiedades opcionales para mostrar datos relacionados sin hacer consultas adicionales.
   // Por ejemplo, se pueden llenar en el backend mediante JOIN o mediante DTO.

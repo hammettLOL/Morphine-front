@@ -12,6 +12,7 @@ export interface WorkOrderDto{
   serviceType: string,
   status: Status,
   paymentMethod: PaymentMethod,
+  paymentMethodAdvance: PaymentMethod,
   scheduleDate: string,
   advancePrice: number,
   totalPrice: number,

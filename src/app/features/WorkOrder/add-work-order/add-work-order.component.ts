@@ -52,7 +52,8 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       percentage: [30],
       totalPrice: [0, [Validators.required, Validators.min(0)]],
       advancePrice: [0],
-      paymentMethod: [PaymentMethod.Efectivo, Validators.required]
+      paymentMethod: [PaymentMethod.Efectivo, Validators.required],
+      paymentMethodAdvance: [PaymentMethod.Efectivo, Validators.required]
     });
    }
 
@@ -146,6 +147,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       const createWorkOrder: WorkOrder = {
         ...this.workOrderForm.value,
         paymentMethod : Number(this.workOrderForm.value.paymentMethod),
+        paymentMethodAdvance : Number(this.workOrderForm.value.paymentMethodAdvance),
         status: Number(this.workOrderForm.value.status),
         schedulerId: Number(this.workOrderForm.value.schedulerId),
         customerId: Number(this.workOrderForm.value.customerId),
