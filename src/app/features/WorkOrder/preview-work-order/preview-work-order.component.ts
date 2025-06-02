@@ -62,6 +62,7 @@ export class PreviewWorkOrderComponent implements OnInit {
   copyClientInfo(): void {
       // Crear texto formateado con la información del cliente
       const clientInfo = `
+        *Agendar cita*
         Cliente: ${this.workOrderPreview.customerName}
         Documento: ${this.workOrderPreview.document}
         Teléfono: ${this.workOrderPreview.cellphone}
@@ -131,7 +132,9 @@ export class PreviewWorkOrderComponent implements OnInit {
       // Crear objeto con datos para compartir
       const shareData = {
         title: `Información de Cliente: ${this.workOrderPreview.customerName}`,
-        text: `Cliente: ${this.workOrderPreview.customerName}
+        text: `
+               *Agendar cita*
+               Cliente: ${this.workOrderPreview.customerName}
                Documento: ${this.workOrderPreview.document}
                Teléfono: ${this.workOrderPreview.cellphone}
                Email: ${this.workOrderPreview.email}
