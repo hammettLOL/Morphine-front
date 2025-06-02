@@ -10,11 +10,12 @@ export interface WorkOrder {
   status: Status;
   advancePrice?: number;
   totalPrice?: number;
-  scheduleDate?: Date;          // Se espera un valor Date en el backend (DateTime?)  
+  scheduleDate?: Date; 
   createdAt?: Date;
   updatedAt?: Date;
   paymentMethod?: PaymentMethod;
   paymentMethodAdvance?: PaymentMethod;
+  duration?: number;
 
   // Propiedades opcionales para mostrar datos relacionados sin hacer consultas adicionales.
   // Por ejemplo, se pueden llenar en el backend mediante JOIN o mediante DTO.

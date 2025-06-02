@@ -16,5 +16,6 @@ export interface WorkOrderDto{
   scheduleDate: string,
   advancePrice: number,
   totalPrice: number,
-  percentage: number
+  percentage: number,
+  duration:number
 }

@@ -52,6 +52,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       advancePrice: [0, [Validators.min(0)]],
       paymentMethod: [PaymentMethod.Efectivo, Validators.required],
       paymentMethodAdvance: [PaymentMethod.Efectivo, Validators.required],
+      duration: [2, [Validators.required]],
       percentage: [30]
     });
    }
@@ -136,6 +137,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       advancePrice: workOrders.advancePrice,
       paymentMethod: workOrders.paymentMethod,
       paymentMethodAdvance: workOrders.paymentMethodAdvance,
+      duration: workOrders.duration,
       percentage : workOrders.percentage
     });
 
@@ -188,6 +190,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
         status: Number(this.workOrderForm.value.status),
         customerId: this.customerId,
         serviceId: this.serviceId,
+        duration: Number(this.workOrderForm.value.duration),
         id: this.workOrderId,
         scheduleDate: combinedDateTime
       };

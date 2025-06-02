@@ -93,6 +93,10 @@
             <span class="font-medium text-gray-700">Fecha y Hora:</span>
             <span class="text-gray-800">{{ workOrderPreview.dateTime | date:'dd/MM/yyyy HH:mm ' }}</span>
           </div>
+           <div class="flex justify-between items-center py-2 border-b border-gray-200">
+            <span class="font-medium text-gray-700">Duración:</span>
+            <span class="text-gray-800">{{ workOrderPreview.duration }} horas</span>
+          </div>
           <div class="flex justify-between items-center py-2 border-b border-gray-200">
             <span class="font-medium text-gray-700">Monto Total:</span>
             <span class="text-gray-800 font-bold">S/ {{ workOrderPreview.totalPrice | number:'1.2-2' }}</span>
