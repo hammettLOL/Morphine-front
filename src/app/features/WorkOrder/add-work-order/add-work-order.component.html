@@ -251,6 +251,53 @@
         </div>
       </div>
 
+      <!-- Duración del Tatuaje -->
+      <div>
+        <label for="duration" class="block text-gray-700 font-medium mb-2"
+          >Duración del Tatuaje (horas)</label
+        >
+        <div class="relative">
+          <select
+            id="duration"
+            formControlName="duration"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+          >
+            <option value="" disabled selected>Seleccione duración</option>
+            <option value="2">2 horas</option>
+            <option value="3">3 horas</option>
+            <option value="4">4 horas</option>
+            <option value="5">5 horas</option>
+            <option value="6">6 horas</option>
+            <option value="7">7 horas</option>
+            <option value="8">8 horas</option>
+            <option value="9">9 horas</option>
+            <option value="10">10 horas</option>
+            <option value="11">11 horas</option>
+            <option value="12">12 horas</option>
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+          >
+            <svg
+              class="fill-current h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M7 10l5 5 5-5H7z" />
+            </svg>
+          </div>
+        </div>
+        <div
+          *ngIf="
+            workOrderForm.get('duration')?.invalid &&
+            workOrderForm.get('duration')?.touched
+          "
+          class="text-red-500 text-sm mt-1"
+        >
+          Seleccione la duración del tatuaje.
+        </div>
+      </div>
+
       <!-- Medio de Pago (Adelanto) -->
       <div>
         <label

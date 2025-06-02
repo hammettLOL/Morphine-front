@@ -53,6 +53,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       percentage: [30],
       totalPrice: [0, [Validators.required, Validators.min(0)]],
       advancePrice: [0],
+      duration: [2, Validators.required],
       paymentMethod: [PaymentMethod.Efectivo, Validators.required],
       paymentMethodAdvance: [PaymentMethod.Efectivo, Validators.required]
     });
@@ -157,6 +158,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
         schedulerId: Number(this.workOrderForm.value.schedulerId),
         customerId: Number(this.workOrderForm.value.customerId),
         serviceId: Number(this.workOrderForm.value.serviceId),
+        duration: Number(this.workOrderForm.value.duration),
         scheduleDate: combinedDateTime
       };
       this.isSumitted = true;

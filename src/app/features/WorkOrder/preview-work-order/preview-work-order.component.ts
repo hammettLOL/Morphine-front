@@ -67,10 +67,11 @@ export class PreviewWorkOrderComponent implements OnInit {
         Documento: ${this.workOrderPreview.document}
         Teléfono: ${this.workOrderPreview.cellphone}
         Email: ${this.workOrderPreview.email}
+        Referencia: ${this.workOrderPreview.reference}
         Fecha: ${new Date(this.workOrderPreview.dateTime).toISOString().split('T')[0]}
         Hora: ${new Date(this.workOrderPreview.dateTime).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false })}
+        Tiempo: ${this.workOrderPreview.duration} horas
         Monto: S/ ${this.workOrderPreview.totalPrice.toFixed(2)}
-        Referencia: ${this.workOrderPreview.reference}
       `.replace(/^\s+/gm, '').trim();
       
       // Usar la API del portapapeles, compatible con Safari en iOS 13.4+
@@ -138,10 +139,11 @@ export class PreviewWorkOrderComponent implements OnInit {
                Documento: ${this.workOrderPreview.document}
                Teléfono: ${this.workOrderPreview.cellphone}
                Email: ${this.workOrderPreview.email}
+               Referencia: ${this.workOrderPreview.reference}
                Fecha: ${new Date(this.workOrderPreview.dateTime).toISOString().split('T')[0]}
                Hora: ${new Date(this.workOrderPreview.dateTime).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false })}
-               Monto: S/ ${this.workOrderPreview.totalPrice.toFixed(2)}
-               Referencia: ${this.workOrderPreview.reference}`.replace(/^\s+/gm, '').trim(),
+               Tiempo: ${this.workOrderPreview.duration} horas
+               Monto: S/ ${this.workOrderPreview.totalPrice.toFixed(2)}`.replace(/^\s+/gm, '').trim(),
         // URL opcional si quisieras incluirla
         // url: window.location.href
       };

@@ -7,4 +7,5 @@ export interface WorkOrderPreview {
   reference: string,
   dateTime: string,
   totalPrice: number,
+  duration: number,
 }
