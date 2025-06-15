@@ -145,6 +145,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       this.workOrderForm.markAllAsTouched();
       return;
     }
+    this.isSumitted = true;
     if(this.customerId) {
       // Combinar fecha y hora
       const date = this.workOrderForm.value.scheduleDate;
@@ -161,12 +162,12 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
         duration: Number(this.workOrderForm.value.duration),
         scheduleDate: combinedDateTime
       };
-      this.isSumitted = true;
       this.workOrderCreated.emit(createWorkOrder);
-      this.isSumitted = false;
     }
   }
-
+  resetSubmitState(){
+    this.isSumitted = false;
+  }
   cancel(): void {
     this.workOrderCancelled.emit();
   }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, viewChild } from '@angular/core';
 import { WorkOrderService } from '../../../core/services/work-order.service';
 import { WorkOrderDto } from '../../../core/models/work-order-dto.model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -57,8 +57,7 @@ export class WorkOrderListComponent implements OnInit {
     { value:10, name:'Octubre'},{ value:11, name:'Noviembre'},{ value:12, name:'Diciembre' }
   ];
   years: number[] = [];
-  
-
+  @ViewChild(EditWorkOrderComponent) editWorkOrderComponent!: EditWorkOrderComponent;
 
   statusMap: { [key: number]: string } = {
     0: 'Pendiente',
@@ -208,11 +207,13 @@ export class WorkOrderListComponent implements OnInit {
     onWorkOrderSaved(workOrder: any) {
       this.workOrderService.update(workOrder.id, workOrder).subscribe({
         next: () => {
+          this.editWorkOrderComponent.resetSubmitState();
           this.toastService.showToast('Orden de trabajo actualizada correctamente','success');
           this.closeEditModal();
           this.loadWorkOrders();
         },
         error: (err) => {
+          this.editWorkOrderComponent.resetSubmitState();
           this.toastService.showToast('Error al actualizar la orden de trabajo','danger');
         }
       });

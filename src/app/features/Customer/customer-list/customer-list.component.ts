@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CustomersService} from '../../../core/services/customers.service';
 import { Customer } from '../../../core/models/customer.model';
 import { CommonModule, NgClass } from '@angular/common';
@@ -53,6 +53,10 @@ export class CustomersListComponent implements OnInit {
   hasPreviousPage = false;
   hasNextPage = false;
   searchTerm = '';
+
+  @ViewChild(AddCustomerComponent) addCustomerComponent!: AddCustomerComponent;
+  @ViewChild(EditCustomerComponent) editCustomerComponent!: EditCustomerComponent;
+  @ViewChild(AddWorkOrderComponent) addWorkOrderComponent!: AddWorkOrderComponent;
 
   // Mapeo de valores numéricos a cadenas de texto
   documentTypeMap: { [key: number]: string } = {
@@ -156,11 +160,13 @@ export class CustomersListComponent implements OnInit {
   onCustomerEditSaved(customer: any) {
     this.customersService.updateCustomer(customer).subscribe({
       next: () => {
+        this.editCustomerComponent.resetSubmitState();
         this.toastService.showToast('Cliente actualizado correctamente','success');
         this.closeEditCustomerModal();
         this.loadCustomers();
       },
       error: (err) => {
+        this.editCustomerComponent.resetSubmitState();
         this.toastService.showToast('Error al actualizar el cliente','danger');
       }
     });
@@ -172,10 +178,12 @@ export class CustomersListComponent implements OnInit {
   onWorkOrderCreated(workOrder: WorkOrder) {
     this.workOrderService.create(workOrder).subscribe({
       next: (newOrder: WorkOrder) => {
+        this.addWorkOrderComponent.resetSubmitState();
         this.toastService.showToast('Orden de trabajo creada correctamente','success');
         this.router.navigate(['/work-orders']);
       },
       error: (err) => {
+        this.addWorkOrderComponent.resetSubmitState();
         this.toastService.showToast('Error al crear la orden de trabajo','danger');
       }
     });
@@ -196,10 +204,12 @@ export class CustomersListComponent implements OnInit {
     this.customersService.addCustomer(customer).subscribe({
       next: (response) => {
         this.toastService.showToast('Cliente agregado correctamente.', 'success');
+        this.addCustomerComponent.resetSubmitState();
         this.closeAddCustomerModal();
         this.loadCustomers();
       },
       error: (err) => {
+        this.addCustomerComponent.resetSubmitState();
         this.toastService.showToast('Error al agregar el cliente.', 'danger');
       }
     });

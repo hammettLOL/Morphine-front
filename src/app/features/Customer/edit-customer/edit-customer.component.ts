@@ -21,6 +21,7 @@ export class EditCustomerComponent implements OnInit {
   customerForm!: FormGroup;
   loading = true;
   error?: any;
+  isSubmitted = false;
 
   constructor(
     private readonly router: Router,
@@ -70,7 +71,7 @@ export class EditCustomerComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    
+    this.isSubmitted = false;
     this.loadCustomer();
   }
 
@@ -117,10 +118,14 @@ export class EditCustomerComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if(this.isSubmitted) {
+      return;
+    }
     if (this.customerForm.invalid) {
       this.customerForm.markAllAsTouched();
       return;
     }
+    this.isSubmitted = true;
     const updatedCustomer: Customer = {
       ...this.customerForm.value,
       cellphone : String(this.customerForm.value.cellphone),
@@ -129,6 +134,10 @@ export class EditCustomerComponent implements OnInit {
     };
 
     this.customerSaved.emit(updatedCustomer);
+  }
+
+  resetSubmitState(){
+    this.isSubmitted = false;
   }
 
   cancel() {
