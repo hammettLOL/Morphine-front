@@ -179,6 +179,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       this.workOrderForm.markAllAsTouched();
       return;
     }
+    this.isSumitted = true;;
     if(this.workOrderId) {
       const date = this.workOrderForm.value.scheduleDate;
       const time = this.workOrderForm.value.scheduleTime;
@@ -194,11 +195,14 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
         id: this.workOrderId,
         scheduleDate: combinedDateTime
       };
-     this.isSumitted = true;;
+     
      this.workOrderSaved.emit(updatedWorkOrder);
-     this.isSumitted = false;
     }
 
+  }
+
+  resetSubmitState(){
+    this.isSumitted = false;
   }
 
   cancel() {

@@ -219,6 +219,7 @@
   <div *ngIf="isModalEditCustomerOpen" [@modalAnimation] class="fixed inset-0 z-50 overflow-auto bg-black/60 backdrop-blur-sm">
       <div [@contentAnimation] class="relative top-30 mx-auto p-6 bg-white rounded-xl shadow-lg max-w-3xl">
           <app-edit-customer
+              #editCustomerComponent
               [customerId]="selectedCustomerId"  (customerSaved)="onCustomerEditSaved($event)"
               (customerCancelled)="onCustomerEditCanceled()"
           ></app-edit-customer>
@@ -235,6 +236,7 @@
     <div *ngIf="isModalAddWorkOrderOpen" [@modalAnimation] class="fixed inset-0 z-50 overflow-auto bg-black/60 backdrop-blur-sm">
         <div [@contentAnimation] class="relative top-10 mx-auto p-6 bg-white rounded-xl shadow-lg max-w-3xl">
             <app-add-work-order
+                #addWorkOrderComponent
                 [customerId]="selectedCustomerId"
                 (workOrderCreated)="onWorkOrderCreated($event)"
                 (workOrderCancelled)="onWorkOrderCancelled()"
@@ -253,6 +255,7 @@
       <div *ngIf="isModalAddCustomerOpen" [@modalAnimation] class="fixed inset-0 z-50 overflow-auto bg-black/60 backdrop-blur-sm">
           <div [@contentAnimation] class="relative top-30 mx-auto p-6 bg-white rounded-xl shadow-lg max-w-3xl">
               <app-add-customer
+                  #addCustomerComponent
                   (customerCreated)="onCustomerAddCreated($event)"
                   (customerCancelled)="onCustomerAddCanceled()"
               ></app-add-customer>

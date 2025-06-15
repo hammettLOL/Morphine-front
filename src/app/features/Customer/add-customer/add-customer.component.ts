@@ -93,6 +93,9 @@ export class AddCustomerComponent implements OnInit {
     };
 
     this.customerCreated.emit(newCustomer);
+  }
+
+  resetSubmitState(){
     this.isSubmitted = false;
   }
   cancel() {
