@@ -10,6 +10,7 @@ export interface WorkOrder {
   status: Status;
   advancePrice?: number;
   totalPrice?: number;
+  creationDate?: Date;
   scheduleDate?: Date; 
   createdAt?: Date;
   updatedAt?: Date;

@@ -13,6 +13,7 @@ export interface WorkOrderDto{
   status: Status,
   paymentMethod: PaymentMethod,
   paymentMethodAdvance: PaymentMethod,
+  creationDate: string,
   scheduleDate: string,
   advancePrice: number,
   totalPrice: number,

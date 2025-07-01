@@ -208,10 +208,32 @@
         </div>
       </div>
 
+      <!-- Fecha de Creación del Estudio -->
+    <div>
+      <label for="creationDate" class="block text-gray-700 font-medium mb-2"
+        >Fecha de Creación del Estudio</label
+      >
+      <input
+        id="creationDate"
+        formControlName="creationDate"
+        type="date"
+        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+      />
+      <div
+        *ngIf="
+          workOrderForm.get('creationDate')?.invalid &&
+          workOrderForm.get('creationDate')?.touched
+        "
+        class="text-red-500 text-sm mt-1"
+      >
+        La fecha de creación es requerida.
+      </div>
+    </div>
+
       <!-- Fecha Programada -->
       <div>
         <label for="scheduleDate" class="block text-gray-700 font-medium mb-2"
-          >Fecha Programada</label
+          >Fecha Programada del Tatuaje</label
         >
         <input
           id="scheduleDate"
