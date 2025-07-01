@@ -83,7 +83,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
             const advanceValue = parseFloat(totalPrice) * (parseFloat(percentageControl?.value) / 100);
             this.workOrderForm.get('advancePrice')?.setValue(advanceValue.toFixed(0), { emitEvent: false });
           } else {
-            this.workOrderForm.get('advancePrice')?.setValue('', { emitEvent: false });
+            this.workOrderForm.get('advancePrice')?.setValue('0', { emitEvent: false });
           }
         });
     }
@@ -101,7 +101,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
             const advanceValue = parseFloat(totalPriceControl?.value) * (parseFloat(percentage) / 100);
             this.workOrderForm.get('advancePrice')?.setValue(advanceValue.toFixed(0), { emitEvent: false });
           } else {
-            this.workOrderForm.get('advancePrice')?.setValue('', { emitEvent: false });
+            this.workOrderForm.get('advancePrice')?.setValue('0', { emitEvent: false });
           }
         });
     }
