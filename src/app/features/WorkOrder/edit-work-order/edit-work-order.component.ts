@@ -46,6 +46,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       schedulerId: ['', Validators.required],
       description: [''],
       status: [Status.Pendiente, Validators.required],
+      creationDate: ['', Validators.required],
       scheduleDate: ['', Validators.required],
       scheduleTime: ['', Validators.required],
       totalPrice: [0, [Validators.required, Validators.min(0)]],
@@ -131,6 +132,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       schedulerId: workOrders.schedulerId,
       status: workOrders.status,
       description: workOrders.description,
+      creationDate: this.formatDateForInput(workOrders.creationDate) || null, // Si es necesario formatear la fecha
       scheduleDate: this.formatDateForInput(workOrders.scheduleDate) || null, // Si es necesario formatear la fecha
       scheduleTime: this.formatTimeForInput(workOrders.scheduleDate) || null, // Si es necesario formatear la fecha
       totalPrice: workOrders.totalPrice,
@@ -193,6 +195,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
         serviceId: this.serviceId,
         duration: Number(this.workOrderForm.value.duration),
         id: this.workOrderId,
+        creationDate: this.workOrderForm.value.creationDate,
         scheduleDate: combinedDateTime
       };
      

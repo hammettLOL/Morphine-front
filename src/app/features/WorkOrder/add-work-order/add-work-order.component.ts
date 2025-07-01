@@ -48,6 +48,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       schedulerId: [1, Validators.required],
       description: [''],
       status: [Status.Pendiente, Validators.required],
+      creationDate: ['', Validators.required],
       scheduleDate: ['', Validators.required],
       scheduleTime: ['', Validators.required],
       percentage: [30],
@@ -160,6 +161,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
         customerId: Number(this.workOrderForm.value.customerId),
         serviceId: Number(this.workOrderForm.value.serviceId),
         duration: Number(this.workOrderForm.value.duration),
+        creationDate: this.workOrderForm.value.creationDate,
         scheduleDate: combinedDateTime
       };
       this.workOrderCreated.emit(createWorkOrder);
