@@ -1,170 +1,295 @@
 <div class="p-6 bg-gray-50 min-h-screen">
   <header class="mb-8">
     <h1 class="text-3xl font-bold text-gray-800">Dashboard</h1>
-    <p class="text-gray-500 mt-1">Resumen de métricas y actividad del negocio</p>
+    <p class="text-gray-500 mt-1">Selecciona el período para ver las métricas del negocio</p>
   </header>
   
-  <div *ngIf="metrics; else loading">
+  <!-- Selección de Período -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Seleccionar Período</h2>
+    
+    <form [formGroup]="periodForm" (ngSubmit)="loadMetrics()" class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div>
+        <label class="block font-medium text-gray-700 mb-2">Año</label>
+        <select 
+          formControlName="year" 
+          (ngModelChange)="onYearChange()"
+          class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
+          <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+        </select>
+      </div>
+      
+      <div>
+        <label class="block font-medium text-gray-700 mb-2">Mes</label>
+        <select 
+          formControlName="month" 
+          (ngModelChange)="onMonthChange()"
+          class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
+          <option 
+            *ngFor="let m of months" 
+            [value]="m.value" 
+            [disabled]="periodForm.value.year === today.getFullYear() && m.value > today.getMonth() + 1">
+            {{ m.name }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="flex items-end">
+        <button
+          type="submit"
+          [disabled]="periodForm.invalid || loading"
+          class="w-full py-3 px-5 rounded-lg bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 text-white font-medium transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+          <span *ngIf="!loading">Ver Métricas</span>
+          <span *ngIf="loading" class="flex items-center justify-center">
+            <svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            Cargando...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Métricas del Período Seleccionado -->
+  <div *ngIf="showMetrics && metrics" class="space-y-8">
+    <!-- Título del período -->
+    <div class="text-center">
+      <h2 class="text-2xl font-bold text-gray-800">
+        Métricas de {{ months[periodForm.value.month - 1].name }} {{ periodForm.value.year }}
+      </h2>
+    </div>
+
     <!-- Métricas Principales -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <!-- Card: Total Clientes -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      
+      <!-- Monto Total Bruto -->
+      <div class="bg-gradient-to-br from-indigo-600 to-indigo-500 rounded-xl shadow-md text-white overflow-hidden">
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
-              <div class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Clientes</div>
-              <div class="mt-1 text-3xl font-semibold text-gray-800">{{ metrics.totalCustomers }}</div>
+              <div class="text-indigo-100 text-xs font-semibold uppercase tracking-wider">Monto Total</div>
+              <div class="mt-2 text-3xl font-bold">{{ metrics.totalGrossAmount | currency:'S/ ':'symbol':'1.2-2' }}</div>
+              <div class="text-indigo-100 text-sm mt-1">Suma de todos los tatuajes</div>
             </div>
-            <div class="h-12 w-12 bg-blue-50 rounded-lg flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            <div class="h-12 w-12 bg-white bg-opacity-10 rounded-lg flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
             </div>
           </div>
         </div>
-        <div class="h-1 bg-blue-500"></div>
       </div>
 
-      <!-- Card: Total Tattoos -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
+      <!-- Monto Morphine (después de comisión) -->
+      <div class="bg-gradient-to-br from-red-600 to-red-500 rounded-xl shadow-md text-white overflow-hidden">
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
-              <div class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Tattoos</div>
-              <div class="mt-1 text-3xl font-semibold text-gray-800">{{ metrics.totalTattoos }}</div>
+              <div class="text-red-100 text-xs font-semibold uppercase tracking-wider">Monto Morphine</div>
+              <div class="mt-2 text-3xl font-bold">{{ metrics.totalMorphineAmount | currency:'S/ ':'symbol':'1.2-2' }}</div>
+              <div class="text-red-100 text-sm mt-1">Mi % después de comisión</div>
             </div>
-            <div class="h-12 w-12 bg-purple-50 rounded-lg flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            <div class="h-12 w-12 bg-white bg-opacity-10 rounded-lg flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
           </div>
         </div>
-        <div class="h-1 bg-purple-500"></div>
       </div>
 
-      <!-- Card: Citas Mensual -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
+      <!-- Total General de Ingresos -->
+      <div class="bg-gradient-to-br from-green-600 to-green-500 rounded-xl shadow-md text-white overflow-hidden">
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
-              <div class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Citas Mensual</div>
-              <div class="mt-1 text-3xl font-semibold text-gray-800">{{ metrics.appointmentsMonth }}</div>
+              <div class="text-green-100 text-xs font-semibold uppercase tracking-wider">Total Ingresos</div>
+              <div class="mt-2 text-3xl font-bold">{{ metrics.totalGeneralIncome | currency:'S/ ':'symbol':'1.2-2' }}</div>
+              <div class="text-green-100 text-sm mt-1">Morphine + Lima Espacio</div>
             </div>
-            <div class="h-12 w-12 bg-green-50 rounded-lg flex items-center justify-center">
+            <div class="h-12 w-12 bg-white bg-opacity-10 rounded-lg flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="h-1 bg-green-500"></div>
-      </div>
-
-      <!-- Card: Ingresos Mensual -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
-        <div class="p-6">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Ingresos Mensual</div>
-              <div class="mt-1 text-3xl font-semibold text-gray-800">{{ metrics.revenueMonth | currency:'S/. ':'symbol':'1.2-2' }}</div>
-            </div>
-            <div class="h-12 w-12 bg-yellow-50 rounded-lg flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
           </div>
         </div>
-        <div class="h-1 bg-yellow-500"></div>
       </div>
     </div>
 
-    <!-- Métricas Adicionales - Ingresos por Ubicación -->
-    <h2 class="text-xl font-bold text-gray-800 mb-4">Desglose de Ingresos</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <!-- Total Ingresos -->
-      <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl shadow-md text-white overflow-hidden">
-        <div class="p-6">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="text-gray-300 text-xs font-semibold uppercase tracking-wider">Total Ingresos</div>
-              <div class="mt-2 text-3xl font-bold">{{ metrics.totalRevenue | currency:'S/. ':'symbol':'1.2-2' }}</div>
-            </div>
-            <div class="h-12 w-12 bg-white bg-opacity-10 rounded-lg flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- Métricas Secundarias -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-      <!-- Lima Espacio -->
+      <!-- Ingresos de Lima Espacio -->
       <div class="bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl shadow-md text-white overflow-hidden">
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
-              <div class="text-blue-100 text-xs font-semibold uppercase tracking-wider">Lima Espacio</div>
-              <div class="mt-2 text-3xl font-bold">{{ metrics.totalLimaEspacioRevenue | currency:'S/. ':'symbol':'1.2-2' }}</div>
+              <div class="text-blue-100 text-xs font-semibold uppercase tracking-wider">Lima Espacio me dio</div>
+              <div class="mt-2 text-3xl font-bold">{{ metrics.limaEspacioIncome | currency:'S/ ':'symbol':'1.2-2' }}</div>
+              <div class="text-blue-100 text-sm mt-1">Sus citas terminadas</div>
             </div>
             <div class="h-12 w-12 bg-white bg-opacity-10 rounded-lg flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Morphine -->
+      <!-- Agendado por Morphine para Lima Espacio -->
       <div class="bg-gradient-to-br from-purple-600 to-purple-500 rounded-xl shadow-md text-white overflow-hidden">
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
-              <div class="text-purple-100 text-xs font-semibold uppercase tracking-wider">Morphine</div>
-              <div class="mt-2 text-3xl font-bold">{{ metrics.totalMorphineRevenue | currency:'S/. ':'symbol':'1.2-2' }}</div>
+              <div class="text-purple-100 text-xs font-semibold uppercase tracking-wider">Agendé a Lima Espacio</div>
+              <div class="mt-2 text-3xl font-bold">{{ metrics.morphineScheduledForLimaEspacio | currency:'S/ ':'symbol':'1.2-2' }}</div>
+              <div class="text-purple-100 text-sm mt-1">Fecha de creación</div>
             </div>
             <div class="h-12 w-12 bg-white bg-opacity-10 rounded-lg flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Emitido en SUNAT -->
+      <div class="bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-xl shadow-md text-white overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-yellow-100 text-xs font-semibold uppercase tracking-wider">Emitido SUNAT</div>
+              <div class="mt-2 text-3xl font-bold">{{ metrics.totalEmittedSunat | currency:'S/ ':'symbol':'1.2-2' }}</div>
+              <div class="text-yellow-100 text-sm mt-1">Facturación oficial</div>
+            </div>
+            <div class="h-12 w-12 bg-white bg-opacity-10 rounded-lg flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Sección para Actividad Reciente -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-xl font-bold text-gray-800">Actividad Reciente</h2>
-        <button class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">Ver todo</button>
-      </div>
+
+    <!-- Desglose Detallado -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       
-      <div class="text-gray-500 text-center py-8">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-          <polyline points="14 2 14 8 20 8"></polyline>
-          <line x1="16" y1="13" x2="8" y2="13"></line>
-          <line x1="16" y1="17" x2="8" y2="17"></line>
-          <polyline points="10 9 9 9 8 9"></polyline>
-        </svg>
-        <p>Aquí puedes incluir gráficos, lista de citas recientes, o cualquier otro dato relevante.</p>
-        <button class="mt-4 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-colors">Agregar widgets</button>
+      <!-- Desglose por Ubicación -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Desglose por Ubicación</h3>
+        
+        <div class="space-y-4">
+          <div class="flex justify-between items-center p-4 bg-indigo-50 rounded-lg">
+            <div>
+              <span class="font-medium text-gray-800">Monto Total Bruto</span>
+              <p class="text-sm text-gray-600">Suma de todos los tatuajes</p>
+            </div>
+            <span class="text-lg font-bold text-indigo-600">
+              {{ metrics.totalGrossAmount | currency:'S/ ':'symbol':'1.2-2' }}
+            </span>
+          </div>
+          
+          <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg">
+            <div>
+              <span class="font-medium text-gray-800">Monto Morphine Neto</span>
+              <p class="text-sm text-gray-600">Mi % después de comisión del studio</p>
+            </div>
+            <span class="text-lg font-bold text-red-600">
+              {{ metrics.totalMorphineAmount | currency:'S/ ':'symbol':'1.2-2' }}
+            </span>
+          </div>
+          
+          <div class="flex justify-between items-center p-4 bg-purple-50 rounded-lg">
+            <div>
+              <span class="font-medium text-gray-800">Mis Citas (Morphine)</span>
+              <p class="text-sm text-gray-600">Citas que agendé yo</p>
+            </div>
+            <span class="text-lg font-bold text-purple-600">
+              {{ metrics.morphineOwnIncome | currency:'S/ ':'symbol':'1.2-2' }}
+            </span>
+          </div>
+          
+          <div class="flex justify-between items-center p-4 bg-blue-50 rounded-lg">
+            <div>
+              <span class="font-medium text-gray-800">Citas Lima Espacio</span>
+              <p class="text-sm text-gray-600">Citas de Lima Espacio terminadas</p>
+            </div>
+            <span class="text-lg font-bold text-blue-600">
+              {{ metrics.limaEspacioIncome | currency:'S/ ':'symbol':'1.2-2' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estadísticas Adicionales -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Estadísticas del Período</h3>
+        
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Total de Citas Terminadas</span>
+            <span class="font-semibold text-gray-800">{{ metrics.totalCompletedAppointments }}</span>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Citas Agendadas por Mí</span>
+            <span class="font-semibold text-gray-800">{{ metrics.morphineScheduledAppointments }}</span>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Citas de Lima Espacio</span>
+            <span class="font-semibold text-gray-800">{{ metrics.limaEspacioAppointments }}</span>
+          </div>
+          
+          <div class="flex justify-between items-center pt-2 border-t border-gray-200">
+            <span class="text-gray-600">Facturas Emitidas</span>
+            <span class="font-semibold text-gray-800">{{ metrics.totalEmittedInvoices }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen Ejecutivo -->
+    <div class="bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl shadow-lg text-white p-6">
+      <h3 class="text-xl font-semibold mb-4">Resumen Ejecutivo</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="text-center">
+          <div class="text-2xl font-bold text-green-400">
+            {{ ((metrics.totalMorphineAmount / metrics.totalGrossAmount) * 100) | number:'1.0-0' }}%
+          </div>
+          <div class="text-gray-300 text-sm">% Real de Comisión Morphine</div>
+        </div>
+        
+        <div class="text-center">
+          <div class="text-2xl font-bold text-blue-400">
+            {{ ((metrics.limaEspacioIncome / metrics.totalGeneralIncome) * 100) | number:'1.0-0' }}%
+          </div>
+          <div class="text-gray-300 text-sm">Participación Lima Espacio</div>
+        </div>
+        
+        <div class="text-center">
+          <div class="text-2xl font-bold text-purple-400">
+            {{ (metrics.totalGrossAmount / metrics.totalCompletedAppointments) | currency:'S/ ':'symbol':'1.0-0' }}
+          </div>
+          <div class="text-gray-300 text-sm">Precio Promedio por Tatuaje</div>
+        </div>
       </div>
     </div>
   </div>
-  
-  <ng-template #loading>
-    <div class="flex justify-center items-center p-12">
-      <div class="flex flex-col items-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
-        <p class="text-gray-500">Cargando métricas...</p>
-      </div>
-    </div>
-  </ng-template>
+
+  <!-- Estado vacío cuando no se han cargado métricas -->
+  <div *ngIf="!showMetrics && !loading" class="text-center py-16">
+    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+    </svg>
+    <h3 class="mt-4 text-lg font-medium text-gray-900">Selecciona un período</h3>
+    <p class="mt-2 text-gray-500">Elige el año y mes para ver las métricas detalladas del negocio</p>
+  </div>
 </div>
