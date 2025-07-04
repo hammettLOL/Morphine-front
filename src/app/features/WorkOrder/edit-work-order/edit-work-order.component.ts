@@ -45,7 +45,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
       serviceType: [{value: '', disabled: true}, Validators.required],
       schedulerId: ['', Validators.required],
       description: [''],
-      status: [Status.Pendiente, Validators.required],
+      status: [Status.Completado, Validators.required],
       creationDate: ['', Validators.required],
       scheduleDate: ['', Validators.required],
       scheduleTime: ['', Validators.required],
@@ -63,6 +63,7 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
     this.loadWorkOrder();
     this.onTotalPriceChange();
     this.onPercentageChange();
+    this.onSchedulerChange();
   }
   onTotalPriceChange() {
     const totalPriceControl = this.workOrderForm.get('totalPrice');
@@ -96,6 +97,21 @@ export class EditWorkOrderComponent implements OnInit, OnDestroy {
           } else {
             this.workOrderForm.get('advancePrice')?.setValue('0', { emitEvent: false });
           }
+        });
+    }
+  }
+
+  onSchedulerChange() {
+    const schedulerIdControl = this.workOrderForm.get('schedulerId');
+    if (schedulerIdControl) {
+      schedulerIdControl.valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(schedulerId => {
+          console.log(schedulerId);
+          if (schedulerId == 3) {
+            console.log(schedulerId);
+            this.workOrderForm.get('percentage')?.setValue(0, { emitEvent: false });
+          } 
         });
     }
   }

@@ -47,7 +47,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
       serviceId: ['', Validators.required],
       schedulerId: [1, Validators.required],
       description: [''],
-      status: [Status.Pendiente, Validators.required],
+      status: [Status.Completado, Validators.required],
       creationDate: ['', Validators.required],
       scheduleDate: ['', Validators.required],
       scheduleTime: ['', Validators.required],
@@ -69,6 +69,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
    this.isSumitted = false;
    this.onTotalPriceChange();
    this.onPercentageChange();
+   this.onSchedulerChange();
 
   }
   onTotalPriceChange() {
@@ -103,6 +104,21 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
           } else {
             this.workOrderForm.get('advancePrice')?.setValue('0', { emitEvent: false });
           }
+        });
+    }
+  }
+
+  onSchedulerChange() {
+    const schedulerIdControl = this.workOrderForm.get('schedulerId');
+    if (schedulerIdControl) {
+      schedulerIdControl.valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(schedulerId => {
+          console.log(schedulerId);
+          if (schedulerId == 3) {
+            console.log(schedulerId);
+            this.workOrderForm.get('percentage')?.setValue(0, { emitEvent: false });
+          } 
         });
     }
   }
