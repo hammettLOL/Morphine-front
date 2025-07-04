@@ -18,9 +18,7 @@ export interface DashboardMetrics {
   limaEspacioAppointments: number;   // Citas de Lima Espacio
   totalEmittedInvoices: number;      // Número de facturas emitidas
 
-  totalGrossAmount: number;          // Monto total bruto de todos los tatuajes (suma de totalPrice)
-  totalMorphineAmount: number;       // Monto total que le corresponde a Morphine (% después de comisión)
-
+ 
   // Información del período
   year: number;
   month: number;
