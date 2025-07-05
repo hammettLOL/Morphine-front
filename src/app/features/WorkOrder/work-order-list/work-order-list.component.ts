@@ -57,7 +57,18 @@ export class WorkOrderListComponent implements OnInit {
     { value:10, name:'Octubre'},{ value:11, name:'Noviembre'},{ value:12, name:'Diciembre' }
   ];
   years: number[] = [];
+  schedulerId= 0;
+  totalGross = 0;
+  totalNet = 0;
+  totalCount = 0;
   @ViewChild(EditWorkOrderComponent) editWorkOrderComponent!: EditWorkOrderComponent;
+
+  schedulerOptions = [
+  { value: 0, name: 'Todos' },
+  { value: 1, name: 'Morphine' },
+  { value: 2, name: 'Lima Espacio' },
+  { value: 3, name: 'Proyecto' }
+];
 
   statusMap: { [key: number]: string } = {
     0: 'Pendiente',
@@ -94,18 +105,22 @@ export class WorkOrderListComponent implements OnInit {
       // aunque sea “0”, y si no, dejamos 0 por defecto.
       this.year  = params['year']  !== undefined ? +params['year']  : 0;
       this.month = params['month'] !== undefined ? +params['month'] : 0;
-
+      this.schedulerId = params['schedulerId'] !== undefined ? +params['schedulerId'] : 0;
       this.loadWorkOrders();
     });
    
   }
 
   loadWorkOrders() {
-    this.workOrderService.getWorkOrders(this.pageNumber, this.pageSize, this.searchTerm, this.year, this.month).subscribe((data) => {
+    this.workOrderService.getWorkOrders(this.pageNumber, this.pageSize, this.searchTerm, this.year, this.month, this.schedulerId).subscribe((data) => {
       this.workOrders = data.items;
       this.hasPreviousPage = this.pageNumber > 1;
       this.hasNextPage = data.totalPages > this.pageNumber; 
       this.totalPages = data.totalPages;
+      this.totalGross = data.totalGross || 0;
+      this.totalNet = data.totalNet || 0;
+      this.totalCount = data.totalCount || 0;
+      
     });
   }
 
@@ -126,6 +141,15 @@ export class WorkOrderListComponent implements OnInit {
       { queryParams: qp, queryParamsHandling: 'merge' }
     );
   }
+
+  onSchedulerChange(s: number) {
+  const qp: any = { pageNumber: 1 };
+  qp.schedulerId = s !== 0 ? s : null;
+  this.router.navigate(
+    ['/work-orders'],
+    { queryParams: qp, queryParamsHandling: 'merge' }
+  );
+}
 
   addWorkOrder(): void {
       this.router.navigate(['/customers']);
