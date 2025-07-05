@@ -19,13 +19,14 @@ export class WorkOrderService {
   constructor(private readonly http: HttpClient) {}
 
   // Obtener todas las órdenes de trabajo
-  getWorkOrders(pageNumber: number, pageSize: number, search: string = '', year: number = 0, month: number = 0): Observable<PagedResult<WorkOrderDto>> {
+  getWorkOrders(pageNumber: number, pageSize: number, search: string = '', year: number = 0, month: number = 0, schedulerId: number = 0): Observable<PagedResult<WorkOrderDto>> {
       let params = new HttpParams()
         .set('pageNumber', pageNumber.toString())
         .set('pageSize', pageSize.toString());
         if (search.trim()) params = params.set('search', search.trim());
         if (year)          params = params.set('year',  year.toString());
         if (month)         params = params.set('month', month.toString());
+        if (schedulerId)   params = params.set('schedulerId', schedulerId.toString());
         
       return this.http.get<PagedResult<WorkOrderDto>>(`${this.apiUrl}/${this.endpoint}`, { params });
     }
