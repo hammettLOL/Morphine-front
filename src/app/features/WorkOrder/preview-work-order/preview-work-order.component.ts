@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastService } from '../../../core/services/toast.service';
 import { WorkOrderService } from '../../../core/services/work-order.service';
@@ -14,7 +14,9 @@ registerLocaleData(localeEs, 'es');
 @Component({
   selector: 'app-preview-work-order',
   providers: [
+      DatePipe,
       { provide: LOCALE_ID, useValue: 'es' } // Establecer español como locale por defecto
+      
     ],
   imports: [CommonModule],
   standalone: true,
@@ -30,7 +32,8 @@ export class PreviewWorkOrderComponent implements OnInit {
   constructor(
     private readonly toastService: ToastService,
     private readonly workOrderService: WorkOrderService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -61,19 +64,9 @@ export class PreviewWorkOrderComponent implements OnInit {
 
   copyClientInfo(): void {
       // Crear texto formateado con la información del cliente
-      const clientInfo = `
-        *Agendar cita*
-        Cliente: ${this.workOrderPreview.customerName}
-        Documento: ${this.workOrderPreview.document}
-        Teléfono: ${this.workOrderPreview.cellphone}
-        Email: ${this.workOrderPreview.email}
-        Referencia: ${this.workOrderPreview.reference}
-        Fecha: ${new Date(this.workOrderPreview.dateTime).toISOString().split('T')[0]}
-        Hora: ${new Date(this.workOrderPreview.dateTime).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false })}
-        Tiempo: ${this.workOrderPreview.duration} horas
-        Monto: S/ ${this.workOrderPreview.totalPrice.toFixed(2)}
-      `.replace(/^\s+/gm, '').trim();
       
+      const clientInfo = this.textToShareOrCopy();
+
       // Usar la API del portapapeles, compatible con Safari en iOS 13.4+
       if (navigator.clipboard) {
         navigator.clipboard.writeText(clientInfo.trim())
@@ -129,23 +122,28 @@ export class PreviewWorkOrderComponent implements OnInit {
       }
     }
 
+    textToShareOrCopy(): string{
+      const formattedDate = this.datePipe.transform(this.workOrderPreview.dateTime, 'EEEE, dd MMMM yyyy HH:mm', 'es');
+      const clientInfo = `
+        *Agendar cita*
+        Cliente: ${this.workOrderPreview.customerName}
+        Documento: ${this.workOrderPreview.document}
+        Teléfono: ${this.workOrderPreview.cellphone}
+        Email: ${this.workOrderPreview.email}
+        Referencia: ${this.workOrderPreview.reference}
+        Fecha: ${formattedDate}
+        Hora: ${new Date(this.workOrderPreview.dateTime).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false })}
+        Tiempo: ${this.workOrderPreview.duration} horas
+        Monto: S/ ${this.workOrderPreview.totalPrice.toFixed(2)}
+      `.replace(/^\s+/gm, '').trim();
+      return clientInfo;
+    }
+
      shareClientInfo(): void {
       // Crear objeto con datos para compartir
       const shareData = {
         title: `Información de Cliente: ${this.workOrderPreview.customerName}`,
-        text: `
-               *Agendar cita*
-               Cliente: ${this.workOrderPreview.customerName}
-               Documento: ${this.workOrderPreview.document}
-               Teléfono: ${this.workOrderPreview.cellphone}
-               Email: ${this.workOrderPreview.email}
-               Referencia: ${this.workOrderPreview.reference}
-               Fecha: ${new Date(this.workOrderPreview.dateTime).toISOString().split('T')[0]}
-               Hora: ${new Date(this.workOrderPreview.dateTime).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false })}
-               Tiempo: ${this.workOrderPreview.duration} horas
-               Monto: S/ ${this.workOrderPreview.totalPrice.toFixed(2)}`.replace(/^\s+/gm, '').trim(),
-        // URL opcional si quisieras incluirla
-        // url: window.location.href
+        text: this.textToShareOrCopy()
       };
       
       // Verificar si el navegador soporta la API Web Share
