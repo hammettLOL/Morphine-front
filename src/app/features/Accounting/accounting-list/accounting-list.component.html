@@ -51,9 +51,8 @@
           <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">DNI</th>
           <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Email</th>
           <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Por</th>
-          <th class="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Adelanto</th>
-          <th class="px-5 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Medio</th>
-          <th class="px-5 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Total</th>
+          <th class="px-5 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Neto
+          </th>
           <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Medio</th>
           <th class="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Verificado</th>
           <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Observación</th>
@@ -69,18 +68,7 @@
           <td class="px-4 py-3 text-sm text-gray-800">{{ wo.dni }}</td>
           <td class="px-4 py-3 text-sm text-gray-600">{{ wo.email }}</td>
           <td class="px-4 py-3 text-sm text-gray-600">{{ wo.schedulerName }}</td>
-          <td class="py-3 text-sm text-gray-800 text-center">{{ wo.advancePrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
-          <td class="px-4 py-3 text-sm text-gray-800">
-            <span class="px-2 py-1 text-xs font-medium rounded-full" [ngClass]="{
-              'bg-blue-100 text-blue-800': paymentMethodMap[wo.paymentMethodAdvance] === 'Tarjeta',
-              'bg-green-100 text-green-800': paymentMethodMap[wo.paymentMethodAdvance] === 'Efectivo',
-              'bg-purple-100 text-purple-800': paymentMethodMap[wo.paymentMethodAdvance] === 'Transferencia',
-              'bg-gray-100 text-gray-800': !paymentMethodMap[wo.paymentMethodAdvance]
-            }">
-              {{ paymentMethodMap[wo.paymentMethodAdvance] }}
-            </span>
-          </td>
-          <td class="py-3 text-sm text-gray-800 text-center font-medium">{{ wo.totalPrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
+          <td class="py-3 text-sm text-gray-800 text-center font-medium">{{ wo.netPrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
           <td class="px-4 py-3 text-sm text-gray-800">
             <span class="px-2 py-1 text-xs font-medium rounded-full" [ngClass]="{
               'bg-blue-100 text-blue-800': paymentMethodMap[wo.paymentMethod] === 'Tarjeta',
