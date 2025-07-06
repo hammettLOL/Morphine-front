@@ -11,7 +11,7 @@ export interface AccountingWorkOrder {
     paymentMethod: PaymentMethod;
     paymentMethodAdvance: PaymentMethod;
     advancePrice: number;
-    totalPrice: number;
+    netPrice: number;
     verified: boolean;
     remarks: string;
     emitted: boolean;
