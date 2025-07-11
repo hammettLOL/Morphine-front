@@ -72,6 +72,7 @@ export class AddCustomerPublicComponent implements OnInit {
       instagram: [''],
       reference: ['', Validators.required] // Solo se requiere la referencia
     });
+    this.applyDocumentValidators(Number(typeDocument));
   }
 
   applyDocumentValidators(type: number) {
