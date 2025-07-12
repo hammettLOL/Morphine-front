@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -39,6 +39,9 @@ export class AddCustomerPublicComponent implements OnInit {
   countries = Countries;
   selectedCountry: Country = this.countries[0];
   selectedCountryIndex: number = 0;
+  filteredCountries: Country[] = [];
+  showCountryDropdown = false;
+  countrySearchTerm = '';
 
   constructor(
     private readonly fb: FormBuilder,
@@ -71,7 +74,6 @@ export class AddCustomerPublicComponent implements OnInit {
   }
 
   buildForm(document: string, typeDocument: string) {
-    console.log(this.selectedCountry);
     this.customerForm = this.fb.group({
       name: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -95,6 +97,7 @@ export class AddCustomerPublicComponent implements OnInit {
       reference: ['', Validators.required], // Solo se requiere la referencia
     });
     this.applyDocumentValidators(Number(typeDocument));
+    this.filteredCountries = [...this.countries];
   }
 
   applyDocumentValidators(type: number) {
@@ -183,9 +186,57 @@ export class AddCustomerPublicComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
+   // Método para filtrar países
+  filterCountries(searchTerm: string): void {
+    this.countrySearchTerm = searchTerm;
+    
+    if (!searchTerm.trim()) {
+      this.filteredCountries = [...this.countries];
+      return;
+    }
+  
+    this.filteredCountries = this.countries.filter(country => 
+      // Filtrar por código de país
+      country.dialCode.includes(searchTerm) ||
+      // Filtrar por nombre del país
+      country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      // Filtrar por código ISO
+      country.code.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+  
+  // Seleccionar país del dropdown
+  selectCountry(country: Country): void {
+    this.selectedCountry = country;
+    this.customerForm.patchValue({ countryCode: country.dialCode });
+    this.showCountryDropdown = false;
+    this.countrySearchTerm = `${country.flag} +${country.dialCode}`;
+    this.filteredCountries = [...this.countries];
+  }
+  
+  // Mostrar/ocultar dropdown
+  toggleCountryDropdown(): void {
+    this.showCountryDropdown = !this.showCountryDropdown;
+    if (this.showCountryDropdown) {
+      this.countrySearchTerm = '';
+      this.filteredCountries = [...this.countries];
+    }
+  }
+  
+  // Cerrar dropdown al hacer clic fuera
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.country-selector')) {
+      this.showCountryDropdown = false;
+    }
+  }
+
   onCountryChange(event: Event): void {
   const target = event.target as HTMLSelectElement;
   const selectedDialCode = target.value;
+
+  
   
   // Actualizar selectedCountry para mantener la referencia
   this.selectedCountry = this.countries.find(c => c.dialCode === selectedDialCode) || this.countries[0];

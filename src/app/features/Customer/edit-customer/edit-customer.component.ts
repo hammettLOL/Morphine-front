@@ -1,7 +1,7 @@
 // src/app/components/edit-customer/edit-customer.component.ts
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators,ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators,ReactiveFormsModule, AbstractControl, FormsModule } from '@angular/forms';
 import { CustomersService} from '../../../core/services/customers.service';
 import { Customer } from '../../../core/models/customer.model';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { Countries, Country } from '../../../core/models/country';
 @Component({
   selector: 'app-edit-customer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './edit-customer.component.html'
 })
 export class EditCustomerComponent implements OnInit {
@@ -26,6 +26,9 @@ export class EditCustomerComponent implements OnInit {
   countries = Countries;
   selectedCountry: Country = this.countries[0];
   selectedCountryIndex: number = 0;
+  filteredCountries: Country[] = [];
+  showCountryDropdown = false;
+  countrySearchTerm = '';
 
   constructor(
     private readonly router: Router,
@@ -77,6 +80,7 @@ export class EditCustomerComponent implements OnInit {
   ngOnInit(): void {
     this.isSubmitted = false;
     this.loadCustomer();
+    this.filteredCountries = [...this.countries];
   }
 
   loadCustomer() {
@@ -119,10 +123,56 @@ export class EditCustomerComponent implements OnInit {
       typeDocument: customer.typeDocument,
       birthday: this.formatDateForInput(customer.birthday) || null, // Si es necesario formatear la fecha
       countryCode: countryCode,
-       cellphone: phoneNumber,
+      cellphone: phoneNumber,
       instagram: customer.instagram
     });
     this.applyDocumentValidators(Number(customer.typeDocument));
+  }
+  
+    // Método para filtrar países
+  filterCountries(searchTerm: string): void {
+    this.countrySearchTerm = searchTerm;
+    
+    if (!searchTerm.trim()) {
+      this.filteredCountries = [...this.countries];
+      return;
+    }
+  
+    this.filteredCountries = this.countries.filter(country => 
+      // Filtrar por código de país
+      country.dialCode.includes(searchTerm) ||
+      // Filtrar por nombre del país
+      country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      // Filtrar por código ISO
+      country.code.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+  
+  // Seleccionar país del dropdown
+  selectCountry(country: Country): void {
+    this.selectedCountry = country;
+    this.customerForm.patchValue({ countryCode: country.dialCode });
+    this.showCountryDropdown = false;
+    this.countrySearchTerm = `${country.flag} +${country.dialCode}`;
+    this.filteredCountries = [...this.countries];
+  }
+  
+  // Mostrar/ocultar dropdown
+  toggleCountryDropdown(): void {
+    this.showCountryDropdown = !this.showCountryDropdown;
+    if (this.showCountryDropdown) {
+      this.countrySearchTerm = '';
+      this.filteredCountries = [...this.countries];
+    }
+  }
+  
+  // Cerrar dropdown al hacer clic fuera
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.country-selector')) {
+      this.showCountryDropdown = false;
+    }
   }
   private formatDateForInput(dateValue: string): string {
     // Si la fecha es el valor por defecto o nula, retorna cadena vacía

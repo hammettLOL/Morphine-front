@@ -1,6 +1,6 @@
 // src/app/components/add-customer/add-customer.component.ts
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, FormsModule } from '@angular/forms';
 import { Customer } from '../../../core/models/customer.model';
 import { CommonModule } from '@angular/common';
 import { Countries, Country } from '../../../core/models/country';
@@ -8,7 +8,7 @@ import { Countries, Country } from '../../../core/models/country';
 @Component({
   selector: 'app-add-customer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './add-customer.component.html',
   styleUrls: ['./add-customer.component.scss']
 })
@@ -22,6 +22,9 @@ export class AddCustomerComponent implements OnInit {
   countries = Countries;
   selectedCountry: Country = this.countries[0];
   selectedCountryIndex: number = 0;
+  filteredCountries: Country[] = [];
+  showCountryDropdown = false;
+  countrySearchTerm = '';
 
 
   constructor(
@@ -29,6 +32,7 @@ export class AddCustomerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.filteredCountries = [...this.countries];
     this.customerForm = this.fb.group({
       name: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -72,6 +76,52 @@ export class AddCustomerComponent implements OnInit {
   get documentFormControl(): AbstractControl {
     return this.customerForm.get('document')!;
   }
+
+  // Método para filtrar países
+filterCountries(searchTerm: string): void {
+  this.countrySearchTerm = searchTerm;
+  
+  if (!searchTerm.trim()) {
+    this.filteredCountries = [...this.countries];
+    return;
+  }
+
+  this.filteredCountries = this.countries.filter(country => 
+    // Filtrar por código de país
+    country.dialCode.includes(searchTerm) ||
+    // Filtrar por nombre del país
+    country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    // Filtrar por código ISO
+    country.code.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+}
+
+// Seleccionar país del dropdown
+selectCountry(country: Country): void {
+  this.selectedCountry = country;
+  this.customerForm.patchValue({ countryCode: country.dialCode });
+  this.showCountryDropdown = false;
+  this.countrySearchTerm = `${country.flag} +${country.dialCode}`;
+  this.filteredCountries = [...this.countries];
+}
+
+// Mostrar/ocultar dropdown
+toggleCountryDropdown(): void {
+  this.showCountryDropdown = !this.showCountryDropdown;
+  if (this.showCountryDropdown) {
+    this.countrySearchTerm = '';
+    this.filteredCountries = [...this.countries];
+  }
+}
+
+// Cerrar dropdown al hacer clic fuera
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: Event): void {
+  const target = event.target as HTMLElement;
+  if (!target.closest('.country-selector')) {
+    this.showCountryDropdown = false;
+  }
+}
 
   onSubmit(): void {
     if(this.isSubmitted) {
