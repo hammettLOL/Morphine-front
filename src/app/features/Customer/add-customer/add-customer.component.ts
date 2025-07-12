@@ -41,6 +41,7 @@ export class AddCustomerComponent implements OnInit {
       instagram: ['']
     });
     this.isSubmitted = false;
+    this.applyDocumentValidators(Number(this.customerForm.get('typeDocument')?.value));
   }
 
   applyDocumentValidators(type: number) {

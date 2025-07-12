@@ -44,7 +44,6 @@ export class EditCustomerComponent implements OnInit {
       birthday: [''],
       instagram: ['']
     });
-
   }
   applyDocumentValidators(type: number) {
       
@@ -123,6 +122,7 @@ export class EditCustomerComponent implements OnInit {
        cellphone: phoneNumber,
       instagram: customer.instagram
     });
+    this.applyDocumentValidators(Number(customer.typeDocument));
   }
   private formatDateForInput(dateValue: string): string {
     // Si la fecha es el valor por defecto o nula, retorna cadena vacía
