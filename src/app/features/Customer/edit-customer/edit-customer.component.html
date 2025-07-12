@@ -92,17 +92,63 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Celular -->
-        <div>
-          <label for="cellphone" class="block font-medium text-gray-700 mb-2">Celular<span class="text-red-600">*</span></label>
-          <input id="cellphone" formControlName="cellphone" type="number" placeholder="Ingrese el celular"
-                class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
-                [ngClass]="{'border-red-500 ring-1 ring-red-500': customerForm.get('cellphone')?.invalid && customerForm.get('cellphone')?.touched}"
-          />
-          <div *ngIf="customerForm.get('cellphone')?.invalid && customerForm.get('cellphone')?.touched" class="text-red-500 text-sm mt-1">
-            El celular es requerido.        
-          </div>
+        <!-- Celular con selector de país -->
+<div>
+  <label for="cellphone" class="block font-medium text-gray-700 mb-2">Celular<span class="text-red-600">*</span></label>
+  <div class="flex gap-2">
+    <!-- Selector de país con filtro -->
+    <div class="w-32 relative country-selector">
+      <input
+        type="text"
+        [(ngModel)]="countrySearchTerm"
+        [ngModelOptions]="{standalone: true}"
+        (input)="filterCountries($any($event.target).value)"
+        (focus)="showCountryDropdown = true"
+        [placeholder]="selectedCountry.flag + ' +' + selectedCountry.dialCode"
+        class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+      />
+      
+      <!-- Icono dropdown -->
+      <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+      
+      <!-- Dropdown países filtrados -->
+      <div *ngIf="showCountryDropdown" class="absolute z-10 w-48 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+        <div *ngIf="filteredCountries.length === 0" class="p-2 text-gray-500 text-sm">
+          No encontrado
         </div>
+        <div 
+          *ngFor="let country of filteredCountries"
+          (click)="selectCountry(country)"
+          class="p-2 hover:bg-gray-100 cursor-pointer flex items-center text-sm">
+          <span class="mr-2">{{country.flag}}</span>
+          <span>+{{country.dialCode}}</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Input del número -->
+    <div class="flex-1">
+      <input 
+        id="cellphone" 
+        formControlName="cellphone" 
+        type="tel" 
+        placeholder="Número de celular"
+        class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+        [ngClass]="{'border-red-500 ring-1 ring-red-500': customerForm.get('cellphone')?.invalid && customerForm.get('cellphone')?.touched}"
+      />
+    </div>
+  </div>
+  <div *ngIf="customerForm.get('cellphone')?.invalid && customerForm.get('cellphone')?.touched" class="text-red-500 text-sm mt-1">
+  <div *ngIf="customerForm.get('cellphone')?.errors?.['required']">El celular es requerido.</div>
+  <div *ngIf="customerForm.get('cellphone')?.errors?.['minlength']">El celular debe tener al menos 6 dígitos.</div>
+  <div *ngIf="customerForm.get('cellphone')?.errors?.['maxlength']">El celular no puede tener más de 15 dígitos.</div>
+  <div *ngIf="customerForm.get('cellphone')?.errors?.['pattern']">El celular solo debe contener números.</div>
+</div>
+</div>
 
         <!-- Cumpleaños -->
         <div>
