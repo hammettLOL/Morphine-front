@@ -6,6 +6,7 @@ import { CustomersService} from '../../../core/services/customers.service';
 import { Customer } from '../../../core/models/customer.model';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../core/services/toast.service';
+import { Countries, Country } from '../../../core/models/country';
 
 @Component({
   selector: 'app-edit-customer',
@@ -22,6 +23,9 @@ export class EditCustomerComponent implements OnInit {
   loading = true;
   error?: any;
   isSubmitted = false;
+  countries = Countries;
+  selectedCountry: Country = this.countries[0];
+  selectedCountryIndex: number = 0;
 
   constructor(
     private readonly router: Router,
@@ -35,7 +39,8 @@ export class EditCustomerComponent implements OnInit {
       email: ['', [Validators.email]],
       document: ['', [Validators.pattern(/^[0-9]{8}$/)]],
       typeDocument: [0],
-      cellphone: ['',[Validators.minLength(9),Validators.maxLength(12)]],
+      countryCode: [this.selectedCountry.dialCode],
+      cellphone: ['',[Validators.minLength(6),Validators.maxLength(15)]],
       birthday: [''],
       instagram: ['']
     });
@@ -94,6 +99,19 @@ export class EditCustomerComponent implements OnInit {
     }
   }
   setFormValues(customer: Customer) {
+
+    let countryCode = '51'; // Por defecto Perú
+    let phoneNumber = customer.cellphone;
+  
+  // Buscar el código de país en el número
+  for (const country of this.countries) {
+    if (customer.cellphone.startsWith(country.dialCode)) {
+      countryCode = country.dialCode;
+      phoneNumber = customer.cellphone.substring(country.dialCode.length);
+      this.selectedCountry = country;
+      break;
+    }
+  }
     this.customerForm.patchValue({
       name: customer.name,
       lastName: customer.lastName,
@@ -101,7 +119,8 @@ export class EditCustomerComponent implements OnInit {
       document: customer.document,
       typeDocument: customer.typeDocument,
       birthday: this.formatDateForInput(customer.birthday) || null, // Si es necesario formatear la fecha
-      cellphone: customer.cellphone,
+      countryCode: countryCode,
+       cellphone: phoneNumber,
       instagram: customer.instagram
     });
   }
@@ -126,15 +145,24 @@ export class EditCustomerComponent implements OnInit {
       return;
     }
     this.isSubmitted = true;
+    const fullCellphone = this.customerForm.value.countryCode + this.customerForm.value.cellphone;
     const updatedCustomer: Customer = {
       ...this.customerForm.value,
-      cellphone : String(this.customerForm.value.cellphone),
+      cellphone : String(fullCellphone),
       typeDocument: Number(this.customerForm.value.typeDocument), 
       id: this.customerId
     };
 
     this.customerSaved.emit(updatedCustomer);
   }
+    onCountryChange(event: Event): void {
+  const target = event.target as HTMLSelectElement;
+  const selectedDialCode = target.value;
+  
+  // Actualizar selectedCountry para mantener la referencia
+  this.selectedCountry = this.countries.find(c => c.dialCode === selectedDialCode) || this.countries[0];
+}
+
 
   resetSubmitState(){
     this.isSubmitted = false;

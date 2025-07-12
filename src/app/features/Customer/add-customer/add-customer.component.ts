@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { Customer } from '../../../core/models/customer.model';
 import { CommonModule } from '@angular/common';
+import { Countries, Country } from '../../../core/models/country';
 
 @Component({
   selector: 'app-add-customer',
@@ -18,6 +19,9 @@ export class AddCustomerComponent implements OnInit {
   @Output() customerCreated = new EventEmitter<Customer>();
   @Output() customerCancelled = new EventEmitter<void>();
   isSubmitted = false;
+  countries = Countries;
+  selectedCountry: Country = this.countries[0];
+  selectedCountryIndex: number = 0;
 
 
   constructor(
@@ -31,7 +35,8 @@ export class AddCustomerComponent implements OnInit {
       email: ['', [Validators.email]],
       document: ['', [Validators.required, Validators.pattern(/^[0-9]{8}$/)]],
       typeDocument: [0],
-      cellphone: ['',[Validators.minLength(9)]],
+      countryCode: [this.selectedCountry.dialCode],
+      cellphone: ['',[Validators.minLength(6), Validators.maxLength(15)]],
       birthday: [''],
       instagram: ['']
     });
@@ -80,6 +85,7 @@ export class AddCustomerComponent implements OnInit {
 
     // Convertir el valor de tipoDocumento a número si la API lo requiere
     const formValues = this.customerForm.value;
+    const fullCellphone = formValues.countryCode + formValues.cellphone;
     const newCustomer: Customer = {
       id: 0, // El ID lo asignará la API, generalmente
       name: formValues.name,
@@ -88,12 +94,19 @@ export class AddCustomerComponent implements OnInit {
       document: formValues.document,
       typeDocument: Number(formValues.typeDocument),
       birthday: formValues.birthday || null,
-      cellphone: String(formValues.cellphone),
+      cellphone: String(fullCellphone),
       instagram: formValues.instagram
     };
 
     this.customerCreated.emit(newCustomer);
   }
+  onCountryChange(event: Event): void {
+  const target = event.target as HTMLSelectElement;
+  const selectedDialCode = target.value;
+  
+  // Actualizar selectedCountry para mantener la referencia
+  this.selectedCountry = this.countries.find(c => c.dialCode === selectedDialCode) || this.countries[0];
+}
 
   resetSubmitState(){
     this.isSubmitted = false;
