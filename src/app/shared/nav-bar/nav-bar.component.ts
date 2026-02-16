@@ -10,4 +10,8 @@ import { CommonModule } from '@angular/common';
 })
 export class NavBarComponent {
   @Output() toggleSidebar: EventEmitter<void> = new EventEmitter<void>();
+
+  get userName(): string {
+    return localStorage.getItem('userName') || '';
+  }
 }
