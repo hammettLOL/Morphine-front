@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { BookingManagerDashboardService } from '../../core/services/booking-manager-dashboard.service';
 import { BookingManagerDashboard } from '../../core/models/booking-manager-dashboard.model';
+import { WorkOrderService } from '../../core/services/work-order.service';
+import { WorkOrderDto } from '../../core/models/work-order-dto.model';
 import {
   FridayPeriod,
   getCurrentFridayPeriod,
@@ -15,7 +16,7 @@ import {
 @Component({
   selector: 'app-booking-manager-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './booking-manager-dashboard.component.html',
   styleUrls: ['./booking-manager-dashboard.component.scss']
 })
@@ -25,7 +26,22 @@ export class BookingManagerDashboardComponent implements OnInit {
   dashboard?: BookingManagerDashboard;
   loading = false;
 
-  constructor(private readonly bmService: BookingManagerDashboardService) {}
+  // Modal detalle
+  isDetailOpen = false;
+  detailLoading = false;
+  selectedOrder?: WorkOrderDto;
+
+  private readonly statusMap: Record<number, string> = {
+    0: 'Pendiente', 1: 'En progreso', 2: 'Completado', 3: 'Cancelado'
+  };
+  private readonly paymentMethodMap: Record<number, string> = {
+    0: 'Plin', 1: 'Yape', 2: 'Tarjeta', 3: 'Efectivo', 4: 'Transferencia'
+  };
+
+  constructor(
+    private readonly bmService: BookingManagerDashboardService,
+    private readonly workOrderService: WorkOrderService
+  ) {}
 
   ngOnInit(): void {
     this.currentPeriod = getCurrentFridayPeriod();
@@ -59,9 +75,48 @@ export class BookingManagerDashboardComponent implements OnInit {
     this.loadDashboard();
   }
 
+  openDetail(orderId: number): void {
+    this.detailLoading = true;
+    this.isDetailOpen = true;
+    this.workOrderService.getById(orderId).subscribe({
+      next: (order) => {
+        this.selectedOrder = order;
+        this.detailLoading = false;
+      },
+      error: () => {
+        this.detailLoading = false;
+        this.isDetailOpen = false;
+      }
+    });
+  }
+
+  closeDetail(): void {
+    this.isDetailOpen = false;
+    this.selectedOrder = undefined;
+  }
+
+  getStatusLabel(status: number): string {
+    return this.statusMap[status] ?? 'Desconocido';
+  }
+
+  getPaymentMethodLabel(method: number): string {
+    return this.paymentMethodMap[method] ?? '-';
+  }
+
+  private readonly ARC_TOTAL = 251.33;
+
   get progressPercent(): number {
     if (!this.dashboard) return 0;
     return Math.min(100, (this.dashboard.totalAgendado / this.dashboard.meta) * 100);
+  }
+
+  get arcLength(): string {
+    return `${this.ARC_TOTAL}`;
+  }
+
+  get arcOffset(): string {
+    const filled = (this.progressPercent / 100) * this.ARC_TOTAL;
+    return `${this.ARC_TOTAL - filled}`;
   }
 
   formatCurrency(value: number): string {
@@ -71,5 +126,12 @@ export class BookingManagerDashboardComponent implements OnInit {
   formatDate(dateStr: string): string {
     const date = new Date(dateStr);
     return date.toLocaleDateString('es-PE', { weekday: 'short', day: '2-digit', month: '2-digit' });
+  }
+
+  formatDateTime(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('es-PE', {
+      weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
   }
 }
