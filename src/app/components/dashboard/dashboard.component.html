@@ -1,31 +1,34 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <header class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-800">Dashboard</h1>
+<div class="p-6 bg-gray-950 min-h-screen relative">
+  <div class="absolute top-20 right-10 w-72 h-72 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-40 left-10 w-56 h-56 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
+  <header class="mb-8 relative">
+    <div class="inline-block mb-2 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold tracking-widest uppercase">DASHBOARD</div>
+    <h1 class="text-3xl font-bold text-gray-100">Dashboard</h1>
     <p class="text-gray-500 mt-1">Selecciona el período para ver las métricas del negocio</p>
   </header>
   
   <!-- Selección de Período -->
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">Seleccionar Período</h2>
+  <div class="bg-gray-900/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/50 border border-gray-800/50 p-6 mb-8">
+    <div class="flex items-center gap-2 mb-4"><div class="w-1 h-5 bg-red-500 rounded-full"></div><h2 class="text-xl font-semibold text-gray-100">Seleccionar Período</h2></div>
     
     <form [formGroup]="periodForm" (ngSubmit)="loadMetrics()" class="grid grid-cols-1 sm:grid-cols-3 gap-6">
       <div>
-        <label class="block font-medium text-gray-700 mb-2">Año</label>
-        <select 
-          formControlName="year" 
+        <label class="block font-medium text-gray-300 mb-2">Año</label>
+        <select
+          formControlName="year"
           (ngModelChange)="onYearChange()"
-          class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
+          class="w-full p-3 border border-gray-700/50 rounded-xl bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
           <option *ngFor="let y of years" [value]="y">{{ y }}</option>
         </select>
       </div>
       
       <div>
-        <label class="block font-medium text-gray-700 mb-2">Mes</label>
-        <select 
-          formControlName="month" 
+        <label class="block font-medium text-gray-300 mb-2">Mes</label>
+        <select
+          formControlName="month"
           (ngModelChange)="onMonthChange()"
-          class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
-          <option 
+          class="w-full p-3 border border-gray-700/50 rounded-xl bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
+          <option
             *ngFor="let m of months" 
             [value]="m.value" 
             [disabled]="periodForm.value.year === today.getFullYear() && m.value > today.getMonth() + 1">
@@ -38,7 +41,7 @@
         <button
           type="submit"
           [disabled]="periodForm.invalid || loading"
-          class="w-full py-3 px-5 rounded-lg bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 text-white font-medium transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+          class="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 shadow-lg shadow-red-500/20 focus:ring-4 focus:ring-red-800 text-white font-medium transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
           <span *ngIf="!loading">Ver Métricas</span>
           <span *ngIf="loading" class="flex items-center justify-center">
             <svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -56,7 +59,7 @@
   <div *ngIf="showMetrics && metrics" class="space-y-8">
     <!-- Título del período -->
     <div class="text-center">
-      <h2 class="text-2xl font-bold text-gray-800">
+      <h2 class="text-2xl font-bold text-gray-100">
         Métricas de {{ months[periodForm.value.month - 1].name }} {{ periodForm.value.year }}
       </h2>
     </div>
@@ -65,7 +68,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
       
       <!-- Total General de Ingresos -->
-      <div class="bg-gradient-to-br from-indigo-600 to-indigo-500 rounded-xl shadow-md text-white overflow-hidden">
+      <div class="bg-gradient-to-br from-indigo-600 to-indigo-500 rounded-2xl shadow-lg text-white overflow-hidden">
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
@@ -83,7 +86,7 @@
       </div>
 
       <!-- Monto Morphine (después de comisión) -->
-      <div class="bg-gradient-to-br from-red-600 to-red-500 rounded-xl shadow-md text-white overflow-hidden">
+      <div class="bg-gradient-to-br from-red-600 to-red-500 rounded-2xl shadow-lg text-white overflow-hidden">
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
@@ -101,7 +104,7 @@
       </div>
 
       <!-- Ingresos de Lima Espacio -->
-      <div class="bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl shadow-md text-white overflow-hidden">
+      <div class="bg-gradient-to-br from-blue-600 to-blue-500 rounded-2xl shadow-lg text-white overflow-hidden">
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
@@ -125,7 +128,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
         
         <!-- Agendado por Morphine para Lima Espacio -->
-        <div class="bg-gradient-to-br from-purple-600 to-purple-500 rounded-xl shadow-md text-white overflow-hidden">
+        <div class="bg-gradient-to-br from-purple-600 to-purple-500 rounded-2xl shadow-lg text-white overflow-hidden">
           <div class="p-6">
             <div class="flex items-center justify-between">
               <div>
@@ -143,7 +146,7 @@
         </div>
 
         <!-- Total Emitido en SUNAT -->
-        <div class="bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-xl shadow-md text-white overflow-hidden">
+        <div class="bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-2xl shadow-lg text-white overflow-hidden">
           <div class="p-6">
             <div class="flex items-center justify-between">
               <div>
@@ -166,44 +169,44 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       
       <!-- Desglose por Ubicación -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Desglose por Ubicación</h3>
-        
+      <div class="bg-gray-900/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/50 border border-gray-800/50 p-6">
+        <div class="flex items-center gap-2 mb-4"><div class="w-1 h-5 bg-red-500 rounded-full"></div><h3 class="text-lg font-semibold text-gray-100">Desglose por Ubicación</h3></div>
+
         <div class="space-y-4">
-          <div class="flex justify-between items-center p-4 bg-indigo-50 rounded-lg">
+          <div class="flex justify-between items-center p-4 bg-indigo-900/30 rounded-lg">
             <div>
-              <span class="font-medium text-gray-800">Total General Ingresos</span>
-              <p class="text-sm text-gray-600">Morphine + Lima Espacio</p>
+              <span class="font-medium text-gray-100">Total General Ingresos</span>
+              <p class="text-sm text-gray-400">Morphine + Lima Espacio</p>
             </div>
             <span class="text-lg font-bold text-indigo-600">
               {{ metrics.totalGeneralIncome | currency:'S/ ':'symbol':'1.2-2' }}
             </span>
           </div>
           
-          <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg">
+          <div class="flex justify-between items-center p-4 bg-red-900/30 rounded-lg">
             <div>
-              <span class="font-medium text-gray-800">Monto Morphine Neto</span>
-              <p class="text-sm text-gray-600">Mi % después de comisión del studio</p>
+              <span class="font-medium text-gray-100">Monto Morphine Neto</span>
+              <p class="text-sm text-gray-400">Mi % después de comisión del studio</p>
             </div>
             <span class="text-lg font-bold text-red-600">
               {{ metrics.morphineOwnIncome | currency:'S/ ':'symbol':'1.2-2' }}
             </span>
           </div>
           
-          <div class="flex justify-between items-center p-4 bg-purple-50 rounded-lg">
+          <div class="flex justify-between items-center p-4 bg-purple-900/30 rounded-lg">
             <div>
-              <span class="font-medium text-gray-800">Mis Citas (Morphine)</span>
-              <p class="text-sm text-gray-600">Citas que agendé yo</p>
+              <span class="font-medium text-gray-100">Mis Citas (Morphine)</span>
+              <p class="text-sm text-gray-400">Citas que agendé yo</p>
             </div>
             <span class="text-lg font-bold text-purple-600">
               {{ metrics.morphineOwnIncome | currency:'S/ ':'symbol':'1.2-2' }}
             </span>
           </div>
           
-          <div class="flex justify-between items-center p-4 bg-blue-50 rounded-lg">
+          <div class="flex justify-between items-center p-4 bg-blue-900/30 rounded-lg">
             <div>
-              <span class="font-medium text-gray-800">Citas Lima Espacio</span>
-              <p class="text-sm text-gray-600">Citas de Lima Espacio terminadas</p>
+              <span class="font-medium text-gray-100">Citas Lima Espacio</span>
+              <p class="text-sm text-gray-400">Citas de Lima Espacio terminadas</p>
             </div>
             <span class="text-lg font-bold text-blue-600">
               {{ metrics.limaEspacioIncome | currency:'S/ ':'symbol':'1.2-2' }}
@@ -213,36 +216,36 @@
       </div>
 
       <!-- Estadísticas Adicionales -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Estadísticas del Período</h3>
-        
+      <div class="bg-gray-900/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/50 border border-gray-800/50 p-6">
+        <div class="flex items-center gap-2 mb-4"><div class="w-1 h-5 bg-red-500 rounded-full"></div><h3 class="text-lg font-semibold text-gray-100">Estadísticas del Período</h3></div>
+
         <div class="space-y-4">
           <div class="flex justify-between items-center">
-            <span class="text-gray-600">Total de Citas Terminadas</span>
-            <span class="font-semibold text-gray-800">{{ metrics.totalCompletedAppointments }}</span>
+            <span class="text-gray-400">Total de Citas Terminadas</span>
+            <span class="font-semibold text-gray-100">{{ metrics.totalCompletedAppointments }}</span>
           </div>
-          
+
           <div class="flex justify-between items-center">
-            <span class="text-gray-600">Citas Agendadas por Mí</span>
-            <span class="font-semibold text-gray-800">{{ metrics.morphineScheduledAppointments }}</span>
+            <span class="text-gray-400">Citas Agendadas por Mí</span>
+            <span class="font-semibold text-gray-100">{{ metrics.morphineScheduledAppointments }}</span>
           </div>
-          
+
           <div class="flex justify-between items-center">
-            <span class="text-gray-600">Citas de Lima Espacio</span>
-            <span class="font-semibold text-gray-800">{{ metrics.limaEspacioAppointments }}</span>
+            <span class="text-gray-400">Citas de Lima Espacio</span>
+            <span class="font-semibold text-gray-100">{{ metrics.limaEspacioAppointments }}</span>
           </div>
-          
-          <div class="flex justify-between items-center pt-2 border-t border-gray-200">
-            <span class="text-gray-600">Facturas Emitidas</span>
-            <span class="font-semibold text-gray-800">{{ metrics.totalEmittedInvoices }}</span>
+
+          <div class="flex justify-between items-center pt-2 border-t border-gray-800/50">
+            <span class="text-gray-400">Facturas Emitidas</span>
+            <span class="font-semibold text-gray-100">{{ metrics.totalEmittedInvoices }}</span>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Resumen Ejecutivo -->
-    <div class="bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl shadow-lg text-white p-6">
-      <h3 class="text-xl font-semibold mb-4">Resumen Ejecutivo</h3>
+    <div class="bg-gradient-to-r from-gray-900 to-gray-900/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/50 border border-gray-800/50 text-white p-6">
+      <div class="flex items-center gap-2 mb-4"><div class="w-1 h-5 bg-red-500 rounded-full"></div><h3 class="text-xl font-semibold">Resumen Ejecutivo</h3></div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="text-center">
           <div class="text-2xl font-bold text-green-400">
@@ -273,7 +276,7 @@
     <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
     </svg>
-    <h3 class="mt-4 text-lg font-medium text-gray-900">Selecciona un período</h3>
+    <h3 class="mt-4 text-lg font-medium text-gray-100">Selecciona un período</h3>
     <p class="mt-2 text-gray-500">Elige el año y mes para ver las métricas detalladas del negocio</p>
   </div>
 </div>

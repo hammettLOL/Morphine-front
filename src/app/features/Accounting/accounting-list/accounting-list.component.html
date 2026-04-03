@@ -1,96 +1,98 @@
-<div class="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-sm">
+<div class="max-w-7xl mx-auto p-6 bg-gray-900/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/50 relative">
+  <!-- Glow decorative -->
+  <div class="absolute top-20 right-10 w-72 h-72 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
   <header class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-800">SUNAT</h1>
+    <div class="inline-block mb-2 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold tracking-widest uppercase">CONTABILIDAD</div>
+    <h1 class="text-3xl font-bold text-gray-100">SUNAT</h1>
   </header>
-  
+
   <!-- Period Selection -->
-  <form [formGroup]="periodForm" (ngSubmit)="onPeriodChange()" class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8 bg-gray-50 p-4 rounded-lg">
+  <form [formGroup]="periodForm" (ngSubmit)="onPeriodChange()" class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8 bg-gray-950 p-4 rounded-2xl">
     <div>
-      <label class="block font-medium text-gray-700 mb-1">Año</label>
-      <select formControlName="year" class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition ">
+      <label class="block text-sm font-medium text-gray-400 mb-1.5">Ano</label>
+      <select formControlName="year" class="w-full p-2.5 border border-gray-700/50 rounded-xl bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
         <option *ngFor="let y of years" [value]="y">{{ y }}</option>
       </select>
     </div>
-    
+
     <div>
-      <label class="block font-medium text-gray-700 mb-1">Mes</label>
-      <select formControlName="month" class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition ">
+      <label class="block text-sm font-medium text-gray-400 mb-1.5">Mes</label>
+      <select formControlName="month" class="w-full p-2.5 border border-gray-700/50 rounded-xl bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
         <option *ngFor="let m of months" [value]="m.value" [disabled]="periodForm.value.year === today.getFullYear() && m.value > today.getMonth() + 1">
           {{ m.name }}
         </option>
       </select>
     </div>
-    
+
     <div class="flex items-end">
       <button
         type="submit"
         [disabled]="periodForm.invalid"
-        class="w-full py-2.5 px-5 rounded-lg bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 text-white font-medium transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+        class="w-full py-2.5 px-5 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 shadow-lg shadow-red-500/20 focus:ring-4 focus:ring-red-800 text-white font-medium transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Cargar
       </button>
     </div>
   </form>
-  
+
   <!-- Total Amount Summary -->
   <div class="flex justify-between items-center mb-4">
-    <div class="py-2 px-4 bg-gray-50 rounded-lg">
-      <span class="text-gray-700 font-medium">Monto total:</span>
-      <span class="text-lg font-bold ml-2 text-red-600">{{ totalAmount | currency:'S/ ':'symbol':'1.2-2' }}</span>
+    <div class="py-3 px-5 bg-gray-950 rounded-2xl border-l-4 border-red-500">
+      <span class="text-sm font-medium text-gray-400">Monto total:</span>
+      <span class="text-2xl font-bold ml-2 text-red-400">{{ totalAmount | currency:'S/ ':'symbol':'1.2-2' }}</span>
     </div>
-    
-    <!-- Could add action buttons here like Export, Print, etc. -->
   </div>
-  
+
   <!-- WorkOrders Table -->
-  <div *ngIf="accountingWorkOrders.length; else sinDatos" class="overflow-x-auto border border-gray-200 rounded-lg">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-100">
+  <div *ngIf="accountingWorkOrders.length; else sinDatos" class="overflow-x-auto border border-gray-800/50 rounded-2xl">
+    <table class="min-w-full divide-y divide-gray-700">
+      <thead class="bg-gray-800/50">
         <tr>
-          <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Cliente</th>
-          <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">DNI</th>
-          <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Email</th>
-          <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Por</th>
-          <th class="px-5 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Neto
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Cliente</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">DNI</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Email</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Por</th>
+          <th class="px-5 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">Neto
           </th>
-          <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Medio</th>
-          <th class="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Verificado</th>
-          <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Observación</th>
-          <th class="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Emitido</th>
-          <th class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Monto</th>
-          <th class="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Acción</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Medio</th>
+          <th class="px-4 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">Verificado</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Observacion</th>
+          <th class="px-4 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">Emitido</th>
+          <th class="px-4 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Monto</th>
+          <th class="px-4 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">Accion</th>
         </tr>
       </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-        <tr *ngFor="let wo of accountingWorkOrders" class="hover:bg-gray-50 transition-colors duration-150">
+      <tbody class="bg-gray-900/80 divide-y divide-gray-700">
+        <tr *ngFor="let wo of accountingWorkOrders" class="hover:bg-gray-800/50 hover:border-l-2 hover:border-red-500 transition-colors duration-150">
           <!-- Read-only fields -->
-          <td class="px-4 py-3 text-sm text-gray-800">{{ wo.customerName }}</td>
-          <td class="px-4 py-3 text-sm text-gray-800">{{ wo.dni }}</td>
-          <td class="px-4 py-3 text-sm text-gray-600">{{ wo.email }}</td>
-          <td class="px-4 py-3 text-sm text-gray-600">{{ wo.schedulerName }}</td>
-          <td class="py-3 text-sm text-gray-800 text-center font-medium">{{ wo.netPrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
-          <td class="px-4 py-3 text-sm text-gray-800">
+          <td class="px-4 py-3 text-sm text-gray-100">{{ wo.customerName }}</td>
+          <td class="px-4 py-3 text-sm text-gray-100">{{ wo.dni }}</td>
+          <td class="px-4 py-3 text-sm text-gray-400">{{ wo.email }}</td>
+          <td class="px-4 py-3 text-sm text-gray-400">{{ wo.schedulerName }}</td>
+          <td class="py-3 text-sm text-gray-100 text-center font-medium">{{ wo.netPrice | currency:'S/ ':'symbol':'1.2-2' }}</td>
+          <td class="px-4 py-3 text-sm text-gray-100">
             <span class="px-2 py-1 text-xs font-medium rounded-full" [ngClass]="{
-              'bg-blue-100 text-blue-800': paymentMethodMap[wo.paymentMethod] === 'Tarjeta',
-              'bg-green-100 text-green-800': paymentMethodMap[wo.paymentMethod] === 'Efectivo',
-              'bg-purple-100 text-purple-800': paymentMethodMap[wo.paymentMethod] === 'Transferencia',
-              'bg-gray-100 text-gray-800': !paymentMethodMap[wo.paymentMethod]
+              'bg-blue-900/30 text-blue-300': paymentMethodMap[wo.paymentMethod] === 'Tarjeta',
+              'bg-green-900/30 text-green-300': paymentMethodMap[wo.paymentMethod] === 'Efectivo',
+              'bg-purple-900/30 text-purple-300': paymentMethodMap[wo.paymentMethod] === 'Transferencia',
+              'bg-gray-800/50 text-gray-300': !paymentMethodMap[wo.paymentMethod]
             }">
               {{ paymentMethodMap[wo.paymentMethod] }}
             </span>
           </td>
-          
+
           <!-- Editable fields -->
           <td class="px-4 py-3 text-center">
             <select [(ngModel)]="wo.verified"
                     (ngModelChange)="onFieldChange(wo)"
                     [disabled]="paymentMethodMap[wo.paymentMethod] === 'Tarjeta'"
-                    class="p-1.5 border border-gray-300 rounded-md text-sm focus:ring-2 focus:outline-none focus:ring-red-500 focus:border-red-500 disabled:opacity-50 disabled:bg-gray-100">
+                    class="p-1.5 border border-gray-700/50 rounded-xl text-sm bg-gray-800/50 text-gray-100 focus:ring-2 focus:outline-none focus:ring-red-500 focus:border-red-500 disabled:opacity-50 disabled:bg-gray-700/50">
               <option [ngValue]="true">Si</option>
               <option [ngValue]="false">No</option>
             </select>
           </td>
-          
+
           <td class="px-4 py-3">
             <input
               type="text"
@@ -98,51 +100,51 @@
               (ngModelChange)="onFieldChange(wo)"
               [disabled]="paymentMethodMap[wo.paymentMethod] === 'Tarjeta'"
               maxlength="100"
-              class="w-full p-1.5 border border-gray-300 rounded-md text-sm focus:ring-2 focus:outline-none focus:ring-red-500 focus:border-red-500 disabled:opacity-50 disabled:bg-gray-100"
+              class="w-full p-1.5 border border-gray-700/50 rounded-xl text-sm bg-gray-800/50 text-gray-100 focus:ring-2 focus:outline-none focus:ring-red-500 focus:border-red-500 disabled:opacity-50 disabled:bg-gray-700/50"
             />
           </td>
-          
+
           <td class="px-4 py-3 text-center">
-            <select [(ngModel)]="wo.emitted" 
+            <select [(ngModel)]="wo.emitted"
                     (ngModelChange)="onFieldChange(wo)"
                     [disabled]="paymentMethodMap[wo.paymentMethod] === 'Tarjeta'"
-                    class="p-1.5 border border-gray-300 rounded-md text-sm focus:ring-2 focus:outline-none focus:ring-red-500 focus:border-red-500 disabled:opacity-50 disabled:bg-gray-100">
+                    class="p-1.5 border border-gray-700/50 rounded-xl text-sm bg-gray-800/50 text-gray-100 focus:ring-2 focus:outline-none focus:ring-red-500 focus:border-red-500 disabled:opacity-50 disabled:bg-gray-700/50">
               <option [ngValue]="true">Si</option>
               <option [ngValue]="false">No</option>
             </select>
           </td>
-          
+
           <td class="px-4 py-3 text-right">
             <input
               type="number"
               [(ngModel)]="wo.amount"
               [disabled]="paymentMethodMap[wo.paymentMethod] === 'Tarjeta'"
               (ngModelChange)="onFieldChange(wo)"
-              class="w-24 p-1.5 border border-gray-300 rounded-md text-sm text-right font-medium focus:ring-2 focus:outline-none focus:ring-red-500 focus:border-red-500 disabled:opacity-50 disabled:bg-gray-100"
+              class="w-24 p-1.5 border border-gray-600 rounded-xl text-sm text-right font-medium bg-gray-700 text-gray-100 focus:ring-2 focus:outline-none focus:ring-red-500 focus:border-red-500 disabled:opacity-50 disabled:bg-gray-600"
             />
           </td>
-          
+
           <!-- Action buttons -->
           <td class="px-4 py-3">
             <div class="flex items-center justify-center space-x-2">
-              <button 
-                (click)="saveRow(wo)" 
+              <button
+                (click)="saveRow(wo)"
                 [disabled]="!wo.isModified"
-                class="p-1.5 rounded-md bg-green-50 text-green-600 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
+                class="p-1.5 rounded-xl bg-green-900/30 text-green-400 hover:bg-green-800/50 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
                 title="Guardar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                   <polyline points="17 21 17 13 7 13 7 21"></polyline>
                   <polyline points="7 3 7 8 15 8"></polyline>
                 </svg>
               </button>
-              
-              <button 
-                (click)="deleteRow(wo)" 
-                class="p-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-150"
+
+              <button
+                (click)="deleteRow(wo)"
+                class="p-1.5 rounded-xl bg-red-900/30 text-red-400 hover:bg-red-800/50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-150"
                 title="Eliminar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="3 6 5 6 21 6"></polyline>
                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -156,14 +158,14 @@
       </tbody>
     </table>
   </div>
-  
+
   <!-- Empty state -->
   <ng-template #sinDatos>
-    <div class="py-12 text-center bg-gray-50 rounded-lg">
+    <div class="py-12 text-center bg-gray-950 rounded-2xl">
       <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
       </svg>
-      <p class="mt-2 text-gray-500">No hay órdenes de trabajo para este período.</p>
+      <p class="mt-2 text-gray-500">No hay ordenes de trabajo para este periodo.</p>
     </div>
   </ng-template>
 </div>
