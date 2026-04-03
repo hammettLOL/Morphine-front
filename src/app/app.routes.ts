@@ -12,18 +12,21 @@ import { WorkOrderListComponent } from './features/WorkOrder/work-order-list/wor
 import { CustomerDetailComponent } from './features/Customer/customer-detail/customer-detail.component';
 import { AddCustomerPublicComponent } from './features/Customer/add-customer-public/add-customer-public.component';
 import { AccountingListComponent } from './features/Accounting/accounting-list/accounting-list.component';
+import { BookingManagerDashboardComponent } from './components/booking-manager-dashboard/booking-manager-dashboard.component';
+import { roleGuard } from '../guards/role.guard';
 
 
 export const routes: Routes = [
   { path: '', component: HomeComponent},
   { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin'] } },
+  { path: 'dashboard-bm', component: BookingManagerDashboardComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['BookingManager', 'Admin'] } },
   { path: 'customers', component: CustomersListComponent, canActivate: [AuthGuard] },
-  { path: 'accounting', component: AccountingListComponent, canActivate: [AuthGuard] },
+  { path: 'accounting', component: AccountingListComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin', 'AsistenteContable'] } },
   { path: 'customer/detail/:id', component: CustomerDetailComponent, canActivate: [AuthGuard] },
   { path: 'add-customer-public/:token', component: AddCustomerPublicComponent, data:{ hideSidebar: true, canActivate:[NoAuthGuard] } },
-  { path: 'work-orders', component: WorkOrderListComponent, canActivate: [AuthGuard] },
-  { path: 'add-service', component: AddServiceComponent, canActivate: [AuthGuard]},
+  { path: 'work-orders', component: WorkOrderListComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin', 'BookingManager'] } },
+  { path: 'add-service', component: AddServiceComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin'] } },
   { path: 'add-customer', component: AddCustomerComponent, canActivate: [AuthGuard]},
   { path: '**', redirectTo: '/', pathMatch: 'full'},
 ];
