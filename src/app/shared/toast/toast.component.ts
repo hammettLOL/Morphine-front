@@ -23,11 +23,11 @@ export class ToastComponent {
   get iconClasses(): string {
     switch (this.type) {
       case 'success':
-        return 'w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200';
+        return 'w-8 h-8 text-green-200 bg-green-800 rounded-lg';
       case 'danger':
-        return 'w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200';
+        return 'w-8 h-8 text-red-200 bg-red-800 rounded-lg';
       case 'warning':
-        return 'w-8 h-8 text-orange-500 bg-orange-100 rounded-lg dark:bg-orange-700 dark:text-orange-200';
+        return 'w-8 h-8 text-orange-200 bg-orange-700 rounded-lg';
       default:
         return '';
     }

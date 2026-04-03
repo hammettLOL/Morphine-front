@@ -1,4 +1,4 @@
-<div *ngIf="isLoggedIn(); else loginLayout" class="flex h-screen">
+<div *ngIf="isLoggedIn(); else loginLayout" class="flex h-screen bg-gray-950 text-gray-100">
     <!-- Sidebar siempre toggleable -->
     <app-side-bar *ngIf="showSidebar" [isOpen]="isSidebarOpen" (closeSidebar)="closeSidebar()"></app-side-bar>
   
