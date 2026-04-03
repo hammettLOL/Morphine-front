@@ -101,11 +101,10 @@ export class WorkOrderListComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.pageNumber = +params['pageNumber'] || 1;
-      // Aquí comprobamos si viene explicitamente el parámetro,
-      // aunque sea “0”, y si no, dejamos 0 por defecto.
       this.year  = params['year']  !== undefined ? +params['year']  : 0;
       this.month = params['month'] !== undefined ? +params['month'] : 0;
       this.schedulerId = params['schedulerId'] !== undefined ? +params['schedulerId'] : 0;
+
       this.loadWorkOrders();
     });
    

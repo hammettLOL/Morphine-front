@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastService } from '../../core/services/toast.service';
 import { FooterComponent } from '../../shared/footer/footer.component';
+import { getDefaultRouteForRole } from '../../core/config/navigation.config';
 
 @Component({
   selector: 'app-login',
@@ -40,8 +41,8 @@ export class LoginComponent implements OnInit{
     const { username, password } = this.loginForm.value;
     this.authService.login(username, password).subscribe({
       next: (res) => {
-        localStorage.setItem('token', res.token);
-        this.router.navigate(['/customers']);
+        const defaultRoute = getDefaultRouteForRole(res.role);
+        this.router.navigate([defaultRoute]);
       },
       error: (err) => {
         this.isLoading = false;
