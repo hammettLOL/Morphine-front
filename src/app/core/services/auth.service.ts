@@ -10,6 +10,7 @@ export interface LoginResponse {
   name: string;
   lastName: string;
   email: string;
+  role: string;
 }
 
 interface JwtPayload {
@@ -27,6 +28,7 @@ export class AuthService {
   private readonly userNameKey = 'userName';
   private readonly userLastNameKey = 'userLastName';
   private readonly userEmailKey = 'userEmail';
+  private readonly userRoleKey = 'userRole';
 
   constructor(private readonly http: HttpClient, private readonly router: Router) {}
 
@@ -41,6 +43,7 @@ export class AuthService {
     localStorage.setItem(this.userNameKey, response.name);
     localStorage.setItem(this.userLastNameKey, response.lastName);
     localStorage.setItem(this.userEmailKey, response.email);
+    localStorage.setItem(this.userRoleKey, response.role);
   }
 
   getToken(): string | null {
@@ -64,11 +67,16 @@ export class AuthService {
     }
   }
 
+  getUserRole(): string | null {
+    return localStorage.getItem(this.userRoleKey);
+  }
+
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userNameKey);
     localStorage.removeItem(this.userLastNameKey);
     localStorage.removeItem(this.userEmailKey);
+    localStorage.removeItem(this.userRoleKey);
     this.router.navigate(['/']);
   }
 
