@@ -1,35 +1,44 @@
-<div class="container mx-auto p-4">
-    <div *ngIf="loading" class="text-center text-gray-500">
-      Cargando...
+<div class="container mx-auto p-4 relative">
+    <!-- Glow effect -->
+    <div class="absolute top-20 right-10 w-72 h-72 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div *ngIf="loading" class="text-center text-gray-500 py-20">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-600 border-t-red-600"></div>
+      <p class="mt-4 text-gray-400">Cargando...</p>
     </div>
-    <div *ngIf="!loading && customer" class="bg-white shadow rounded-lg p-6">
-      <h1 class="text-2xl font-bold mb-4">Detalle del Cliente</h1>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <p><span class="font-bold">Nombre:</span> {{ customer.name }}</p>
-          <p><span class="font-bold">Apellido:</span> {{ customer.lastName }}</p>
-          <p><span class="font-bold">Email:</span> {{ customer.email }}</p>
-          <p><span class="font-bold">Tipo de Documento:</span> {{ documentTypeMap[customer.typeDocument] }}</p>
-          <p><span class="font-bold">Documento:</span> {{ customer.document }}</p>
+    <div *ngIf="!loading && customer" class="bg-gray-900/80 backdrop-blur-sm shadow-lg shadow-gray-900/50 rounded-2xl p-6 border border-gray-800/50">
+      <div class="mb-6">
+        <div class="inline-block mb-2 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold tracking-widest uppercase">CLIENTE</div>
+        <h1 class="text-2xl font-bold text-gray-100">Detalle del Cliente</h1>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-3">
+          <div class="flex items-center gap-2 mb-3"><div class="w-1 h-5 bg-red-500 rounded-full"></div><h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider">Informacion Personal</h3></div>
+          <p class="text-gray-300"><span class="text-sm font-medium text-gray-400">Nombre:</span> {{ customer.name }}</p>
+          <p class="text-gray-300"><span class="text-sm font-medium text-gray-400">Apellido:</span> {{ customer.lastName }}</p>
+          <p class="text-gray-300"><span class="text-sm font-medium text-gray-400">Email:</span> {{ customer.email }}</p>
+          <p class="text-gray-300"><span class="text-sm font-medium text-gray-400">Tipo de Documento:</span> {{ documentTypeMap[customer.typeDocument] }}</p>
+          <p class="text-gray-300"><span class="text-sm font-medium text-gray-400">Documento:</span> {{ customer.document }}</p>
         </div>
-        <div>
-          <p><span class="font-bold">Celular:</span> {{ customer.cellphone }}</p>
-          <p><span class="font-bold">Cumpleaños:</span> {{ customer.birthday | date:'shortDate' }}</p>
-          <p><span class="font-bold">Instagram:</span> {{ customer.instagram }}</p>
+        <div class="space-y-3">
+          <div class="flex items-center gap-2 mb-3"><div class="w-1 h-5 bg-red-500 rounded-full"></div><h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider">Contacto</h3></div>
+          <p class="text-gray-300"><span class="text-sm font-medium text-gray-400">Celular:</span> {{ customer.cellphone }}</p>
+          <p class="text-gray-300"><span class="text-sm font-medium text-gray-400">Cumpleanos:</span> {{ customer.birthday | date:'shortDate' }}</p>
+          <p class="text-gray-300"><span class="text-sm font-medium text-gray-400">Instagram:</span> {{ customer.instagram }}</p>
         </div>
       </div>
-      <!-- Botones de Acción -->
-      <div class="mt-6 flex flex-col sm:flex-row justify-between gap-2">
-        <button (click)="editCustomer()" class="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600">
+      <!-- Botones de Accion -->
+      <div class="mt-6 flex flex-col sm:flex-row justify-between gap-3">
+        <button (click)="editCustomer()" class="flex-1 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white py-2.5 rounded-xl shadow-lg shadow-green-500/20 transition-all duration-200 font-medium">
           Editar
         </button>
-        <button (click)="addWorkOrder()" class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+        <button (click)="addWorkOrder()" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white py-2.5 rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-200 font-medium">
           Agregar Work Order
         </button>
-        <button (click)="deleteCustomer()" class="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600">
+        <button (click)="deleteCustomer()" class="flex-1 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white py-2.5 rounded-xl shadow-lg shadow-red-500/20 transition-all duration-200 font-medium">
           Eliminar
         </button>
       </div>
     </div>
   </div>
-  

@@ -1,35 +1,39 @@
-<div class="container mx-auto p-4 max-w-3xl bg-gray-100">
+<div class="container mx-auto p-4 max-w-3xl bg-gray-950 relative">
+  <!-- Glow effect -->
+  <div class="absolute top-20 right-10 w-72 h-72 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
   <!-- Mensaje de error -->
   <div
     *ngIf="!isValid"
-    class="bg-gray-200 border-l-4 border-red-600 rounded-lg p-6 shadow-lg"
+    class="bg-gray-900/80 backdrop-blur-sm border-l-4 border-red-600 rounded-2xl p-6 shadow-lg shadow-gray-900/50"
   >
     <p class="text-red-600 text-center font-bold text-lg">{{ message }}</p>
     <div class="text-center mt-4">
       <button
         (click)="cancel()"
-        class="bg-red-600 text-white py-2 px-6 rounded-md hover:bg-red-700 transition duration-300 shadow-md"
+        class="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white py-2 px-6 rounded-xl shadow-lg shadow-red-500/20 transition-all duration-200"
       >
         Volver
       </button>
     </div>
   </div>
 
-  <!-- Paso 1: Verificación de DNI -->
+  <!-- Paso 1: Verificacion de DNI -->
   <div
     *ngIf="isValid && !customerVerified"
-    class="bg-white rounded-lg p-6 shadow-xl border-t-4 border-red-600"
+    class="bg-gray-900/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-gray-900/50 border-t-4 border-red-600"
   >
     <!-- Encabezado -->
     <div class="mb-8 text-center">
-      <h1 class="text-3xl font-bold text-gray-800 mb-2">
+      <div class="inline-block mb-3 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold tracking-widest uppercase">RESERVA</div>
+      <h1 class="text-3xl font-bold text-gray-100 mb-2">
         Reserva tu <span class="text-red-600">Tatuaje</span>
       </h1>
       <div class="w-24 h-1 bg-red-600 mx-auto mb-4"></div>
-      <p class="text-gray-600">Ingresa tu DNI para comenzar</p>
+      <p class="text-gray-400">Ingresa tu DNI para comenzar</p>
     </div>
 
-    <!-- Formulario de verificación -->
+    <!-- Formulario de verificacion -->
     <form
       [formGroup]="verificationForm"
       (ngSubmit)="verifyDocument()"
@@ -40,13 +44,13 @@
         <div>
           <label
             for="verifyTypeDocument"
-            class="block font-medium text-gray-700 mb-2"
+            class="block text-sm font-medium text-gray-400 mb-1.5"
             >Tipo de Documento<span class="text-red-600">*</span></label
           >
           <select
             id="verifyTypeDocument"
             formControlName="typeDocument"
-            class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition appearance-none"
+            class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition appearance-none"
             (ngModelChange)="applyDocumentValidatorsForVerification($event)"
           >
             <option selected [ngValue]="0">DNI</option>
@@ -59,15 +63,15 @@
         <div>
           <label
             for="verifyDocument"
-            class="block font-medium text-gray-700 mb-2"
+            class="block text-sm font-medium text-gray-400 mb-1.5"
             >Documento<span class="text-red-600">*</span></label
           >
           <input
             id="verifyDocument"
             formControlName="document"
             type="text"
-            placeholder="Ingrese el número de documento"
-            class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+            placeholder="Ingrese el numero de documento"
+            class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
             [ngClass]="{
               'border-red-500 ring-1 ring-red-500':
                 verificationForm.get('document')?.invalid &&
@@ -87,29 +91,29 @@
             <div
               *ngIf="verificationForm.get('document')?.errors?.['pattern'] && verificationForm.value.typeDocument === 0"
             >
-              DNI debe tener <strong>8 dígitos</strong>.
+              DNI debe tener <strong>8 digitos</strong>.
             </div>
             <div
               *ngIf="verificationForm.get('document')?.errors?.['pattern'] && verificationForm.value.typeDocument === 1"
             >
-              CE debe tener <strong>9 caracteres</strong> (letras o números).
+              CE debe tener <strong>9 caracteres</strong> (letras o numeros).
             </div>
             <div
               *ngIf="verificationForm.get('document')?.errors?.['pattern'] && verificationForm.value.typeDocument === 2"
             >
               Pasaporte debe tener entre
-              <strong>6 y 11 caracteres</strong> (letras o números).
+              <strong>6 y 11 caracteres</strong> (letras o numeros).
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Botón verificar -->
+      <!-- Boton verificar -->
       <div class="pt-4">
         <button
           type="submit"
           [disabled]="isVerifyDocumentSubmitted"
-          class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg"
+          class="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-red-500/20 transform hover:scale-105 transition-all duration-300"
         >
           {{ isVerifyDocumentSubmitted ? "PROCESANDO..." : "VERIFICAR" }}
         </button>
@@ -120,106 +124,107 @@
   <!-- Formulario principal (Cliente existente o nuevo) -->
   <div
     *ngIf="isValid && customerVerified"
-    class="bg-white rounded-lg p-6 shadow-xl border-t-4 border-red-600"
+    class="bg-gray-900/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-gray-900/50 border-t-4 border-red-600"
   >
     <!-- Encabezado -->
     <div class="mb-8 text-center">
-      <h1 class="text-3xl font-bold text-gray-800 mb-2">
+      <div class="inline-block mb-3 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold tracking-widest uppercase">RESERVA</div>
+      <h1 class="text-3xl font-bold text-gray-100 mb-2">
         Reserva tu <span class="text-red-600">Tatuaje</span>
       </h1>
       <div class="w-24 h-1 bg-red-600 mx-auto mb-4"></div>
 
       <!-- Mensaje de bienvenida para cliente existente -->
-      <p *ngIf="existingCustomer" class="text-gray-600 text-xl">
+      <p *ngIf="existingCustomer" class="text-gray-400 text-xl">
         Hola
         <span class="font-bold text-red-600">{{ existingCustomer.name }}, </span
         ><br />
         Ya te encuentras en mi registro, solo termina de completar la
-        información solicitada
+        informacion solicitada
       </p>
       <!-- Mensaje para nuevo cliente -->
-      <p *ngIf="!existingCustomer" class="text-gray-600">
-        Déjanos tus datos para contactarte
+      <p *ngIf="!existingCustomer" class="text-gray-400">
+        Dejanos tus datos para contactarte
       </p>
     </div>
 
     <!-- Mensaje de privacidad -->
-    <div class="mb-6 bg-gray-100 border-l-4 border-red-600 p-4 rounded-r-md">
-      <p class="text-gray-700 text-sm">
-        <span class="font-bold text-red-600">🔒 Política de privacidad:</span>
-        Tus datos serán utilizados exclusivamente para ponernos en contacto
-        contigo. No compartiremos tu información con terceros bajo ninguna
+    <div class="mb-6 bg-gray-900 border-l-4 border-red-600 p-4 rounded-r-xl">
+      <p class="text-gray-300 text-sm">
+        <span class="font-bold text-red-600">Politica de privacidad:</span>
+        Tus datos seran utilizados exclusivamente para ponernos en contacto
+        contigo. No compartiremos tu informacion con terceros bajo ninguna
         circunstancia.
       </p>
     </div>
 
     <!-- Formulario -->
     <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" class="space-y-6">
-      <!-- Campos de cliente sólo visibles si es nuevo -->
-      <div
-        *ngIf="!existingCustomer"
-        class="grid grid-cols-1 md:grid-cols-2 gap-6"
-      >
-        <!-- Nombre -->
-        <div>
-          <label for="name" class="block font-medium text-gray-700 mb-2"
-            >Nombre<span class="text-red-600">*</span></label
-          >
-          <input
-            id="name"
-            formControlName="name"
-            type="text"
-            placeholder="Ingrese el nombre"
-            class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
-            [ngClass]="{
-              'border-red-500 ring-1 ring-red-500':
+      <!-- Campos de cliente solo visibles si es nuevo -->
+      <div *ngIf="!existingCustomer" class="bg-gray-800/30 rounded-2xl border border-gray-800/50 p-6">
+        <div class="flex items-center gap-2 mb-5"><div class="w-1 h-5 bg-red-500 rounded-full"></div><h3 class="text-base font-semibold text-gray-200">Datos Personales</h3></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Nombre -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-400 mb-1.5"
+              >Nombre<span class="text-red-600">*</span></label
+            >
+            <input
+              id="name"
+              formControlName="name"
+              type="text"
+              placeholder="Ingrese el nombre"
+              class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+              [ngClass]="{
+                'border-red-500 ring-1 ring-red-500':
+                  customerForm.get('name')?.invalid &&
+                  customerForm.get('name')?.touched
+              }"
+            />
+            <div
+              *ngIf="
                 customerForm.get('name')?.invalid &&
                 customerForm.get('name')?.touched
-            }"
-          />
-          <div
-            *ngIf="
-              customerForm.get('name')?.invalid &&
-              customerForm.get('name')?.touched
-            "
-            class="text-red-500 text-sm mt-1"
-          >
-            El nombre es requerido.
+              "
+              class="text-red-500 text-sm mt-1"
+            >
+              El nombre es requerido.
+            </div>
           </div>
-        </div>
 
-        <!-- Apellido -->
-        <div>
-          <label for="lastName" class="block font-medium text-gray-700 mb-2"
-            >Apellido<span class="text-red-600">*</span></label
-          >
-          <input
-            id="lastName"
-            formControlName="lastName"
-            type="text"
-            placeholder="Ingrese el apellido"
-            class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
-            [ngClass]="{
-              'border-red-500 ring-1 ring-red-500':
+          <!-- Apellido -->
+          <div>
+            <label for="lastName" class="block text-sm font-medium text-gray-400 mb-1.5"
+              >Apellido<span class="text-red-600">*</span></label
+            >
+            <input
+              id="lastName"
+              formControlName="lastName"
+              type="text"
+              placeholder="Ingrese el apellido"
+              class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+              [ngClass]="{
+                'border-red-500 ring-1 ring-red-500':
+                  customerForm.get('lastName')?.invalid &&
+                  customerForm.get('lastName')?.touched
+              }"
+            />
+            <div
+              *ngIf="
                 customerForm.get('lastName')?.invalid &&
                 customerForm.get('lastName')?.touched
-            }"
-          />
-          <div
-            *ngIf="
-              customerForm.get('lastName')?.invalid &&
-              customerForm.get('lastName')?.touched
-            "
-            class="text-red-500 text-sm mt-1"
-          >
-            El apellido es requerido.
+              "
+              class="text-red-500 text-sm mt-1"
+            >
+              El apellido es requerido.
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Email (visible para todos) -->
       <div *ngIf="!existingCustomer">
-        <label for="email" class="block font-medium text-gray-700 mb-2"
+        <label for="email" class="block text-sm font-medium text-gray-400 mb-1.5"
           >Email<span class="text-red-600">*</span></label
         >
         <input
@@ -227,7 +232,7 @@
           formControlName="email"
           type="email"
           placeholder="Ingrese el email"
-          class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+          class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
           [ngClass]="{
             'border-red-500 ring-1 ring-red-500':
               customerForm.get('email')?.invalid &&
@@ -252,13 +257,13 @@
       >
         <!-- Tipo de Documento -->
         <div>
-          <label for="typeDocument" class="block font-medium text-gray-700 mb-2"
+          <label for="typeDocument" class="block text-sm font-medium text-gray-400 mb-1.5"
             >Tipo de Documento<span class="text-red-600">*</span></label
           >
           <select
             id="typeDocument"
             formControlName="typeDocument"
-            class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition appearance-none"
+            class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition appearance-none"
             (ngModelChange)="applyDocumentValidators($event)"
           >
             <option selected [ngValue]="0">DNI</option>
@@ -269,15 +274,15 @@
 
         <!-- Documento -->
         <div>
-          <label for="document" class="block font-medium text-gray-700 mb-2"
+          <label for="document" class="block text-sm font-medium text-gray-400 mb-1.5"
             >Documento<span class="text-red-600">*</span></label
           >
           <input
             id="document"
             formControlName="document"
             type="text"
-            placeholder="Ingrese el número de documento"
-            class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+            placeholder="Ingrese el numero de documento"
+            class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
             [ngClass]="{
               'border-red-500 ring-1 ring-red-500':
                 customerForm.get('document')?.invalid &&
@@ -298,18 +303,18 @@
             <div
               *ngIf="customerForm.get('document')?.errors?.['pattern'] && customerForm.value.typeDocument === 0"
             >
-              DNI debe tener <strong>8 dígitos</strong>.
+              DNI debe tener <strong>8 digitos</strong>.
             </div>
             <div
               *ngIf="customerForm.get('document')?.errors?.['pattern'] && customerForm.value.typeDocument === 1"
             >
-              CE debe tener <strong>9 caracteres</strong> (letras o números).
+              CE debe tener <strong>9 caracteres</strong> (letras o numeros).
             </div>
             <div
               *ngIf="customerForm.get('document')?.errors?.['pattern'] && customerForm.value.typeDocument === 2"
             >
               Pasaporte debe tener entre
-              <strong>6 y 11 caracteres</strong> (letras o números).
+              <strong>6 y 11 caracteres</strong> (letras o numeros).
             </div>
           </div>
         </div>
@@ -319,11 +324,11 @@
         class="grid grid-cols-1 md:grid-cols-2 gap-6"
         *ngIf="!existingCustomer"
       >
-       <!-- Celular con selector de país -->
+       <!-- Celular con selector de pais -->
 <div>
-  <label for="cellphone" class="block font-medium text-gray-700 mb-2">Celular<span class="text-red-600">*</span></label>
+  <label for="cellphone" class="block text-sm font-medium text-gray-400 mb-1.5">Celular<span class="text-red-600">*</span></label>
   <div class="flex gap-2">
-    <!-- Selector de país con filtro -->
+    <!-- Selector de pais con filtro -->
     <div class="w-32 relative country-selector">
       <input
         type="text"
@@ -332,60 +337,60 @@
         (input)="filterCountries($any($event.target).value)"
         (focus)="showCountryDropdown = true"
         [placeholder]="selectedCountry.flag + ' +' + selectedCountry.dialCode"
-        class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+        class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
       />
-      
+
       <!-- Icono dropdown -->
       <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg>
       </div>
-      
-      <!-- Dropdown países filtrados -->
-      <div *ngIf="showCountryDropdown" class="absolute z-10 w-48 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+
+      <!-- Dropdown paises filtrados -->
+      <div *ngIf="showCountryDropdown" class="absolute z-10 w-48 mt-1 bg-gray-900/95 backdrop-blur-md border border-gray-700/50 rounded-xl shadow-lg max-h-48 overflow-y-auto">
         <div *ngIf="filteredCountries.length === 0" class="p-2 text-gray-500 text-sm">
           No encontrado
         </div>
-        <div 
+        <div
           *ngFor="let country of filteredCountries"
           (click)="selectCountry(country)"
-          class="p-2 hover:bg-gray-100 cursor-pointer flex items-center text-sm">
+          class="p-2 hover:bg-gray-800/50 cursor-pointer flex items-center text-sm text-gray-300">
           <span class="mr-2">{{country.flag}}</span>
           <span>+{{country.dialCode}}</span>
         </div>
       </div>
     </div>
-    
-    <!-- Input del número -->
+
+    <!-- Input del numero -->
     <div class="flex-1">
-      <input 
-        id="cellphone" 
-        formControlName="cellphone" 
-        type="tel" 
-        placeholder="Número de celular"
-        class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+      <input
+        id="cellphone"
+        formControlName="cellphone"
+        type="tel"
+        placeholder="Numero de celular"
+        class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
         [ngClass]="{'border-red-500 ring-1 ring-red-500': customerForm.get('cellphone')?.invalid && customerForm.get('cellphone')?.touched}"
       />
     </div>
   </div>
   <div *ngIf="customerForm.get('cellphone')?.invalid && customerForm.get('cellphone')?.touched" class="text-red-500 text-sm mt-1">
   <div *ngIf="customerForm.get('cellphone')?.errors?.['required']">El celular es requerido.</div>
-  <div *ngIf="customerForm.get('cellphone')?.errors?.['minlength']">El celular debe tener al menos 6 dígitos.</div>
-  <div *ngIf="customerForm.get('cellphone')?.errors?.['maxlength']">El celular no puede tener más de 15 dígitos.</div>
-  <div *ngIf="customerForm.get('cellphone')?.errors?.['pattern']">El celular solo debe contener números.</div>
+  <div *ngIf="customerForm.get('cellphone')?.errors?.['minlength']">El celular debe tener al menos 6 digitos.</div>
+  <div *ngIf="customerForm.get('cellphone')?.errors?.['maxlength']">El celular no puede tener mas de 15 digitos.</div>
+  <div *ngIf="customerForm.get('cellphone')?.errors?.['pattern']">El celular solo debe contener numeros.</div>
 </div>
 </div>
-        <!-- Cumpleaños -->
+        <!-- Cumpleanos -->
         <div>
-          <label for="birthday" class="block font-medium text-gray-700 mb-2"
-            >Cumpleaños<span class="text-red-600">*</span></label
+          <label for="birthday" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Cumpleanos<span class="text-red-600">*</span></label
           >
           <input
             id="birthday"
             formControlName="birthday"
             type="date"
-            class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+            class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
             [ngClass]="{
               'border-red-500 ring-1 ring-red-500':
                 customerForm.get('birthday')?.invalid &&
@@ -399,14 +404,14 @@
             "
             class="text-red-500 text-sm mt-1"
           >
-            El cumpleaños es requerido.
+            El cumpleanos es requerido.
           </div>
         </div>
       </div>
 
       <!-- Instagram (si es cliente nuevo) -->
       <div *ngIf="!existingCustomer">
-        <label for="instagram" class="block font-medium text-gray-700 mb-2"
+        <label for="instagram" class="block text-sm font-medium text-gray-400 mb-1.5"
           >Instagram (Opcional)</label
         >
         <div class="relative">
@@ -418,25 +423,25 @@
             formControlName="instagram"
             type="text"
             placeholder="Ingrese el usuario de Instagram"
-            class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md pl-8 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+            class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl pl-8 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
           />
         </div>
       </div>
 
       <!-- Campo de referencia (visible para todos) -->
       <div>
-        <label for="reference" class="block font-medium text-gray-700 mb-2">
+        <label for="reference" class="block text-sm font-medium text-gray-400 mb-1.5">
           Referencias anime<span class="text-red-600">*</span>
           <span class="text-xs text-gray-500 ml-2"
-            >Descríbenos el diseño que te gustaría</span
+            >Describenos el diseno que te gustaria</span
           >
         </label>
         <textarea
           id="reference"
           formControlName="reference"
           rows="4"
-          placeholder="Describe el estilo, personajes, escenas anime que te gustaría para tu tatuaje..."
-          class="w-full p-3 bg-gray-50 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+          placeholder="Describe el estilo, personajes, escenas anime que te gustaria para tu tatuaje..."
+          class="w-full p-3 bg-gray-800/50 border border-gray-700/50 text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
           [ngClass]="{
             'border-red-500 ring-1 ring-red-500':
               customerForm.get('reference')?.invalid &&
@@ -460,33 +465,33 @@
         <button
           type="submit"
           [disabled]="isSubmitted"
-          class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg"
+          class="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-red-500/20 transform hover:scale-105 transition-all duration-300"
         >
           {{ isSubmitted ? "PROCESANDO..." : "RESERVAR MI CITA" }}
         </button>
         <p class="text-gray-500 text-xs text-center mt-3">
-          Al registrarte, aceptas nuestras políticas de privacidad
+          Al registrarte, aceptas nuestras politicas de privacidad
         </p>
       </div>
     </form>
   </div>
 
-  <!-- Decoración para negocio de tatuajes -->
-  <div class="mt-8 bg-white p-4 rounded-lg shadow-md">
-    <div class="flex items-center justify-center space-x-4 text-gray-700">
+  <!-- Decoracion para negocio de tatuajes -->
+  <div class="mt-8 bg-gray-900/80 backdrop-blur-sm p-4 rounded-2xl shadow-lg shadow-gray-900/50 border border-gray-800/50">
+    <div class="flex items-center justify-center space-x-4 text-gray-300">
       <div class="text-center">
-        <div class="text-red-600 font-bold">✓</div>
+        <div class="text-red-600 font-bold">&#10003;</div>
         <div class="text-sm">Arte personalizado</div>
       </div>
-      <div class="h-8 w-px bg-gray-300"></div>
+      <div class="h-8 w-px bg-gray-600"></div>
       <div class="text-center">
-        <div class="text-red-600 font-bold">✓</div>
+        <div class="text-red-600 font-bold">&#10003;</div>
         <div class="text-sm">Higiene garantizada</div>
       </div>
-      <div class="h-8 w-px bg-gray-300"></div>
+      <div class="h-8 w-px bg-gray-600"></div>
       <div class="text-center">
-        <div class="text-red-600 font-bold">✓</div>
-        <div class="text-sm">Inspiración anime</div>
+        <div class="text-red-600 font-bold">&#10003;</div>
+        <div class="text-sm">Inspiracion anime</div>
       </div>
     </div>
   </div>

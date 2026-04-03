@@ -1,20 +1,26 @@
-<div class="container mx-auto p-4">
-  <h1 class="text-3xl font-bold text-gray-800 mb-2">
-    {{
-      workOrderId ? "Editar Orden de Trabajo" : "Crear Nueva Orden de Trabajo"
-    }}
-  </h1>
+<div class="container mx-auto p-4 relative">
+  <!-- Glow decorative -->
+  <div class="absolute top-20 right-10 w-72 h-72 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="mb-6">
+    <div class="inline-block mb-2 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold tracking-widest uppercase">EDITAR ORDEN</div>
+    <h1 class="text-3xl font-bold text-gray-100">
+      {{
+        workOrderId ? "Editar Orden de Trabajo" : "Crear Nueva Orden de Trabajo"
+      }}
+    </h1>
+  </div>
 
   <div *ngIf="loading" class="flex justify-center items-center py-8">
     <div
-      class="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-t-red-600"
+      class="animate-spin rounded-full h-10 w-10 border-4 border-gray-700 border-t-red-500"
     ></div>
-    <p class="ml-3 text-gray-600">Cargando datos...</p>
+    <p class="ml-3 text-gray-400">Cargando datos...</p>
   </div>
 
   <div
     *ngIf="error"
-    class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md mb-6"
+    class="bg-red-900/30 border-l-4 border-red-500 p-4 rounded-xl mb-6"
   >
     <div class="flex items-center">
       <svg
@@ -43,365 +49,387 @@
     (ngSubmit)="onSubmit()"
     class="space-y-6"
   >
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Nombre del Cliente -->
-      <div class="md:col-span-2">
-        <label for="customerName" class="block text-gray-700 font-medium mb-2"
-          >Nombre del Cliente</label
-        >
-        <input
-          id="customerName"
-          type="text"
-          formControlName="customerName"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all opacity-60"
-          placeholder="Ingrese el nombre del cliente"
-        />
+    <div class="bg-gray-900 rounded-2xl shadow-lg shadow-gray-900/50 p-6">
+      <div class="flex items-center gap-2 mb-6">
+        <div class="w-1 h-5 bg-red-500 rounded-full"></div>
+        <h3 class="text-lg font-semibold text-gray-100">Datos del Cliente</h3>
       </div>
-
-      <!-- Servicio -->
-      <div>
-        <label for="serviceType" class="block text-gray-700 font-medium mb-2"
-          >Servicio</label
-        >
-        <input
-          id="serviceType"
-          type="text"
-          formControlName="serviceType"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all opacity-60"
-          placeholder="Tipo de servicio"
-        />
-      </div>
-
-      <!-- Agendado por -->
-      <div>
-        <label for="schedulerId" class="block text-gray-700 font-medium mb-2"
-          >Agendado por</label
-        >
-        <div class="relative">
-          <select
-            id="schedulerId"
-            formControlName="schedulerId"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Nombre del Cliente -->
+        <div class="md:col-span-2">
+          <label for="customerName" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Nombre del Cliente</label
           >
-            <option value="" disabled selected>Seleccionar</option>
-            <option value="1">Morphine</option>
-            <option value="2">Lima Espacio</option>
-            <option value="3">Proyecto</option>
-            <option value="4">Susana</option>
-          </select>
-          <div
-            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
-          >
-            <svg
-              class="fill-current h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M7 10l5 5 5-5H7z" />
-            </svg>
-          </div>
-        </div>
-        <div
-          *ngIf="
-            workOrderForm.get('schedulerId')?.invalid &&
-            workOrderForm.get('schedulerId')?.touched
-          "
-          class="text-red-500 text-sm mt-1"
-        >
-          Seleccione un agendador.
-        </div>
-      </div>
-
-      <!-- Descripción -->
-      <div class="md:col-span-2">
-        <label for="description" class="block text-gray-700 font-medium mb-2"
-          >Descripción</label
-        >
-        <textarea
-          id="description"
-          formControlName="description"
-          rows="4"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
-          placeholder="Detalles del trabajo"
-        ></textarea>
-      </div>
-
-            <!-- Fecha de Creación del Estudio -->
-      <div>
-        <label for="creationDate" class="block text-gray-700 font-medium mb-2"
-          >Fecha de Creación del Estudio</label
-        >
-        <input
-          id="creationDate"
-          formControlName="creationDate"
-          type="date"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
-        />
-        <div
-          *ngIf="
-            workOrderForm.get('creationDate')?.invalid &&
-            workOrderForm.get('creationDate')?.touched
-          "
-          class="text-red-500 text-sm mt-1"
-        >
-          La fecha de creación es requerida.
-        </div>
-      </div>
-
-      <!-- Fecha Programada -->
-      <div>
-        <label for="scheduleDate" class="block text-gray-700 font-medium mb-2"
-          >Fecha Programada del Tatuaje</label
-        >
-        <input
-          id="scheduleDate"
-          formControlName="scheduleDate"
-          type="date"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
-        />
-        <div
-          *ngIf="
-            workOrderForm.get('scheduleDate')?.invalid &&
-            workOrderForm.get('scheduleDate')?.touched
-          "
-          class="text-red-500 text-sm mt-1"
-        >
-          La fecha es requerida.
-        </div>
-      </div>
-
-      <div>
-        <label for="scheduleTime" class="block text-gray-700 font-medium mb-2"
-          >Hora Programada</label
-        >
-        <input
-          id="scheduleTime"
-          formControlName="scheduleTime"
-          type="time"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
-        />
-        <div
-          *ngIf="
-            workOrderForm.get('scheduleTime')?.invalid &&
-            workOrderForm.get('scheduleTime')?.touched
-          "
-          class="text-red-500 text-sm mt-1"
-        >
-          La hora es requerida.
-        </div>
-      </div>
-
-      <!-- Duración del Tatuaje -->
-      <div>
-        <label for="duration" class="block text-gray-700 font-medium mb-2"
-          >Duración del Tatuaje (horas)</label
-        >
-        <div class="relative">
-          <select
-            id="duration"
-            formControlName="duration"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
-          >
-            <option value="" disabled selected>Seleccione duración</option>
-            <option value="2">2 horas</option>
-            <option value="3">3 horas</option>
-            <option value="4">4 horas</option>
-            <option value="5">5 horas</option>
-            <option value="6">6 horas</option>
-            <option value="7">7 horas</option>
-            <option value="8">8 horas</option>
-            <option value="9">9 horas</option>
-            <option value="10">10 horas</option>
-            <option value="11">11 horas</option>
-            <option value="12">12 horas</option>
-          </select>
-          <div
-            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
-          >
-            <svg
-              class="fill-current h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M7 10l5 5 5-5H7z" />
-            </svg>
-          </div>
-        </div>
-        <div
-          *ngIf="
-            workOrderForm.get('duration')?.invalid &&
-            workOrderForm.get('duration')?.touched
-          "
-          class="text-red-500 text-sm mt-1"
-        >
-          Seleccione la duración del tatuaje.
-        </div>
-      </div>
-
-      <!-- Medio de Pago Adelanto -->
-      <div>
-        <label
-          for="paymentMethodAdvance"
-          class="block text-gray-700 font-medium mb-2"
-          >Medio de Pago (Adelanto)</label
-        >
-        <div class="relative">
-          <select
-            id="paymentMethodAdvance"
-            formControlName="paymentMethodAdvance"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
-          >
-            <option [ngValue]="PaymentMethod.Plin">Plin</option>
-            <option [ngValue]="PaymentMethod.Yape">Yape</option>
-            <option [ngValue]="PaymentMethod.Efectivo">Efectivo</option>
-            <option [ngValue]="PaymentMethod.Tarjeta">Tarjeta</option>
-            <option [ngValue]="PaymentMethod.Transferencia">
-              Transferencia
-            </option>
-          </select>
-          <div
-            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
-          >
-            <svg
-              class="fill-current h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M7 10l5 5 5-5H7z" />
-            </svg>
-          </div>
-        </div>
-        <div
-          *ngIf="
-            workOrderForm.get('paymentMethodAdvance')?.invalid &&
-            workOrderForm.get('paymentMethodAdvance')?.touched
-          "
-          class="text-red-500 text-sm mt-1"
-        >
-          Seleccione un método de pago.
-        </div>
-      </div>
-
-      <!-- Medio de Pago -->
-      <div>
-        <label for="paymentMethod" class="block text-gray-700 font-medium mb-2"
-          >Medio de Pago</label
-        >
-        <div class="relative">
-          <select
-            id="paymentMethod"
-            formControlName="paymentMethod"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
-          >
-            <option [ngValue]="PaymentMethod.Plin">Plin</option>
-            <option [ngValue]="PaymentMethod.Yape">Yape</option>
-            <option [ngValue]="PaymentMethod.Efectivo">Efectivo</option>
-            <option [ngValue]="PaymentMethod.Tarjeta">Tarjeta</option>
-            <option [ngValue]="PaymentMethod.Transferencia">
-              Transferencia
-            </option>
-          </select>
-          <div
-            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
-          >
-            <svg
-              class="fill-current h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M7 10l5 5 5-5H7z" />
-            </svg>
-          </div>
-        </div>
-        <div
-          *ngIf="
-            workOrderForm.get('paymentMethod')?.invalid &&
-            workOrderForm.get('paymentMethod')?.touched
-          "
-          class="text-red-500 text-sm mt-1"
-        >
-          Seleccione un método de pago.
-        </div>
-      </div>
-
-      <div>
-        <label for="percentage" class="block text-gray-700 font-medium mb-2"
-          >Porcentaje de adelanto</label
-        >
-        <div class="relative">
-          <select
-            id="percentage"
-            formControlName="percentage"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
-          >
-            <option [ngValue]="0">0%</option>
-            <option [ngValue]="30">30%</option>
-            <option [ngValue]="40">40%</option>
-          </select>
-          <div
-            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
-          >
-            <svg
-              class="fill-current h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M7 10l5 5 5-5H7z" />
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <!-- Precio Total -->
-      <div>
-        <label for="totalPrice" class="block text-gray-700 font-medium mb-2"
-          >Precio Bruto</label
-        >
-        <div class="relative">
-          <div
-            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
-          >
-            <span class="text-gray-500">S/</span>
-          </div>
           <input
-            id="totalPrice"
-            formControlName="totalPrice"
-            type="number"
-            step="0.01"
-            class="w-full px-4 py-3 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
-            placeholder="0.00"
+            id="customerName"
+            type="text"
+            formControlName="customerName"
+            class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all opacity-60"
+            placeholder="Ingrese el nombre del cliente"
           />
         </div>
-        <div
-          *ngIf="
-            workOrderForm.get('totalPrice')?.invalid &&
-            workOrderForm.get('totalPrice')?.touched
-          "
-          class="text-red-500 text-sm mt-1"
-        >
-          Ingrese un precio válido.
+
+        <!-- Servicio -->
+        <div>
+          <label for="serviceType" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Servicio</label
+          >
+          <input
+            id="serviceType"
+            type="text"
+            formControlName="serviceType"
+            class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all opacity-60"
+            placeholder="Tipo de servicio"
+          />
+        </div>
+
+        <!-- Agendado por -->
+        <div>
+          <label for="schedulerId" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Agendado por</label
+          >
+          <div class="relative">
+            <select
+              id="schedulerId"
+              formControlName="schedulerId"
+              class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+            >
+              <option value="" disabled selected>Seleccionar</option>
+              <option value="1">Morphine</option>
+              <option value="2">Lima Espacio</option>
+              <option value="3">Proyecto</option>
+              <option value="4">Susana</option>
+            </select>
+            <div
+              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-300"
+            >
+              <svg
+                class="fill-current h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M7 10l5 5 5-5H7z" />
+              </svg>
+            </div>
+          </div>
+          <div
+            *ngIf="
+              workOrderForm.get('schedulerId')?.invalid &&
+              workOrderForm.get('schedulerId')?.touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            Seleccione un agendador.
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Precio Adelantado -->
-      <div>
-        <label for="advancePrice" class="block text-gray-700 font-medium mb-2"
-          >Precio Adelantado</label
-        >
-        <div class="relative">
-          <div
-            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+    <div class="bg-gray-900 rounded-2xl shadow-lg shadow-gray-900/50 p-6">
+      <div class="flex items-center gap-2 mb-6">
+        <div class="w-1 h-5 bg-red-500 rounded-full"></div>
+        <h3 class="text-lg font-semibold text-gray-100">Detalles del Servicio</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Descripcion -->
+        <div class="md:col-span-2">
+          <label for="description" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Descripcion</label
           >
-            <span class="text-gray-500">S/</span>
-          </div>
+          <textarea
+            id="description"
+            formControlName="description"
+            rows="4"
+            class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+            placeholder="Detalles del trabajo"
+          ></textarea>
+        </div>
+
+        <!-- Fecha de Creacion del Estudio -->
+        <div>
+          <label for="creationDate" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Fecha de Creacion del Estudio</label
+          >
           <input
-            id="advancePrice"
-            formControlName="advancePrice"
-            type="number"
-            step="0.01"
-            class="w-full px-4 py-3 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
-            placeholder="0.00"
+            id="creationDate"
+            formControlName="creationDate"
+            type="date"
+            class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
           />
+          <div
+            *ngIf="
+              workOrderForm.get('creationDate')?.invalid &&
+              workOrderForm.get('creationDate')?.touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            La fecha de creacion es requerida.
+          </div>
+        </div>
+
+        <!-- Fecha Programada -->
+        <div>
+          <label for="scheduleDate" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Fecha Programada del Tatuaje</label
+          >
+          <input
+            id="scheduleDate"
+            formControlName="scheduleDate"
+            type="date"
+            class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+          />
+          <div
+            *ngIf="
+              workOrderForm.get('scheduleDate')?.invalid &&
+              workOrderForm.get('scheduleDate')?.touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            La fecha es requerida.
+          </div>
+        </div>
+
+        <div>
+          <label for="scheduleTime" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Hora Programada</label
+          >
+          <input
+            id="scheduleTime"
+            formControlName="scheduleTime"
+            type="time"
+            class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+          />
+          <div
+            *ngIf="
+              workOrderForm.get('scheduleTime')?.invalid &&
+              workOrderForm.get('scheduleTime')?.touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            La hora es requerida.
+          </div>
+        </div>
+
+        <!-- Duracion del Tatuaje -->
+        <div>
+          <label for="duration" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Duracion del Tatuaje (horas)</label
+          >
+          <div class="relative">
+            <select
+              id="duration"
+              formControlName="duration"
+              class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+            >
+              <option value="" disabled selected>Seleccione duracion</option>
+              <option value="2">2 horas</option>
+              <option value="3">3 horas</option>
+              <option value="4">4 horas</option>
+              <option value="5">5 horas</option>
+              <option value="6">6 horas</option>
+              <option value="7">7 horas</option>
+              <option value="8">8 horas</option>
+              <option value="9">9 horas</option>
+              <option value="10">10 horas</option>
+              <option value="11">11 horas</option>
+              <option value="12">12 horas</option>
+            </select>
+            <div
+              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-300"
+            >
+              <svg
+                class="fill-current h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M7 10l5 5 5-5H7z" />
+              </svg>
+            </div>
+          </div>
+          <div
+            *ngIf="
+              workOrderForm.get('duration')?.invalid &&
+              workOrderForm.get('duration')?.touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            Seleccione la duracion del tatuaje.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-gray-900 rounded-2xl shadow-lg shadow-gray-900/50 p-6">
+      <div class="flex items-center gap-2 mb-6">
+        <div class="w-1 h-5 bg-red-500 rounded-full"></div>
+        <h3 class="text-lg font-semibold text-gray-100">Pagos y Precios</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Medio de Pago Adelanto -->
+        <div>
+          <label
+            for="paymentMethodAdvance"
+            class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Medio de Pago (Adelanto)</label
+          >
+          <div class="relative">
+            <select
+              id="paymentMethodAdvance"
+              formControlName="paymentMethodAdvance"
+              class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+            >
+              <option [ngValue]="PaymentMethod.Plin">Plin</option>
+              <option [ngValue]="PaymentMethod.Yape">Yape</option>
+              <option [ngValue]="PaymentMethod.Efectivo">Efectivo</option>
+              <option [ngValue]="PaymentMethod.Tarjeta">Tarjeta</option>
+              <option [ngValue]="PaymentMethod.Transferencia">
+                Transferencia
+              </option>
+            </select>
+            <div
+              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-300"
+            >
+              <svg
+                class="fill-current h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M7 10l5 5 5-5H7z" />
+              </svg>
+            </div>
+          </div>
+          <div
+            *ngIf="
+              workOrderForm.get('paymentMethodAdvance')?.invalid &&
+              workOrderForm.get('paymentMethodAdvance')?.touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            Seleccione un metodo de pago.
+          </div>
+        </div>
+
+        <!-- Medio de Pago -->
+        <div>
+          <label for="paymentMethod" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Medio de Pago</label
+          >
+          <div class="relative">
+            <select
+              id="paymentMethod"
+              formControlName="paymentMethod"
+              class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+            >
+              <option [ngValue]="PaymentMethod.Plin">Plin</option>
+              <option [ngValue]="PaymentMethod.Yape">Yape</option>
+              <option [ngValue]="PaymentMethod.Efectivo">Efectivo</option>
+              <option [ngValue]="PaymentMethod.Tarjeta">Tarjeta</option>
+              <option [ngValue]="PaymentMethod.Transferencia">
+                Transferencia
+              </option>
+            </select>
+            <div
+              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-300"
+            >
+              <svg
+                class="fill-current h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M7 10l5 5 5-5H7z" />
+              </svg>
+            </div>
+          </div>
+          <div
+            *ngIf="
+              workOrderForm.get('paymentMethod')?.invalid &&
+              workOrderForm.get('paymentMethod')?.touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            Seleccione un metodo de pago.
+          </div>
+        </div>
+
+        <div>
+          <label for="percentage" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Porcentaje de adelanto</label
+          >
+          <div class="relative">
+            <select
+              id="percentage"
+              formControlName="percentage"
+              class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+            >
+              <option [ngValue]="0">0%</option>
+              <option [ngValue]="30">30%</option>
+              <option [ngValue]="40">40%</option>
+            </select>
+            <div
+              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-300"
+            >
+              <svg
+                class="fill-current h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M7 10l5 5 5-5H7z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Precio Total -->
+        <div>
+          <label for="totalPrice" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Precio Bruto</label
+          >
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+            >
+              <span class="text-gray-500">S/</span>
+            </div>
+            <input
+              id="totalPrice"
+              formControlName="totalPrice"
+              type="number"
+              step="0.01"
+              class="w-full px-4 py-3 pl-10 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+              placeholder="0.00"
+            />
+          </div>
+          <div
+            *ngIf="
+              workOrderForm.get('totalPrice')?.invalid &&
+              workOrderForm.get('totalPrice')?.touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            Ingrese un precio valido.
+          </div>
+        </div>
+
+        <!-- Precio Adelantado -->
+        <div>
+          <label for="advancePrice" class="block text-sm font-medium text-gray-400 mb-1.5"
+            >Precio Adelantado</label
+          >
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+            >
+              <span class="text-gray-500">S/</span>
+            </div>
+            <input
+              id="advancePrice"
+              formControlName="advancePrice"
+              type="number"
+              step="0.01"
+              class="w-full px-4 py-3 pl-10 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+              placeholder="0.00"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -411,7 +439,7 @@
       <button
         type="submit"
         [disabled]="isSumitted"
-        class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transform hover:scale-105 transition duration-300 shadow-lg"
+        class="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-red-500/20 transform hover:scale-105 transition duration-300"
       >
         {{ isSumitted ? "PROCESANDO..." : "EDITAR TATUAJE" }}
       </button>
