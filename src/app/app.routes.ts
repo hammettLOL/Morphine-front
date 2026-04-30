@@ -27,6 +27,6 @@ export const routes: Routes = [
   { path: 'add-customer-public/:token', component: AddCustomerPublicComponent, data:{ hideSidebar: true, canActivate:[NoAuthGuard] } },
   { path: 'work-orders', component: WorkOrderListComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin', 'BookingManager'] } },
   { path: 'add-service', component: AddServiceComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin'] } },
-  { path: 'add-customer', component: AddCustomerComponent, canActivate: [AuthGuard]},
+  { path: 'add-customer', component: AddCustomerComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin', 'BookingManager'] }},
   { path: '**', redirectTo: '/', pathMatch: 'full'},
 ];

@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { EditWorkOrderComponent } from '../../WorkOrder/edit-work-order/edit-work-order.component';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { PreviewWorkOrderComponent } from '../preview-work-order/preview-work-order.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { Role } from '../../../core/enums/role.enum';
 
 @Component({
   selector: 'app-work-order-list',
@@ -90,8 +92,13 @@ export class WorkOrderListComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly  toastService: ToastService,
-    private readonly modalService: ModalService
+    private readonly modalService: ModalService,
+    private readonly authService: AuthService
   ) {}
+
+  get canEdit(): boolean {
+    return this.authService.getUserRole() !== Role.AsistenteContable;
+  }
 
   ngOnInit(): void {
     const currentYear = this.today.getFullYear();
