@@ -13,6 +13,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { WorkOrder } from '../../../core/models/work-order.model';
 import { WorkOrderService } from '../../../core/services/work-order.service';
 import { AddCustomerComponent } from '../add-customer/add-customer.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { Role } from '../../../core/enums/role.enum';
 
 @Component({
   selector: 'app-customers-list',
@@ -65,12 +67,17 @@ export class CustomersListComponent implements OnInit {
     2: 'Pasaporte'
   };
 
-  constructor(private readonly customersService: CustomersService, 
+  constructor(private readonly customersService: CustomersService,
     private readonly router: Router,
     private readonly toastService: ToastService,
     private readonly modalService: ModalService,
-    private readonly  workOrderService: WorkOrderService
+    private readonly  workOrderService: WorkOrderService,
+    private readonly authService: AuthService
   ) {}
+
+  get canEdit(): boolean {
+    return this.authService.getUserRole() !== Role.AsistenteContable;
+  }
 
   ngOnInit(): void {
     this.loadCustomers();
