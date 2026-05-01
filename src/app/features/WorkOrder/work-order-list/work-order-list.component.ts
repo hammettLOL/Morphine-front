@@ -97,6 +97,14 @@ export class WorkOrderListComponent implements OnInit {
   ) {}
 
   get canEdit(): boolean {
+    return true;
+  }
+
+  get canCreate(): boolean {
+    return true;
+  }
+
+  get canDelete(): boolean {
     return this.authService.getUserRole() !== Role.AsistenteContable;
   }
 

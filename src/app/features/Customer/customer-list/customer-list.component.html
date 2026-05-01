@@ -8,7 +8,7 @@
       <h1 class="text-3xl font-bold text-gray-100">Lista de Clientes</h1>
     </div>
     <button
-    *ngIf="canEdit"
+    *ngIf="canCreate"
     (click)="addCustomer()"
     class="mt-4 md:mt-0 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-5 py-2.5 rounded-xl shadow-lg shadow-red-500/20 transition-all duration-200 flex items-center gap-2 font-medium"
     >
@@ -66,9 +66,10 @@
               </svg>
               <span>{{ customer.createdAt | date:'dd/MM/yyyy' }}</span>
             </div>
-            <div *ngIf="canEdit" class="flex mt-3 space-x-2 justify-end">
+            <div class="flex mt-3 space-x-2 justify-end">
                <!-- Boton para Agregar Orden de Trabajo -->
               <button
+              *ngIf="canCreateWorkOrder"
               (click)="addWorkOrder(customer)"
               class="p-2 rounded-xl bg-green-900/30 text-green-600 hover:bg-green-100 transition-all duration-200"
               title="Agregar Orden de Trabajo">
@@ -80,6 +81,7 @@
 
               <!-- Boton para Editar Cliente -->
               <button
+              *ngIf="canEdit"
               (click)="editCustomer(customer)"
               class="p-2 rounded-xl bg-blue-900/30 text-blue-600 hover:bg-blue-100 transition-all duration-200"
               title="Editar Cliente">
@@ -91,6 +93,7 @@
 
               <!-- Boton para Eliminar Cliente -->
               <button
+              *ngIf="canDelete"
               (click)="deleteCustomer(customer)"
               class="p-2 rounded-xl bg-red-900/30 text-red-600 hover:bg-red-100 transition-all duration-200"
               title="Eliminar Cliente">
@@ -116,7 +119,7 @@
             <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Tipo de Doc.</th>
             <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Documento</th>
             <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Celular</th>
-            <th *ngIf="canEdit" class="px-6 py-3 text-center text-xs font-bold text-gray-400 uppercase tracking-wider">Acciones</th>
+            <th class="px-6 py-3 text-center text-xs font-bold text-gray-400 uppercase tracking-wider">Acciones</th>
           </tr>
         </thead>
         <tbody class="bg-gray-900/80 divide-y divide-gray-800/50">
@@ -134,9 +137,10 @@
             </td>
             <td class="px-4 py-3 text-sm text-gray-400">{{ customer.document }}</td>
             <td class="px-4 py-3 text-sm text-gray-400">{{ customer.cellphone }}</td>
-            <td *ngIf="canEdit" class="px-4 py-3 text-sm text-gray-400">
+            <td class="px-4 py-3 text-sm text-gray-400">
               <div class="flex justify-center space-x-2">
                 <button
+                *ngIf="canCreateWorkOrder"
                 (click)="addWorkOrder(customer)"
                 class="p-2 rounded-xl bg-green-900/30 text-green-600 hover:bg-green-100 transition-all duration-200"
                 title="Agregar Orden de Trabajo">
@@ -147,6 +151,7 @@
                 </button>
 
                 <button
+                *ngIf="canEdit"
                 (click)="editCustomer(customer)"
                 class="p-2 rounded-xl bg-blue-900/30 text-blue-600 hover:bg-blue-100 transition-all duration-200"
                 title="Editar Cliente">
@@ -157,6 +162,7 @@
                 </button>
 
                 <button
+                *ngIf="canDelete"
                 (click)="deleteCustomer(customer)"
                 class="p-2 rounded-xl bg-red-900/30 text-red-600 hover:bg-red-100 transition-all duration-200"
                 title="Eliminar Cliente">

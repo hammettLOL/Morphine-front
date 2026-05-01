@@ -7,7 +7,6 @@ import { HomeComponent } from './components/home/home.component';
 import { NoAuthGuard } from '../guards/no-auth.guard';
 import { AddServiceComponent } from './features/Service/add-service/add-service.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { AddWorkOrderComponent } from './features/WorkOrder/add-work-order/add-work-order.component';
 import { WorkOrderListComponent } from './features/WorkOrder/work-order-list/work-order-list.component';
 import { CustomerDetailComponent } from './features/Customer/customer-detail/customer-detail.component';
 import { AddCustomerPublicComponent } from './features/Customer/add-customer-public/add-customer-public.component';
@@ -27,6 +26,6 @@ export const routes: Routes = [
   { path: 'add-customer-public/:token', component: AddCustomerPublicComponent, data:{ hideSidebar: true, canActivate:[NoAuthGuard] } },
   { path: 'work-orders', component: WorkOrderListComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin', 'BookingManager', 'AsistenteContable'] } },
   { path: 'add-service', component: AddServiceComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin'] } },
-  { path: 'add-customer', component: AddCustomerComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin', 'BookingManager'] }},
+  { path: 'add-customer', component: AddCustomerComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin', 'BookingManager', 'AsistenteContable'] }},
   { path: '**', redirectTo: '/', pathMatch: 'full'},
 ];

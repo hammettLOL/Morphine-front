@@ -75,8 +75,20 @@ export class CustomersListComponent implements OnInit {
     private readonly authService: AuthService
   ) {}
 
+  get canCreate(): boolean {
+    return true;
+  }
+
   get canEdit(): boolean {
     return this.authService.getUserRole() !== Role.AsistenteContable;
+  }
+
+  get canDelete(): boolean {
+    return this.authService.getUserRole() !== Role.AsistenteContable;
+  }
+
+  get canCreateWorkOrder(): boolean {
+    return true;
   }
 
   ngOnInit(): void {
