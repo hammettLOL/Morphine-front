@@ -80,7 +80,7 @@ export class CustomersListComponent implements OnInit {
   }
 
   get canEdit(): boolean {
-    return this.authService.getUserRole() !== Role.AsistenteContable;
+    return true;
   }
 
   get canDelete(): boolean {
