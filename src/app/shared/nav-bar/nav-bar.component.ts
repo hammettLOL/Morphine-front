@@ -8,7 +8,7 @@ import { getDefaultRouteForRole } from '../../core/config/navigation.config';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.scss']
+  styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent {
   @Output() toggleSidebar: EventEmitter<void> = new EventEmitter<void>();

@@ -9,7 +9,7 @@ import { MENU_ITEMS, MenuItem } from '../../core/config/navigation.config';
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './side-bar.component.html',
-  styleUrls: ['./side-bar.component.scss']
+  styleUrls: ['./side-bar.component.css']
 })
 export class SideBarComponent {
   private readonly authService = inject(AuthService);

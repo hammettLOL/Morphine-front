@@ -10,7 +10,7 @@ import { Countries, Country } from '../../../core/models/country';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './add-customer.component.html',
-  styleUrls: ['./add-customer.component.scss']
+  styleUrls: ['./add-customer.component.css']
 })
 export class AddCustomerComponent implements OnInit {
   customerForm!: FormGroup;
