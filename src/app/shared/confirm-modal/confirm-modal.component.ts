@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './confirm-modal.component.html',
-  styleUrls: ['./confirm-modal.component.scss'],
+  styleUrls: ['./confirm-modal.component.css'],
   animations: [
     trigger('modalAnimation', [
       transition(':enter', [

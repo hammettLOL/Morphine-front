@@ -8,7 +8,7 @@ export type ToastType = 'success' | 'danger' | 'warning';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './toast.component.html',
-  styleUrls: ['./toast.component.scss']
+  styleUrls: ['./toast.component.css']
 })
 export class ToastComponent {
   @Input() type: ToastType = 'success';
