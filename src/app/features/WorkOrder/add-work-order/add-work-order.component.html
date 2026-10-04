@@ -132,7 +132,9 @@
           <label for="schedulerId" class="block text-sm font-medium text-gray-400 mb-1.5"
             >Agendado por</label
           >
-          <div class="relative">
+          <div *ngIf="isBookingManager" data-testid="scheduler-fijo"
+            class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/30 text-gray-300">Susana</div>
+          <div class="relative" *ngIf="!isBookingManager">
             <select
               id="schedulerId"
               formControlName="schedulerId"
