@@ -11,6 +11,7 @@ import { WorkOrder } from '../../../core/models/work-order.model';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { getDefaultSchedulerForRole } from '../../../core/utils/scheduler.utils';
+import { Role } from '../../../core/enums/role.enum';
 
 @Component({
   selector: 'app-add-work-order',
@@ -31,6 +32,8 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
   loading = false;
   error: any;
   isSumitted = false;
+  // La booking manager siempre agenda como Susana (el backend tambien lo fuerza)
+  isBookingManager = false;
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -45,10 +48,12 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
    }
 
    initForm(){
+    const role = this.authService.getUserRole();
+    this.isBookingManager = role === Role.BookingManager;
     this.workOrderForm = this.fb.group({
       customerId: [this.customerId, Validators.required],
       serviceId: ['', Validators.required],
-      schedulerId: [getDefaultSchedulerForRole(this.authService.getUserRole()), Validators.required],
+      schedulerId: [getDefaultSchedulerForRole(role), Validators.required],
       description: [''],
       status: [Status.Completado, Validators.required],
       creationDate: ['', Validators.required],
