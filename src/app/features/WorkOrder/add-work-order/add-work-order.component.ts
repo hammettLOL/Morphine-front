@@ -9,6 +9,8 @@ import { Status } from '../../../core/enums/status.enum';
 import { PaymentMethod } from '../../../core/enums/payment-method.enum';
 import { WorkOrder } from '../../../core/models/work-order.model';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { AuthService } from '../../../core/services/auth.service';
+import { getDefaultSchedulerForRole } from '../../../core/utils/scheduler.utils';
 
 @Component({
   selector: 'app-add-work-order',
@@ -36,7 +38,8 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly serviceService: ServicesService,
     private readonly customerService: CustomersService,
-    private readonly toastService: ToastService
+    private readonly toastService: ToastService,
+    private readonly authService: AuthService
   ) {
 
    }
@@ -45,7 +48,7 @@ export class AddWorkOrderComponent implements OnInit, OnDestroy {
     this.workOrderForm = this.fb.group({
       customerId: [this.customerId, Validators.required],
       serviceId: ['', Validators.required],
-      schedulerId: [1, Validators.required],
+      schedulerId: [getDefaultSchedulerForRole(this.authService.getUserRole()), Validators.required],
       description: [''],
       status: [Status.Completado, Validators.required],
       creationDate: ['', Validators.required],
