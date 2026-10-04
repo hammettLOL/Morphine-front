@@ -92,7 +92,7 @@
             <div>
               <div class="text-red-100 text-xs font-semibold uppercase tracking-wider">Monto Morphine</div>
               <div class="mt-2 text-3xl font-bold">{{ metrics.morphineOwnIncome| currency:'S/ ':'symbol':'1.2-2' }}</div>
-              <div class="text-red-100 text-sm mt-1">Mi % después de comisión</div>
+              <div class="text-red-100 text-sm mt-1">Citas de Morphine y Susana</div>
             </div>
             <div class="h-12 w-12 bg-white bg-opacity-10 rounded-lg flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -110,7 +110,7 @@
             <div>
               <div class="text-blue-100 text-xs font-semibold uppercase tracking-wider">Lima Espacio me dio</div>
               <div class="mt-2 text-3xl font-bold">{{ metrics.limaEspacioIncome | currency:'S/ ':'symbol':'1.2-2' }}</div>
-              <div class="text-blue-100 text-sm mt-1">Sus citas terminadas</div>
+              <div class="text-blue-100 text-sm mt-1">Sus citas (sin canceladas)</div>
             </div>
             <div class="h-12 w-12 bg-white bg-opacity-10 rounded-lg flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -125,7 +125,7 @@
 
     <!-- Métricas Secundarias - Fila inferior (2 tarjetas centradas) -->
     <div class="flex justify-center mb-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
         
         <!-- Agendado por Morphine para Lima Espacio -->
         <div class="bg-gradient-to-br from-purple-600 to-purple-500 rounded-2xl shadow-lg text-white overflow-hidden">
@@ -162,6 +162,24 @@
             </div>
           </div>
         </div>
+
+        <!-- Adelantos devueltos por citas canceladas -->
+        <div class="bg-gradient-to-br from-emerald-600 to-emerald-500 rounded-2xl shadow-lg text-white overflow-hidden">
+          <div class="p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-emerald-100 text-xs font-semibold uppercase tracking-wider">Adelantos devueltos</div>
+                <div data-testid="adelantos-devueltos" class="mt-2 text-3xl font-bold">{{ metrics.canceledAdvanceRefund | currency:'S/ ':'symbol':'1.2-2' }}</div>
+                <div class="text-emerald-100 text-sm mt-1">Citas canceladas</div>
+              </div>
+              <div class="h-12 w-12 bg-white bg-opacity-10 rounded-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -172,7 +190,7 @@
       <div class="bg-gray-900/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/50 border border-gray-800/50 p-6">
         <div class="flex items-center gap-2 mb-4"><div class="w-1 h-5 bg-red-500 rounded-full"></div><h3 class="text-lg font-semibold text-gray-100">Desglose por Ubicación</h3></div>
 
-        <div class="space-y-4">
+        <div class="space-y-4" data-testid="desglose">
           <div class="flex justify-between items-center p-4 bg-indigo-900/30 rounded-lg">
             <div>
               <span class="font-medium text-gray-100">Total General Ingresos</span>
@@ -186,19 +204,9 @@
           <div class="flex justify-between items-center p-4 bg-red-900/30 rounded-lg">
             <div>
               <span class="font-medium text-gray-100">Monto Morphine Neto</span>
-              <p class="text-sm text-gray-400">Mi % después de comisión del studio</p>
+              <p class="text-sm text-gray-400">Citas de Morphine y Susana, sin el adelanto del estudio</p>
             </div>
             <span class="text-lg font-bold text-red-600">
-              {{ metrics.morphineOwnIncome | currency:'S/ ':'symbol':'1.2-2' }}
-            </span>
-          </div>
-          
-          <div class="flex justify-between items-center p-4 bg-purple-900/30 rounded-lg">
-            <div>
-              <span class="font-medium text-gray-100">Mis Citas (Morphine)</span>
-              <p class="text-sm text-gray-400">Citas que agendé yo</p>
-            </div>
-            <span class="text-lg font-bold text-purple-600">
               {{ metrics.morphineOwnIncome | currency:'S/ ':'symbol':'1.2-2' }}
             </span>
           </div>
@@ -206,7 +214,7 @@
           <div class="flex justify-between items-center p-4 bg-blue-900/30 rounded-lg">
             <div>
               <span class="font-medium text-gray-100">Citas Lima Espacio</span>
-              <p class="text-sm text-gray-400">Citas de Lima Espacio terminadas</p>
+              <p class="text-sm text-gray-400">Citas agendadas por Lima Espacio</p>
             </div>
             <span class="text-lg font-bold text-blue-600">
               {{ metrics.limaEspacioIncome | currency:'S/ ':'symbol':'1.2-2' }}
@@ -221,18 +229,23 @@
 
         <div class="space-y-4">
           <div class="flex justify-between items-center">
-            <span class="text-gray-400">Total de Citas Terminadas</span>
+            <span class="text-gray-400">Total de Citas (sin canceladas)</span>
             <span class="font-semibold text-gray-100">{{ metrics.totalCompletedAppointments }}</span>
           </div>
 
           <div class="flex justify-between items-center">
-            <span class="text-gray-400">Citas Agendadas por Mí</span>
+            <span class="text-gray-400">Citas de Morphine y Susana</span>
             <span class="font-semibold text-gray-100">{{ metrics.morphineScheduledAppointments }}</span>
           </div>
 
           <div class="flex justify-between items-center">
             <span class="text-gray-400">Citas de Lima Espacio</span>
             <span class="font-semibold text-gray-100">{{ metrics.limaEspacioAppointments }}</span>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">Citas Canceladas</span>
+            <span data-testid="citas-canceladas" class="font-semibold text-gray-100">{{ metrics.canceledAppointments }}</span>
           </div>
 
           <div class="flex justify-between items-center pt-2 border-t border-gray-800/50">
@@ -248,24 +261,24 @@
       <div class="flex items-center gap-2 mb-4"><div class="w-1 h-5 bg-red-500 rounded-full"></div><h3 class="text-xl font-semibold">Resumen Ejecutivo</h3></div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="text-center">
-          <div class="text-2xl font-bold text-green-400">
-            {{ ((metrics.morphineOwnIncome / metrics.totalGeneralIncome) * 100) | number:'1.0-0' }}%
+          <div data-testid="porcentaje-morphine" class="text-2xl font-bold text-green-400">
+            {{ ratio(metrics.morphineOwnIncome, metrics.totalGeneralIncome) | percent:'1.0-0' }}
           </div>
-          <div class="text-gray-300 text-sm">% Real de Comisión Morphine</div>
+          <div class="text-gray-300 text-sm">Participación Morphine</div>
         </div>
         
         <div class="text-center">
-          <div class="text-2xl font-bold text-blue-400">
-            {{ ((metrics.limaEspacioIncome / metrics.totalGeneralIncome) * 100) | number:'1.0-0' }}%
+          <div data-testid="porcentaje-lima-espacio" class="text-2xl font-bold text-blue-400">
+            {{ ratio(metrics.limaEspacioIncome, metrics.totalGeneralIncome) | percent:'1.0-0' }}
           </div>
           <div class="text-gray-300 text-sm">Participación Lima Espacio</div>
         </div>
         
         <div class="text-center">
-          <div class="text-2xl font-bold text-purple-400">
-            {{ (metrics.totalGeneralIncome / metrics.totalCompletedAppointments) | currency:'S/ ':'symbol':'1.0-0' }}
+          <div data-testid="promedio-por-cita" class="text-2xl font-bold text-purple-400">
+            {{ ratio(metrics.totalGeneralIncome, metrics.totalCompletedAppointments) | currency:'S/ ':'symbol':'1.0-0' }}
           </div>
-          <div class="text-gray-300 text-sm">Precio Promedio por Tatuaje</div>
+          <div class="text-gray-300 text-sm">Ingreso Neto Promedio por Cita</div>
         </div>
       </div>
     </div>

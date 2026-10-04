@@ -131,6 +131,31 @@
         <h3 class="text-lg font-semibold text-gray-100">Detalles del Servicio</h3>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Estado -->
+        <div>
+          <label for="status" class="block text-sm font-medium text-gray-400 mb-1.5">Estado</label>
+          <div class="relative">
+            <select
+              id="status"
+              formControlName="status"
+              class="w-full px-4 py-3 rounded-xl border border-gray-700/50 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none focus:border-transparent transition"
+            >
+              <option [ngValue]="Status.Pendiente">Pendiente</option>
+              <option [ngValue]="Status.EnProgreso">En progreso</option>
+              <option [ngValue]="Status.Completado">Finalizado</option>
+              <option [ngValue]="Status.Cancelado">Cancelado</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-300">
+              <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M7 10l5 5 5-5H7z" />
+              </svg>
+            </div>
+          </div>
+          <p *ngIf="workOrderForm.get('status')?.value === Status.Cancelado" class="text-gray-500 text-xs mt-1">
+            El adelanto vuelve a Morphine y la cita no suma ingresos.
+          </p>
+        </div>
+
         <!-- Descripcion -->
         <div class="md:col-span-2">
           <label for="description" class="block text-sm font-medium text-gray-400 mb-1.5"

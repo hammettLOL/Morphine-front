@@ -80,6 +80,11 @@ export class DashboardComponent implements OnInit {
     this.metrics = undefined;
   }
 
+  // Evita NaN/Infinity cuando el mes no tiene ingresos o citas
+  ratio(part: number, total: number): number {
+    return total ? part / total : 0;
+  }
+
   loadMetrics(): void {
     if (this.periodForm.invalid) {
       this.periodForm.markAllAsTouched();
