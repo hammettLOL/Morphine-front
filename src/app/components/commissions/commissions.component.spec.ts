@@ -74,6 +74,15 @@ describe('CommissionsComponent', () => {
     expect(fixture.nativeElement.textContent).toContain('Lun 01/06 - Dom 07/06');
   });
 
+  it('en una semana sin meta muestra la cita como 5% sin meta', () => {
+    getMonthlyCommissions.mockReturnValue(of(comision({
+      citas: [{ ...comision().citas[0], tipoComision: 'SinMeta', comision: 100 }]
+    })));
+    const fixture = crear({ anio: '2026', mes: '6' });
+
+    expect(fixture.nativeElement.textContent).toContain('5% (semana sin meta)');
+  });
+
   it('sin parametros carga el mes actual', () => {
     const hoy = new Date();
     crear();

@@ -28,7 +28,8 @@ export class CommissionsComponent implements OnInit {
   private readonly tipoLabels: Record<BookingManagerOrder['tipoComision'], string> = {
     Ninguna: 'Hacia la meta',
     Meta: 'Alcanza meta (fijo)',
-    Extra: '5% extra'
+    Extra: '5% extra',
+    SinMeta: '5% (semana sin meta)'
   };
 
   constructor(

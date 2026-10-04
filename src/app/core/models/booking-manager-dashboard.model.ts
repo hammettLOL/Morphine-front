@@ -11,7 +11,7 @@ export interface BookingManagerDashboard {
   orders: BookingManagerOrder[];
 }
 
-export type TipoComision = 'Ninguna' | 'Meta' | 'Extra';
+export type TipoComision = 'Ninguna' | 'Meta' | 'Extra' | 'SinMeta';
 
 export interface BookingManagerOrder {
   id: number;

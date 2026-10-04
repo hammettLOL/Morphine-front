@@ -45,9 +45,9 @@
         <div class="text-gray-400 text-sm mt-1">S/ 150 por cada semana que llega a {{ formatCurrency(data.meta) }}</div>
       </div>
       <div class="bg-gray-900/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/50 border border-gray-800/50 p-6">
-        <div class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Comision extra (5%)</div>
+        <div class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Comision 5%</div>
         <div class="mt-2 text-2xl font-bold text-purple-500" data-testid="comision-extra">{{ formatCurrency(data.comisionExtra) }}</div>
-        <div class="text-gray-400 text-sm mt-1">Sobre citas posteriores a la meta semanal</div>
+        <div class="text-gray-400 text-sm mt-1">Citas despues de la meta, o todas si la semana no llega</div>
       </div>
     </div>
 
@@ -65,11 +65,11 @@
           </div>
           <span class="text-xs font-semibold px-2 py-1 rounded-full"
             [ngClass]="s.metaAlcanzada ? 'bg-green-900/40 text-green-400' : 'bg-gray-800 text-gray-400'">
-            {{ s.metaAlcanzada ? 'Meta alcanzada' : 'Sin meta' }}
+            {{ s.metaAlcanzada ? 'Meta alcanzada' : 'Sin meta (5%)' }}
           </span>
           <div class="text-right">
             <div class="text-sm font-bold text-gray-100">{{ formatCurrency(s.totalComision) }}</div>
-            <div class="text-xs text-gray-500">Fijo {{ formatCurrency(s.pagoFijo) }} + extra {{ formatCurrency(s.comisionExtra) }}</div>
+            <div class="text-xs text-gray-500">{{ s.metaAlcanzada ? 'Fijo ' + formatCurrency(s.pagoFijo) + ' + 5% ' + formatCurrency(s.comisionExtra) : '5% de cada cita' }}</div>
           </div>
         </div>
       </div>
