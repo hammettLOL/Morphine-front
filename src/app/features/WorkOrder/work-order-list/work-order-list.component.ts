@@ -69,7 +69,8 @@ export class WorkOrderListComponent implements OnInit {
   { value: 0, name: 'Todos' },
   { value: 1, name: 'Morphine' },
   { value: 2, name: 'Lima Espacio' },
-  { value: 3, name: 'Proyecto' }
+  { value: 3, name: 'Proyecto' },
+  { value: 4, name: 'Susana' }
 ];
 
   statusMap: { [key: number]: string } = {
