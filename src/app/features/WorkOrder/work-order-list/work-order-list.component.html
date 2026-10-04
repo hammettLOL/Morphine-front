@@ -195,7 +195,7 @@
             </div>
 
             <div class="flex space-x-2">
-              <button *ngIf="canEdit" (click)="editWorkOrder(workOrder)"
+              <button *ngIf="canEdit" (click)="editWorkOrder(workOrder)" data-testid="editar-cita"
                       class="p-2 rounded-xl bg-green-900/30 text-green-400 hover:bg-green-700">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -254,7 +254,7 @@
                   </svg>
                   <span class="text-xs">Preview</span>
                 </button>
-                <button *ngIf="canEdit" (click)="editWorkOrder(workOrder)"
+                <button *ngIf="canEdit" (click)="editWorkOrder(workOrder)" data-testid="editar-cita"
                         class="p-1.5 rounded-xl bg-green-900/30 text-green-400 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-150"
                         title="Editar">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

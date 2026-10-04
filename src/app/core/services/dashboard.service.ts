@@ -17,6 +17,8 @@ export interface DashboardMetrics {
   morphineScheduledAppointments: number; // Citas agendadas por Morphine
   limaEspacioAppointments: number;   // Citas de Lima Espacio
   totalEmittedInvoices: number;      // Número de facturas emitidas
+  canceledAppointments: number;      // Citas canceladas del mes
+  canceledAdvanceRefund: number;     // Adelantos que el estudio devuelve a Morphine por canceladas
 
  
   // Información del período
