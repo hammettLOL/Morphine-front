@@ -12,6 +12,7 @@ import { CustomerDetailComponent } from './features/Customer/customer-detail/cus
 import { AddCustomerPublicComponent } from './features/Customer/add-customer-public/add-customer-public.component';
 import { AccountingListComponent } from './features/Accounting/accounting-list/accounting-list.component';
 import { BookingManagerDashboardComponent } from './components/booking-manager-dashboard/booking-manager-dashboard.component';
+import { CommissionsComponent } from './components/commissions/commissions.component';
 import { roleGuard } from '../guards/role.guard';
 
 
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin'] } },
   { path: 'dashboard-bm', component: BookingManagerDashboardComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['BookingManager', 'Admin'] } },
+  { path: 'comisiones', component: CommissionsComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin', 'BookingManager'] } },
   { path: 'customers', component: CustomersListComponent, canActivate: [AuthGuard] },
   { path: 'accounting', component: AccountingListComponent, canActivate: [AuthGuard, roleGuard], data: { roles: ['Admin', 'AsistenteContable'] } },
   { path: 'customer/detail/:id', component: CustomerDetailComponent, canActivate: [AuthGuard] },

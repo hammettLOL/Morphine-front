@@ -23,6 +23,12 @@ export const MENU_ITEMS: MenuItem[] = [
     roles: [Role.BookingManager]
   },
   {
+    label: 'Comisiones',
+    route: '/comisiones',
+    icon: `<path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm1 15.9V17a1 1 0 0 1-2 0v-1.09A3.006 3.006 0 0 1 7 13a1 1 0 0 1 2 0 1 1 0 1 0 1-1 3 3 0 0 1-1-5.829V5a1 1 0 0 1 2 0v1.09A3.006 3.006 0 0 1 13 9a1 1 0 0 1-2 0 1 1 0 1 0-1 1 3 3 0 0 1 1 5.9Z"/>`,
+    roles: [Role.Admin, Role.BookingManager]
+  },
+  {
     label: 'Clientes',
     route: '/customers',
     icon: `<path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>`,

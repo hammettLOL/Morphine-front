@@ -1,49 +1,40 @@
-export interface FridayPeriod {
+// Semana de comisiones de la booking manager: lunes a lunes
+export interface WeekPeriod {
   start: Date;
   end: Date;
 }
 
-export function getCurrentFridayPeriod(): FridayPeriod {
-  return getFridayPeriodForDate(new Date());
+export function getCurrentWeekPeriod(): WeekPeriod {
+  return getWeekPeriodForDate(new Date());
 }
 
-export function getFridayPeriodForDate(date: Date): FridayPeriod {
-  const d = new Date(date);
-  const day = d.getDay(); // 0=Dom, 5=Vie
-  const diffToFriday = (day >= 5) ? day - 5 : day + 2;
-  const start = new Date(d);
-  start.setDate(d.getDate() - diffToFriday);
-  start.setHours(0, 0, 0, 0);
-  const end = new Date(start);
-  end.setDate(start.getDate() + 7);
-  return { start, end };
+export function getWeekPeriodForDate(date: Date): WeekPeriod {
+  const daysSinceMonday = (date.getDay() + 6) % 7; // 0=Lun ... 6=Dom
+  const start = new Date(date.getFullYear(), date.getMonth(), date.getDate() - daysSinceMonday);
+  return { start, end: addDays(start, 7) };
 }
 
-export function getNextPeriod(current: FridayPeriod): FridayPeriod {
-  const nextStart = new Date(current.start);
-  nextStart.setDate(nextStart.getDate() + 7);
-  const nextEnd = new Date(nextStart);
-  nextEnd.setDate(nextStart.getDate() + 7);
-  return { start: nextStart, end: nextEnd };
+export function getNextPeriod(current: WeekPeriod): WeekPeriod {
+  return getWeekPeriodForDate(addDays(current.start, 7));
 }
 
-export function getPreviousPeriod(current: FridayPeriod): FridayPeriod {
-  const prevStart = new Date(current.start);
-  prevStart.setDate(prevStart.getDate() - 7);
-  const prevEnd = new Date(prevStart);
-  prevEnd.setDate(prevStart.getDate() + 7);
-  return { start: prevStart, end: prevEnd };
+export function getPreviousPeriod(current: WeekPeriod): WeekPeriod {
+  return getWeekPeriodForDate(addDays(current.start, -7));
 }
 
-export function formatPeriodLabel(period: FridayPeriod): string {
-  const opts: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit' };
-  const startStr = period.start.toLocaleDateString('es-PE', opts);
-  const endDate = new Date(period.end);
-  endDate.setDate(endDate.getDate() - 1);
-  const endStr = endDate.toLocaleDateString('es-PE', opts);
-  return `Vie ${startStr} - Jue ${endStr}`;
+export function formatPeriodLabel(period: WeekPeriod): string {
+  return `Lun ${formatDayMonth(period.start)} - Dom ${formatDayMonth(addDays(period.end, -1))}`;
+}
+
+export function formatDayMonth(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}`;
 }
 
 export function toISODate(date: Date): string {
   return date.toISOString().split('T')[0];
+}
+
+function addDays(date: Date, days: number): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
 }

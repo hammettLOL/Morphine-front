@@ -5,13 +5,14 @@ import { BookingManagerDashboard } from '../../core/models/booking-manager-dashb
 import { WorkOrderService } from '../../core/services/work-order.service';
 import { WorkOrderDto } from '../../core/models/work-order-dto.model';
 import {
-  FridayPeriod,
-  getCurrentFridayPeriod,
+  WeekPeriod,
+  getCurrentWeekPeriod,
   getNextPeriod,
   getPreviousPeriod,
   formatPeriodLabel,
   toISODate
 } from '../../core/utils/period.utils';
+import { formatSoles } from '../../core/utils/format.utils';
 
 @Component({
   selector: 'app-booking-manager-dashboard',
@@ -21,7 +22,7 @@ import {
   styleUrls: ['./booking-manager-dashboard.component.scss']
 })
 export class BookingManagerDashboardComponent implements OnInit {
-  currentPeriod!: FridayPeriod;
+  currentPeriod!: WeekPeriod;
   periodLabel = '';
   dashboard?: BookingManagerDashboard;
   loading = false;
@@ -44,7 +45,7 @@ export class BookingManagerDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currentPeriod = getCurrentFridayPeriod();
+    this.currentPeriod = getCurrentWeekPeriod();
     this.loadDashboard();
   }
 
@@ -120,7 +121,7 @@ export class BookingManagerDashboardComponent implements OnInit {
   }
 
   formatCurrency(value: number): string {
-    return `S/ ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return formatSoles(value);
   }
 
   formatDate(dateStr: string): string {
